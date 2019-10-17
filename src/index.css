@@ -1,13 +1,237 @@
 body {
+  background-color: #FAFAFA;
+  width: 1400px;
+  height: 1200px;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+  /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+    sans-serif; */
+    font-family: 'iCiel Effra' !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@font-face {
+  font-family: 'iCiel Effra';
+  src: url("./resources/iCielEffra-Regular.otf") format("opentype");
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.input-field input[type=text]:focus + label, .materialize-textarea:focus:not([readonly]) + label {
+  color: #086bd1 !important;
+ }
+
+/* label underline focus color */
+ .input-field input[type=text]:focus, .materialize-textarea:focus:not([readonly]) {
+  /* border-bottom: 1px solid #086bd1 !important; */
+  box-shadow: 0 1px 0 0 #086bd1 !important;
+ }
+
+i{
+  user-select: none;
+}
+
+.my-sidenav{
+  position:fixed; 
+  left:0px;
+  top:0px;
+  height: 100vh;
+  width:50px;
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-left: 15px;
+  z-index: 1;
+}
+
+.my-sidenav-big{
+  height: 100vh;
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-left: 15px;
+  font-weight: bold;
+}
+
+.sidenav{
+  width: 250px;
+}
+
+.side-nav-logo{
+  height: 160px;
+  padding-top: 20%;
+}
+
+.side-nav-logo img{
+  height: 100%;
+  margin: auto;
+}
+
+.bold{
+  font-weight: bold;
+}
+
+.flex-column{
+  display:flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.flex-row{
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.main-post{
+  min-height: 250px;
+}
+
+.main-post img{
+  border-radius: 20px;
+}
+
+.sub-post img{
+  border-radius: 20px;
+}
+
+.sub-post{
+  padding-bottom: 10px;
+}
+
+.border-20{
+  border-radius: 20px;
+}
+
+.advertisement{
+  margin: 10px;
+  min-height: 300px;
+  min-width: 100px;
+}
+
+.carousel{
+  position: relative;
+  top: -80px;
+}
+
+.side-nav-active > i, .side-nav-active > span{
+  color: #1565c0 !important;
+}
+
+.personalLibrary-nav{
+  position:fixed;
+  left:0px;
+  top:0px;
+  height: 100vh;
+  /* width:100px; */
+}
+
+.line{
+  width: 100%;
+  border: 1px #AAAAAA solid;
+  margin: 5px 0;
+}
+
+.line-vert{
+  height: 100%;
+  border: 1px #AAAAAA solid;
+}
+
+.my-floating-btn{
+  position:fixed;
+  left:93vw;
+  top:86vh;
+}
+
+.modal{
+  border-radius: 25px;
+}
+
+.padding-vertical-10{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.padding-horizontal-10{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.inline-block{
+  display: inline-block;
+}
+
+.no-padding{
+  padding-left:0;
+  padding-right:0;
+}
+
+.float-left{
+  float: left;
+}
+
+.float-right{
+  float: right;
+}
+
+.no-select{
+  user-select: none;
+}
+
+.min-height-60{
+  height: 60px !important;
+}
+
+.min-height-400{
+  min-height: 400px !important;
+}
+
+.margin-auto{
+  margin: auto; 
+}
+
+.font-size-15{
+  font-size: 15px;
+}
+
+.font-size-18{
+  font-size: 18px;
+}
+
+.font-effra{
+  font-family: 'iCiel Effra'
+}
+
+.font-montserrat{
+  font-family: 'Montserrat', sans-serif;
+}
+
+.knowledgeGroup-header{
+  padding-left: 20px !important;
+}
+
+.ql-container {
+  border-bottom-left-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
+  background: #fefcfc;
+}
+
+.ql-snow.ql-toolbar {
+  display: block;
+  background: #eaecec;
+  border-top-left-radius: 0.5em;
+  border-top-right-radius: 0.5em;
+}
+
+.padding-filler-nav{
+  padding-left: 50px !important;
+  padding-right: 0px !important;
+}
+
+.min-height-100vh{
+  min-height: 100vh !important;
 }
