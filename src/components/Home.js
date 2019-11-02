@@ -21,7 +21,8 @@ class Home extends Component {
     render() {
         return (
             <div className="home row">
-                <div className="col s1"></div>
+                <div className="col s1">
+                </div>
                 <div className="col s7 container row">
                     <h5 className="blue-text text-darken-2 bold font-montserrat">Tin tức</h5>
                     <MainPost imgSrc='https://znews-photo.zadn.vn/w1024/Uploaded/qhj_yvobvhfwbv/2018_07_18/Nguyen_Huy_Binh1.jpg' title='Với chúng tôi, sự kết nối là tất cả' body='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas alias sint libero veritatis exercitationem. Ipsam vitae accusantium odio? Laborum possimus dolorum molestias, reprehenderit eius maxime iure unde at autem exercitationem?' />

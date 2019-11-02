@@ -10,7 +10,9 @@ import LandingPage from './components/LandingPage';
 import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import userReducer from './reducers/userReducer';
-
+import UserInfo from './components/UserInfo';
+import PersonalInfo from './components/PersonalInfo';
+import personalInfoEdit from './components/PersonalInfoEdit';
 const reducers = combineReducers({
   user: userReducer,
 })
@@ -27,7 +29,9 @@ class App extends Component {
             {/* Chuyen Post thanh News */}
             <Switch>
               <Route exact path='/' component={LandingPage} />
-              <Route path='/home' component={Home} />
+              {/* <Route path='/personalInfo' component={PersonalInfo} /> */}
+              <Route path='/home' component={UserInfo} />
+              {/* <Route path='/personalInfoEdit' component={personalInfoEdit} /> */}
               <Route path='/personalLibrary' component={PersonalLibrary} />
               <Route path='/personalLibrary/question/:questionId' component={PersonalLibrary} />
               <Route path='/abbreviationLibrary' component={AbbreviationLibrary} />

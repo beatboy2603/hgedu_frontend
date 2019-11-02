@@ -7,16 +7,31 @@ import { connect } from 'react-redux';
 
 const Sidenav = (props) => {
 
+    const logout = {
+        position: "relative",
+        bottom: "10px",
+        color: "000"
+    };
     const iconColor = {
         color: "#3A3A3A"
-    }
+    },
+
+
+        print = () => {
+
+            console.log();
+        },
+
+        outprint = () => {
+            console.log("Out hover");
+        }
     return (
         <div>
             {props.user.role == "admin" &&
                 <div className="my-sidenav container z-depth-2 white">
                     <Link exact to='/home'>
                         <div className='side-nav-logo' >
-                            {/* <p className="brand-logo blue-text text-darken-3 bold">HGE</p> */}
+                            <p className="brand-logo blue-text text-darken-3 bold">HGE</p>
                             <img src={SmallLogo} alt="HGEdu Logo" style={{ width: "20px", marginTop: "-7vh" }} />
                         </div>
                     </Link>
@@ -39,10 +54,13 @@ const Sidenav = (props) => {
                         <NavLink to='/testManagement' activeClassName="side-nav-active">
                             <i className="material-icons padding-vertical-10" style={iconColor}>check_box</i>
                         </NavLink>
+                        
                     </div>
                     <NavLink>
-                        <i className="material-icons padding-vertical-10" style={iconColor}>account_circle</i>
+                        {/*  */}
+                        <i className="material-icons padding-vertical-10" style={iconColor} onMouseOver={print} onMouseLeave={outprint}>account_circle</i>
                     </NavLink>
+                    <div>wtf</div>
                 </div>
             }
             <ul className="sidenav" id='sidenavAdmin'>
@@ -78,7 +96,7 @@ const Sidenav = (props) => {
                         </NavLink>
                     </div>
                     <NavLink className='flex-row'>
-                        <i className="material-icons left padding-vertical-10" style={iconColor}>account_circle</i>
+                        <i className="material-icons left padding-vertical-10" style={iconColor} >account_circle</i>
                         <span style={iconColor}>Người dùng</span>
                     </NavLink>
                 </div>
