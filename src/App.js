@@ -10,6 +10,7 @@ import LandingPage from './components/LandingPage';
 import { combineReducers, createStore } from 'redux';
 import { Provider } from 'react-redux';
 import userReducer from './reducers/userReducer';
+import TestWord from './components/TestWord';
 
 const reducers = combineReducers({
   user: userReducer,
@@ -33,6 +34,7 @@ class App extends Component {
               <Route path='/abbreviationLibrary' component={AbbreviationLibrary} />
               <Route path='/studentManagement' component={StudentManagement} />
               <Route path='/testManagement' component={TestManagement} />
+              <Route path='/testWord' component={TestWord} />
             </Switch>
           </div>
         </BrowserRouter>
