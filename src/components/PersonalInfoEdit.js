@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import { Avatar, Button, RadioGroup, FormControlLabel, Radio } from '@material-ui/core'
-import { NavLink, Link } from 'react-router-dom/cjs/react-router-dom.min'
+import { NavLink, Link, Redirect } from 'react-router-dom/cjs/react-router-dom.min'
 export default class PersonalInfoEdit extends Component {
     // state = {
     //     user: {}
@@ -13,9 +13,10 @@ export default class PersonalInfoEdit extends Component {
             user: {}
         }
         this.changeInfo = this.changeInfo.bind(this);
+        this.submitData = this.submitData.bind(this);
     }
     componentDidMount() {
-        axios.get('http://localhost:8080/api/user/' + '1')
+        axios.get('http://localhost:8080/api/user/' + '2')
             .then(res => {
                 this.setState({
                     user: res.data
@@ -23,6 +24,15 @@ export default class PersonalInfoEdit extends Component {
                 console.log(this.state.user)
             });
     }
+
+    submitData(e) {
+        e.preventDefault();
+        axios.put('http://localhost:8080/api/user/2', this.state.user)
+            .then(res => 
+                console.log(res.status));
+                return <Redirect to='/home/personalInfo'/>
+    }
+
     str2bool = (string) => {
         if (string && typeof string === 'string') {
             if (string.toLowerCase() === "true") return true;
@@ -31,20 +41,12 @@ export default class PersonalInfoEdit extends Component {
         return string;
     }
     changeInfo(e) {
-
         this.setState({
             user: { ...this.state.user, [e.target.name]: this.str2bool(e.target.value) }
         })
         console.log(this.state.user)
 
     }
-
-    submitData(e) {
-        e.preventDefault();
-        console.log(this.state.user)
-    }
-
-
 
     render() {
         const { user } = this.state
@@ -84,7 +86,7 @@ export default class PersonalInfoEdit extends Component {
         return (
             <div>
                 {user &&
-                    <form>
+                    <div>
                         <div className="col s12" style={{ margin: '5px' }}><h5 className='font-montserrat' style={{ ...style.colorizedText, ...style.margin30 }}>Thông tin cá nhân</h5>
                         </div>
                         <div className="col s2">
@@ -92,40 +94,38 @@ export default class PersonalInfoEdit extends Component {
                         </div>
                         <div className="col s8">
                             <div className="form col s8">
-                                <form onSubmit={this.onSubmit}>
-                                    <h5 className='font-montserrat' style={{ ...style.colorizedText, ...style.margin0 }}>{user.fullName}</h5>
-                                    {/* <input type="text" name="fullName" value={user.fullName} onChange={this.changeInfo} /> */}
-                                    <div style={style.field}>
-                                        <p style={style.detail.title}>E-mail:</p>
-                                        <input type="text" style={style.detail.content} name="email" value={user.email} onChange={this.changeInfo} />
-                                    </div>
-                                    <div style={style.field}>
-                                        <p style={style.detail.title}>Điện thoại:</p>
-                                        <input name="phoneNumber" type="text" style={style.detail.content} value={user.phoneNumber} />
-                                    </div>
-                                    <div style={style.field}>
-                                        <p style={style.detail.title}>Giới tính:</p>
-                                        <RadioGroup name="gender">
-                                            <FormControlLabel value={true} checked={user.gender === true} name="gender" control={<Radio color="primary"/>} onChange={this.changeInfo} label="Male" />
-                                            <FormControlLabel value={false} checked={user.gender === false} name="gender" control={<Radio color="primary"/>} onChange={this.changeInfo} label="Female" />
-                                        </RadioGroup>
-                                    </div>
-                                    <div style={style.field}>
-                                        <p style={style.detail.title}>Ngày sinh:</p>
-                                        <input type="text" style={style.detail.content} defaultValue="10/01/1997" onChange={((e) => { console.log(e.target.value) })} />
-                                    </div>
-                                    <div style={style.field}>
-                                        <p style={style.detail.title}>Trường</p>
-                                        <input type="text" style={style.detail.content} value="Đại học FPT Hà Nội" />
-                                    </div>
-                                </form>
+                                <h5 className='font-montserrat' style={{ ...style.colorizedText, ...style.margin0 }}>{user.fullName}</h5>
+                                {/* <input type="text" name="fullName" value={user.fullName} onChange={this.changeInfo} /> */}
+                                <div style={style.field}>
+                                    <p style={style.detail.title}>E-mail:</p>
+                                    <input type="text" style={style.detail.content} name="email" value={user.email} onChange={this.changeInfo} />
+                                </div>
+                                <div style={style.field}>
+                                    <p style={style.detail.title}>Điện thoại:</p>
+                                    <input name="phoneNumber" type="text" style={style.detail.content} value={user.phoneNumber} />
+                                </div>
+                                <div style={style.field}>
+                                    <p style={style.detail.title}>Giới tính:</p>
+                                    <RadioGroup name="gender">
+                                        <FormControlLabel value={true} checked={user.gender === true} name="gender" control={<Radio color="primary" />} onChange={this.changeInfo} label="Male" />
+                                        <FormControlLabel value={false} checked={user.gender === false} name="gender" control={<Radio color="primary" />} onChange={this.changeInfo} label="Female" />
+                                    </RadioGroup>
+                                </div>
+                                <div style={style.field}>
+                                    <p style={style.detail.title}>Ngày sinh:</p>
+                                    <input type="text" style={style.detail.content} defaultValue="10/01/1997" onChange={((e) => { console.log(e.target.value) })} />
+                                </div>
+                                <div style={style.field}>
+                                    <p style={style.detail.title}>Trường</p>
+                                    <input type="text" style={style.detail.content} value="Đại học FPT Hà Nội" />
+                                </div>
                             </div>
                         </div>
                         <div className="col s2 no-padding">
                             <Link style={{ marginRight: '10px', color: '#3a3a3a' }} to="/home/personalInfo">Huỷ</Link>
-                            <Link to="/home/personalInfo">Xong</Link>
+                            <Link onClick={this.submitData}>Lưu</Link>
                         </div>
-                    </form>
+                    </div>
                 }
             </div>
         )

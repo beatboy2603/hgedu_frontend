@@ -20,7 +20,7 @@ class UserInfo extends Component {
 
     componentDidMount() {
 
-        axios.get('http://localhost:8080/api/user/1')
+        axios.get('http://localhost:8080/api/user/2')
             .then(res => {
                 this.setState({
                     user: res.data

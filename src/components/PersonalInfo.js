@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import { Avatar, Button } from '@material-ui/core'
-import { Link , Switch , Route } from 'react-router-dom/cjs/react-router-dom.min'
+import { Link, Switch, Route } from 'react-router-dom/cjs/react-router-dom.min'
 import PersonalInfoEdit from './PersonalInfoEdit'
 import Modal from 'react-materialize'
 export default class PersonalInfo extends Component {
@@ -10,9 +10,8 @@ export default class PersonalInfo extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8080/api/user/' + '1')
+        axios.get('http://localhost:8080/api/user/' + '2')
             .then(res => {
-                console.log(res.data)
                 this.setState({
                     user: res.data
                 })
@@ -52,40 +51,40 @@ export default class PersonalInfo extends Component {
         }
         return (
             <div>
-                {user && 
-                <div>
-                <div className="col s12" style={{ margin: '5px' }}><h5 className='font-montserrat' style={{ ...style.colorizedText, ...style.margin30 }}>Thông tin cá nhân</h5>
-                </div>
-                    <div className="col s2">
-                        <Avatar style={style.avatar}></Avatar>
-                    </div>
-                    <div className="col s9">
-                        <h5 className='font-montserrat' style={{ ...style.colorizedText, ...style.margin0 }}>{user.fullName}</h5>
-                        <div style={style.field}>
-                            <p style={style.detail.title}>E-mail:</p>
-                            <p style={style.detail.content}>{user.email}</p>
+                {user &&
+                    <div>
+                        <div className="col s12" style={{ margin: '5px' }}><h5 className='font-montserrat' style={{ ...style.colorizedText, ...style.margin30 }}>Thông tin cá nhân</h5>
                         </div>
-                        <div style={style.field}>
-                            <p style={style.detail.title}>Điện thoại:</p>
-                            <p style={style.detail.content}>{user.phoneNumber}</p>
+                        <div className="col s2">
+                            <Avatar style={style.avatar}></Avatar>
                         </div>
-                        <div style={style.field}>
-                            <p style={style.detail.title}>Giới tính:</p>
-                            <p style={style.detail.content}>{user.gender ? "Nam" : "Nữ"}</p>
+                        <div className="col s9">
+                            <h5 className='font-montserrat' style={{ ...style.colorizedText, ...style.margin0 }}>{user.fullName}</h5>
+                            <div style={style.field}>
+                                <p style={style.detail.title}>E-mail:</p>
+                                <p style={style.detail.content}>{user.email}</p>
+                            </div>
+                            <div style={style.field}>
+                                <p style={style.detail.title}>Điện thoại:</p>
+                                <p style={style.detail.content}>{user.phoneNumber}</p>
+                            </div>
+                            <div style={style.field}>
+                                <p style={style.detail.title}>Giới tính:</p>
+                                <p style={style.detail.content}>{user.gender ? "Nam" : "Nữ"}</p>
+                            </div>
+                            <div style={style.field}>
+                                <p style={style.detail.title}>Ngày sinh:</p>
+                                <p style={style.detail.content}>10/01/1997</p>
+                            </div>
+                            <div style={style.field}>
+                                <p style={style.detail.title}>Trường</p>
+                                <p style={style.detail.content}>Đại học FPT Hà Nội</p>
+                            </div>
                         </div>
-                        <div style={style.field}>
-                            <p style={style.detail.title}>Ngày sinh:</p>
-                            <p style={style.detail.content}>10/01/1997</p>
+                        <div className="col s1 no-padding">
+                            <Link to='/home/personalInfo/edit'>Sửa</Link>
                         </div>
-                        <div style={style.field}>
-                            <p style={style.detail.title}>Trường</p>
-                            <p style={style.detail.content}>Đại học FPT Hà Nội</p>
-                        </div>
-                    </div>
-                    <div className="col s1 no-padding">
-                        <Link to = '/home/personalInfo/edit'>Sửa</Link>
-                    </div>
-                    {/* <div className="col s1 no-padding">
+                        {/* <div className="col s1 no-padding">
                         <a href="#edit">Sửa</a>
                         <Modal id="edit">
                             
@@ -93,7 +92,7 @@ export default class PersonalInfo extends Component {
       
                     </div> */}
                     </div>
-            }
+                }
             </div>
         )
     }

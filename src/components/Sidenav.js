@@ -15,11 +15,8 @@ const Sidenav = (props) => {
     const iconColor = {
         color: "#3A3A3A"
     },
-
-
         print = () => {
-
-            console.log();
+            console.log("hover in");
         },
 
         outprint = () => {
@@ -54,7 +51,7 @@ const Sidenav = (props) => {
                         <NavLink to='/testManagement' activeClassName="side-nav-active">
                             <i className="material-icons padding-vertical-10" style={iconColor}>check_box</i>
                         </NavLink>
-                        
+
                     </div>
                     <NavLink>
                         {/*  */}
