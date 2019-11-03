@@ -14,9 +14,10 @@ import { Provider } from 'react-redux';
 // import { combineReducers, createStore } from 'redux';
 // import { persistStore, persistReducer } from 'redux-persist';
 // import storage from 'redux-persist/lib/storage';
-import {store, persistor} from './components/common/Store'
+import { store, persistor } from './components/common/Store'
 import SignUp from './components/common/SignUp';
 import SignIn from './components/common/SignIn';
+import UserInfo from './components/UserInfo';
 
 
 // const persistConfig = {
@@ -41,7 +42,6 @@ class App extends Component {
           <BrowserRouter>
             <div className="App">
               <Sidenav />
-              {/* Chuyen Post thanh News */}
               <Switch>
                 <Route exact path='/' component={LandingPage} />
                 <Route path='/home' component={Home} />
@@ -53,6 +53,7 @@ class App extends Component {
                 <Route path='/studentManagement' component={StudentManagement} />
                 <Route path='/testManagement' component={TestManagement} />
                 <Route path='/newsList' component={NewsList} />
+                {/* <Route path='/userInfo' component={UserInfo}/> */}
               </Switch>
             </div>
           </BrowserRouter>
