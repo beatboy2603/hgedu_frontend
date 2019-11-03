@@ -7,6 +7,7 @@ import AbbreviationLibrary from './components/abbreviation/AbbreviationLibrary';
 import StudentManagement from './components/StudentManagement';
 import TestManagement from './components/personalLibrary/test/TestManagement';
 import LandingPage from './components/LandingPage';
+import NewsList from './components/News/NewsList';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import { Provider } from 'react-redux';
 // import userReducer from './reducers/userReducer';
@@ -51,6 +52,7 @@ class App extends Component {
                 <Route path='/abbreviationLibrary' component={AbbreviationLibrary} />
                 <Route path='/studentManagement' component={StudentManagement} />
                 <Route path='/testManagement' component={TestManagement} />
+                <Route path='/newsList' component={NewsList} />
               </Switch>
             </div>
           </BrowserRouter>

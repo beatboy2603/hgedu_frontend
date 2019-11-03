@@ -12,13 +12,12 @@ const Sidenav = (props) => {
     }
     return (
         <div>
-            {props.user.role == 3 &&
+            {props.user.role === 3 &&
                 <div className="my-sidenav container z-depth-2 white">
                     <Link exact to='/home'>
                         <div className='side-nav-logo' >
-                            <Link to="/">
-                                <img src={SmallLogo} alt="HGEdu Logo" style={{ width: "20px", marginTop: "-7vh" }} />
-                            </Link>
+                            {/* <p className="brand-logo blue-text text-darken-3 bold">HGE</p> */}
+                            <img src={SmallLogo} alt="HGEdu Logo" style={{ width: "20px", marginTop: "-7vh" }} />
                         </div>
                     </Link>
                     <div className="flex-column">
@@ -39,6 +38,30 @@ const Sidenav = (props) => {
                         </NavLink>
                         <NavLink to='/testManagement' activeClassName="side-nav-active">
                             <i className="material-icons padding-vertical-10" style={iconColor}>check_box</i>
+                        </NavLink>
+                    </div>
+                    <NavLink>
+                        <i className="material-icons padding-vertical-10" style={iconColor}>account_circle</i>
+                    </NavLink>
+                </div>
+            }
+            {props.user.role === 2 &&
+                <div className="my-sidenav container z-depth-2 white">
+                    <Link exact to='/home'>
+                        <div className='side-nav-logo' >
+                            {/* <p className="brand-logo blue-text text-darken-3 bold">HGE</p> */}
+                            <img src={SmallLogo} alt="HGEdu Logo" style={{ width: "20px", marginTop: "-7vh" }} />
+                        </div>
+                    </Link>
+                    <div className="flex-column">
+                        <Link className="sidenav-trigger" data-target='sidenavMod'>
+                            <i className="material-icons padding-vertical-10" style={iconColor}>menu</i>
+                        </Link>
+                        <NavLink to="/home" activeClassName="side-nav-active">
+                            <i className="material-icons padding-vertical-10" style={iconColor}>home</i>
+                        </NavLink>
+                        <NavLink to='/newsList' activeClassName="side-nav-active">
+                            <i className="material-icons padding-vertical-10" style={iconColor}>event</i>
                         </NavLink>
                     </div>
                     <NavLink>
@@ -76,6 +99,32 @@ const Sidenav = (props) => {
                         <NavLink to='/testManagement' className='flex-row' activeClassName="side-nav-active">
                             <i className="material-icons left padding-vertical-10" style={iconColor}>check_box</i>
                             <span style={iconColor}>Quản lí kiểm tra</span>
+                        </NavLink>
+                    </div>
+                    <NavLink className='flex-row'>
+                        <i className="material-icons left padding-vertical-10" style={iconColor}>account_circle</i>
+                        <span style={iconColor}>Người dùng</span>
+                    </NavLink>
+                </div>
+                </ul>
+                <ul className="sidenav" id='sidenavMod'>
+                <div className="my-sidenav-big container white">
+                    <Link to='/home'>
+                        <div className='side-nav-logo flex-row' >
+                            <img src={Logo} alt="HGEdu Logo" />
+                        </div>
+                    </Link>
+                    <div className="flex-column">
+                        <Link className="sidenav-trigger" data-target='sidenav'>
+                            <i className="material-icons blue-text text-darken-2 padding-vertical-10">menu</i>
+                        </Link>
+                        <NavLink to="/home" className='flex-row' activeClassName="side-nav-active">
+                            <i className="material-icons left padding-vertical-10" style={iconColor}>home</i>
+                            <span style={iconColor}>Trang chủ</span>
+                        </NavLink>
+                        <NavLink to='/newsList' className='flex-row' activeClassName="side-nav-active">
+                            <i className="material-icons left padding-vertical-10" style={iconColor}>event</i>
+                            <span style={iconColor}>Quản lí bài đăng</span>
                         </NavLink>
                     </div>
                     <NavLink className='flex-row'>

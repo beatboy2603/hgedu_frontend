@@ -6,6 +6,8 @@ import SubPost from './SubPost';
 import Advertisement from './common/Advertisement';
 import { Carousel } from 'react-materialize';
 import { serverUrl } from "./common/common";
+import { axiosPost } from "../common/common";
+import { Modal } from 'react-materialize';
 import axios from 'axios';
 
 class Home extends Component {
@@ -15,36 +17,51 @@ class Home extends Component {
             this.props.history.push('/');
         }
         axios.get(serverUrl + '/api/hello')
+    }
+    constructor(props) {
+        super(props);
+        this.state = {
+            newsList: []
+        }
+    }
+
+    componentWillMount() {
+        axios.get('http://localhost:8084/news')
             .then(res => {
                 console.log(res);
+                this.setState({newsList: res.data})
             })
     }
 
 
     render() {
         return (
+
             <div className="home row">
                 <div className="col s1"></div>
                 <div className="col s7 container row">
                     <h5 className="blue-text text-darken-2 bold font-montserrat">Tin tức</h5>
-                    <MainPost imgSrc='https://znews-photo.zadn.vn/w1024/Uploaded/qhj_yvobvhfwbv/2018_07_18/Nguyen_Huy_Binh1.jpg' title='Với chúng tôi, sự kết nối là tất cả' body='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas alias sint libero veritatis exercitationem. Ipsam vitae accusantium odio? Laborum possimus dolorum molestias, reprehenderit eius maxime iure unde at autem exercitationem?' />
-                    <Carousel options={{ dist: 0, padding: 0 }} className="white-text center">
-                        <div className="col s4 carousel-item">
-                            <SubPost imgSrc='https://thumbor.forbes.com/thumbor/960x0/https%3A%2F%2Fspecials-images.forbesimg.com%2Fdam%2Fimageserve%2F1040138812%2F960x0.jpg%3Ffit%3Dscale' title='Với chúng tôi, sự kết nối là tất cả' body='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas alias sint libero veritatis exercitationem. Ipsam vitae accusantium odio? Laborum possimus dolorum molestias, reprehenderit eius maxime iure unde at autem exercitationem?' />
-                        </div>
-                        <div className="col s4 carousel-item">
-                            <SubPost imgSrc='https://thumbor.forbes.com/thumbor/960x0/https%3A%2F%2Fspecials-images.forbesimg.com%2Fdam%2Fimageserve%2F1040138812%2F960x0.jpg%3Ffit%3Dscale' title='Với chúng tôi, sự kết nối là tất cả' body='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas alias sint libero veritatis exercitationem. Ipsam vitae accusantium odio? Laborum possimus dolorum molestias, reprehenderit eius maxime iure unde at autem exercitationem?' />
-                        </div>
-                        <div className="col s4 carousel-item">
-                            <SubPost imgSrc='https://thumbor.forbes.com/thumbor/960x0/https%3A%2F%2Fspecials-images.forbesimg.com%2Fdam%2Fimageserve%2F1040138812%2F960x0.jpg%3Ffit%3Dscale' title='Với chúng tôi, sự kết nối là tất cả' body='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas alias sint libero veritatis exercitationem. Ipsam vitae accusantium odio? Laborum possimus dolorum molestias, reprehenderit eius maxime iure unde at autem exercitationem?' />
-                        </div>
-                        <div className="col s4 carousel-item">
-                            <SubPost imgSrc='https://thumbor.forbes.com/thumbor/960x0/https%3A%2F%2Fspecials-images.forbesimg.com%2Fdam%2Fimageserve%2F1040138812%2F960x0.jpg%3Ffit%3Dscale' title='Với chúng tôi, sự kết nối là tất cả' body='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas alias sint libero veritatis exercitationem. Ipsam vitae accusantium odio? Laborum possimus dolorum molestias, reprehenderit eius maxime iure unde at autem exercitationem?' />
-                        </div>
-                        <div className="col s4 carousel-item">
-                            <SubPost imgSrc='https://thumbor.forbes.com/thumbor/960x0/https%3A%2F%2Fspecials-images.forbesimg.com%2Fdam%2Fimageserve%2F1040138812%2F960x0.jpg%3Ffit%3Dscale' title='Với chúng tôi, sự kết nối là tất cả' body='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas alias sint libero veritatis exercitationem. Ipsam vitae accusantium odio? Laborum possimus dolorum molestias, reprehenderit eius maxime iure unde at autem exercitationem?' />
-                        </div>
-                    </Carousel>
+                    {this.state.newsList.length !== 0 && 
+    
+                        <MainPost imgSrc={'http://localhost:8084/' + this.state.newsList[0].thumbnail} 
+                        title={this.state.newsList[0].title} 
+                        body={this.state.newsList[0].description}
+                        post={this.state.newsList[0]} />
+
+                    }
+                    {
+                        this.state.newsList.length !== 0 && 
+                        <Carousel options={{ dist: 0, padding: 0 }} className="white-text center">
+                            {this.state.newsList.slice(1).map((post) => 
+                                <div className="col s4 carousel-item">
+                                    <SubPost imgSrc={'http://localhost:8084/' + post.thumbnail} 
+                                        post={post}
+                                        title={post.title}
+                                        body={post.description} />
+                                </div>    
+                            )}
+                        </Carousel> 
+                    }
                 </div>
                 <div className="col s3 flex-column">
                     <Advertisement />
