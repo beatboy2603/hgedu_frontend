@@ -7,9 +7,21 @@ import { connect } from 'react-redux';
 
 const Sidenav = (props) => {
 
+    const logout = {
+        position: "relative",
+        bottom: "10px",
+        color: "000"
+    };
     const iconColor = {
         color: "#3A3A3A"
-    }
+    },
+        print = () => {
+            console.log("hover in");
+        },
+
+        outprint = () => {
+            console.log("Out hover");
+        }
     return (
         <div>
             {props.user.role === 3 &&
