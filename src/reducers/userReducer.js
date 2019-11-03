@@ -1,14 +1,14 @@
 let initialState = {}
 
 const userReducer = (state = initialState, action) => {
-    if (action.type == "changeRole") {
-        console.log("dispatched");
-        return{
-            ...state,
-            role: action.payload,
-        }
+    switch (action.type) {
+        case "CHANGE_ROLE":
+            return {
+                ...state,
+                role: action.payload,
+            }
+        default: return state;
     }
-    return state;
 }
 
 export default userReducer;

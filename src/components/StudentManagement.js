@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
-import CustomizedTreeView from './CustomizedTreeView';
-import SimpleTable from './TempTable2';
+import CustomizedTreeView from './common/CustomizedTreeView';
+import SimpleTable from './common/TempTable2';
 import axios from 'axios';
 import { Modal } from 'react-materialize';
-import KnowledgeGroup from './KnowledgeGroup';
-import PersonalLibraryFiller from './PersonalLibraryFiller';
+import KnowledgeGroup from './personalLibrary/question/KnowledgeGroup';
+import PersonalLibraryFiller from './personalLibrary/PersonalLibraryFiller';
 import Quill from 'quill';
 import ReactQuill from 'react-quill';
 import SwitchUI from '@material-ui/core/Switch';

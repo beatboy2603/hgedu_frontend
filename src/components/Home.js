@@ -3,15 +3,18 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import MainPost from './MainPost';
 import SubPost from './SubPost';
-import Advertisement from './Advertisement';
+import Advertisement from './common/Advertisement';
 import { Carousel } from 'react-materialize';
-import { axiosPost } from "../common/common";
+import { serverUrl } from "./common/common";
 import axios from 'axios';
 
 class Home extends Component {
 
     componentDidMount() {
-        axios.get('http://localhost:8080/api/hello')
+        if(!this.props.user.role){
+            this.props.history.push('/');
+        }
+        axios.get(serverUrl + '/api/hello')
             .then(res => {
                 console.log(res);
             })
@@ -52,4 +55,8 @@ class Home extends Component {
     }
 }
 
-export default Home;
+const mapStateToProps = state => ({
+    user: state.user,
+});
+
+export default connect(mapStateToProps)(Home);

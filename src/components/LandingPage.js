@@ -1,54 +1,55 @@
 import React, { Component } from 'react';
 import { gapi } from "gapi-script";
-import { axiosPost } from "../common/common";
+import axios from "axios";
 import { GoogleLogin } from 'react-google-login';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { serverUrl } from './common/common';
+import auth from './common/Auth';
 
 class LandingPage extends Component {
-    onSignIn = (googleUser) => {
-        // console.log("signIn");
-        // var id_token = googleUser.getAuthResponse().id_token;
-        // console.log(id_token);
-        // this.props.dispatch({ type: "changeRole", payload: "admin" });
-    }
+    onSignIn = (googleUser) => {}
 
     signOut = () => {
+        let props = this.props;
         var auth2 = gapi.auth2.getAuthInstance();
-        auth2.signOut().then(function () {
+        auth2.signOut().then(() => {
             console.log('User signed out.');
+            props.dispatch({ type: "SIGN_OUT", payload: null });
+            this.redirect();
         });
-        this.props.dispatch({ type: "changeRole", payload: null });
     }
 
     redirect = () => {
-        console.log("a")
-        console.log(this.props.user.role);
         if (this.props.user.role) {
             this.props.history.push('/home');
+        }else{
+            this.props.history.push('/');
         }
+    }
+
+    token = (token) => {
+        axios.get("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token="+token).then(res=>{
+            console.log(res);
+        })
     }
 
     render() {
         const responseGoogle = (res) => {
-            console.log("wtf")
-            var id_token = res.tokenObj.id_token;
-            var config = {
-                api: "SignIn",
-                data: {
-                    id_token,
+            var token = res.tokenObj.id_token;
+            this.token(token);
+            axios.post(serverUrl + 'api/authen', {
+                token
+            }).then(res => {
+                if(res.data.message=="SignUp"){
+                    console.log(res.data);
+                    this.signOut();
+                }else{
+                    let user = res.data.user;
+                    this.props.dispatch({ type: "CHANGE_ROLE", payload: user.roleId });
                 }
-            }
-            console.log(id_token);
-            this.props.dispatch({ type: "changeRole", payload: "admin" });
-            this.redirect();
-            // this.props.history.push("/home");
-            // browserHistory.push("/home");
-            // this.context.router.history.push('/home');
-            // console.log(this.props.user);
-            // axiosPost(config).then(res => {
-            //     console.log("sent");
-            // });
+                this.redirect();
+            })
         }
         const iconColor = {
             color: "#3A3A3A"
@@ -69,6 +70,8 @@ class LandingPage extends Component {
                 />
                 <div className="g-signin2" onSuccess={() => this.onSignIn()}></div>
                 <a href="#" onClick={() => this.signOut()}>Sign out</a>
+                <button onClick={() => { console.log(auth.getAuth()) }}>test</button>
+                <button onClick={() => { this.token() }}>test Token</button>
             </div>
         )
     }
