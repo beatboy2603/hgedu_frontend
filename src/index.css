@@ -1,7 +1,7 @@
 body {
   background-color: #FAFAFA;
-  width: 1400px;
-  height: 1200px;
+  /* width: 1400px;
+  height: 1200px; */
   margin: 0;
   /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
@@ -258,7 +258,7 @@ i{
 
 .wrap{
   display: grid;
-  grid-template-rows: 50px 1000px 1000px;
+  grid-template-rows: 50px 1150px;
 }
 
 .setBlue{
@@ -270,16 +270,17 @@ i{
   background: #FAFAFA;
   margin-top: 0px;
   padding-top: 0px;
+  overflow: auto;
 }
 
-.header h3{
-  margin-left: 30px;
+.header h5{
+  margin-left: 20px;
+  height: 100%;
 }
 
 .header span{
-  margin-left: 30px;
-  padding-top: 10px;
-  margin-top: 10px;
+  margin-left: 20px;
+  height: 100%;
 }
 
 .float-right{
@@ -288,9 +289,12 @@ i{
 
 .header table{
   padding-top: 0px;
-  margin-left: 30px;
   border-top: 1px solid lightgray ;
   margin-top: 10px;
+}
+
+.header table th{
+  margin-left: 5px;
 }
 
 .table{
