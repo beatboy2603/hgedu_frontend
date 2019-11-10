@@ -70,7 +70,7 @@ class UserInfo extends Component {
                             <h5 className='font-montserrat' style={{ ...style.margin30, ...style.colorizedText }}>Tài khoản</h5>
                             <div className="line"></div>
                             <div className='flex-row padding-vertical-10'>
-                                <NavLink className='flex-row' to='/home/personalInfo'><AccountCircleIcon /> <span style={{ fontSize: '13px' }}>Thông tin cá nhân</span></NavLink>
+                                <NavLink className='flex-row' to='/user/personalInfo'><AccountCircleIcon /> <span style={{ fontSize: '13px' }}>Thông tin cá nhân</span></NavLink>
                             </div>
                             <div className="flex-row">
                                 <NavLink className='flex-row' to='/#'><SettingsIcon className='' /> <span style={{ fontSize: '13px' }}>Cài đặt</span></NavLink>
@@ -79,8 +79,8 @@ class UserInfo extends Component {
                     </div>
                     <div className="col s9">
                         <Switch>
-                            <Route path="/home/personalInfo/edit" component={PersonalInfoEdit} />
-                            <Route path="/home/personalInfo" component={PersonalInfo} />
+                            <Route path="/user/personalInfo/edit" component={PersonalInfoEdit} />
+                            <Route path="/user/personalInfo" component={PersonalInfo} />
                             <Route path="/setting"></Route>
                         </Switch>
                     </div>

@@ -15,6 +15,7 @@ export default class PersonalInfo extends Component {
                 this.setState({
                     user: res.data
                 })
+                console.log(this.state.user);
             });
     }
     render() {
@@ -82,7 +83,7 @@ export default class PersonalInfo extends Component {
                             </div>
                         </div>
                         <div className="col s1 no-padding">
-                            <Link to='/home/personalInfo/edit'>Sửa</Link>
+                            <Link to='/user/personalInfo/edit'>Sửa</Link>
                         </div>
                         {/* <div className="col s1 no-padding">
                         <a href="#edit">Sửa</a>

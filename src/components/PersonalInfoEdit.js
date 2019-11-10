@@ -6,7 +6,6 @@ export default class PersonalInfoEdit extends Component {
     // state = {
     //     user: {}
     // }
-
     constructor(props) {
         super(props);
         this.state = {
@@ -30,6 +29,7 @@ export default class PersonalInfoEdit extends Component {
         axios.put('http://localhost:8080/api/user/2', this.state.user)
             .then(res => 
                 console.log(res.status));
+                if(window.confirm('Sure to update?'))
                 return <Redirect to='/home/personalInfo'/>
     }
 
@@ -122,7 +122,7 @@ export default class PersonalInfoEdit extends Component {
                             </div>
                         </div>
                         <div className="col s2 no-padding">
-                            <Link style={{ marginRight: '10px', color: '#3a3a3a' }} to="/home/personalInfo">Huỷ</Link>
+                            <Link style={{ marginRight: '10px', color: '#3a3a3a' }} to="/user/personalInfo">Huỷ</Link>
                             <Link onClick={this.submitData}>Lưu</Link>
                         </div>
                     </div>

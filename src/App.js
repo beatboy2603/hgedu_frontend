@@ -29,8 +29,9 @@ class App extends Component {
             {/* Chuyen Post thanh News */}
             <Switch>
               <Route exact path='/' component={LandingPage} />
+              <Route exact path='/home' component={Home} />
               {/* <Route path='/personalInfo' component={PersonalInfo} /> */}
-              <Route path='/home' component={UserInfo} />
+              <Route path='/user' component={UserInfo} />
               {/* <Route path='/personalInfoEdit' component={personalInfoEdit} /> */}
               <Route path='/personalLibrary' component={PersonalLibrary} />
               <Route path='/personalLibrary/question/:questionId' component={PersonalLibrary} />
