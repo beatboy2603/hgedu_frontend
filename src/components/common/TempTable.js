@@ -32,22 +32,36 @@ const rows = [
 export default function SimpleTable() {
   const classes = useStyles();
 
+  const over = e => {
+    // e.stopPropagation();
+    // document.getElementById(props.id).querySelector(".editFolderBtn").style.display = "block";
+    e.target.style.backgroundColor = "red";
+  };
+  const out = e => {
+    // e.stopPropagation();
+    // document.getElementById(props.id).querySelector(".editFolderBtn").style.display = "none";
+    e.target.style.backgroundColor = '';
+  };
+
   return (
     <Paper className={classes.root}>
       <Table className={classes.table}>
         <TableHead>
           <TableRow>
-            <TableCell style={{color: "#086bd1", paddingLeft:"30px"}}><span className="bold font-montserrat font-size-15">Mã câu</span></TableCell>
-            <TableCell style={{color: "#086bd1"}}><span className="bold font-montserrat font-size-15">Câu hỏi</span></TableCell>
-            <TableCell style={{color: "#086bd1"}}><span className="bold font-montserrat font-size-15">Mức khó</span></TableCell>
-            <TableCell style={{color: "#086bd1"}}><span className="bold font-montserrat font-size-15">Trình độ</span></TableCell>
-            <TableCell style={{color: "#086bd1"}}><span className="bold font-montserrat font-size-15">Thuộc tính</span></TableCell>
+            <TableCell style={{ color: "#086bd1", paddingLeft: "30px" }}><span className="bold font-montserrat font-size-15">Mã câu</span></TableCell>
+            <TableCell style={{ color: "#086bd1" }}><span className="bold font-montserrat font-size-15">Câu hỏi</span></TableCell>
+            <TableCell style={{ color: "#086bd1" }}><span className="bold font-montserrat font-size-15">Mức khó</span></TableCell>
+            <TableCell style={{ color: "#086bd1" }}><span className="bold font-montserrat font-size-15">Trình độ</span></TableCell>
+            <TableCell style={{ color: "#086bd1" }}><span className="bold font-montserrat font-size-15">Thuộc tính</span></TableCell>
+            <TableCell style={{ color: "#086bd1" }}><span className="bold font-montserrat font-size-15">Thuộc tính</span></TableCell>
+            <TableCell style={{ color: "#086bd1" }}><span className="bold font-montserrat font-size-15">Thuộc tính</span></TableCell>
+            <TableCell style={{ color: "#086bd1" }}><span className="bold font-montserrat font-size-15">Thuộc tính</span></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map(row => (
-            <TableRow key={row.code}>
-              <TableCell component="th" scope="row" style={{paddingLeft:"30px"}}><span className="font-effra font-size-18 grey-text text-darken-3">{row.code}</span></TableCell>
+            <TableRow key={row.code} onMouseOver={over} onMouseOut={out} id={"row"+row.code} className="table-row">
+              <TableCell component="th" scope="row" style={{ paddingLeft: "30px" }}><span className="font-effra font-size-18 grey-text text-darken-3">{row.code}</span></TableCell>
               <TableCell><span className="font-effra font-size-18 grey-text text-darken-3">{row.content}</span></TableCell>
               <TableCell><span className="font-effra font-size-18 grey-text text-darken-3">{row.hardness}</span></TableCell>
               <TableCell><span className="font-effra font-size-18 grey-text text-darken-3">{row.level}</span></TableCell>

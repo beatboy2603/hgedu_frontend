@@ -36,7 +36,6 @@ class Home extends Component {
 
     render() {
         return (
-
             <div className="home row">
                 <div className="col s1"></div>
                 <div className="col s7 container row">

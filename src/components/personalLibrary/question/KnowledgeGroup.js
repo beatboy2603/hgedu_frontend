@@ -5,6 +5,7 @@ import CustomizedTreeView from '../../common/CustomizedTreeView';
 import SimpleTable from '../../common/TempTable';
 import axios from 'axios';
 import { Modal } from 'react-materialize';
+import ModalQuestion from './ModalQuestion';
 
 class KnowledgeGroup extends Component {
 
@@ -16,6 +17,7 @@ class KnowledgeGroup extends Component {
     render() {
         return (
             <div className="knowledgeGroup row">
+                <ModalQuestion/>
                 <div className="col s3 container min-height-60 knowledgeGroup-header">
                     <h5 className="blue-text text-darken-3 bold font-montserrat" style={{ paddingLeft: "10px" }}>Vô Cơ  <i className="material-icons grey-text text-darken-3">more_vert</i></h5>
                     <p className='grey-text text-darken-3' style={{ position: "relative", top: "-15px", paddingLeft: "10px" }}>04 câu hỏi</p>

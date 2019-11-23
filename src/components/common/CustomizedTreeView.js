@@ -58,6 +58,7 @@ const useTreeItemStyles = makeStyles(theme => ({
         display: 'flex',
         alignItems: 'center',
         padding: theme.spacing(0.5, 0),
+        minHeight: "40px", //height of each item
     },
     labelIcon: {
         marginRight: theme.spacing(1),
@@ -72,18 +73,41 @@ function StyledTreeItem(props) {
     const classes = useTreeItemStyles();
     const { labelText, labelIcon: LabelIcon, labelInfo, color, bgColor, ...other } = props;
 
+    const over = e => {
+        e.stopPropagation();
+        if (props.parentFolderId !== 0 && !props.hasChildren && props.id !== 4) {
+            document.getElementById(props.id).querySelector(".deleteFolderBtn").style.display = "block";
+        }
+        document.getElementById(props.id).querySelector(".editFolderBtn").style.display = "block";
+        // e.target.style.backgroundColor = "red";
+    };
+    const out = e => {
+        e.stopPropagation();
+        if (props.parentFolderId !== 0 && !props.hasChildren && props.id !== 4) {
+            document.getElementById(props.id).querySelector(".deleteFolderBtn").style.display = "none";
+        }
+        document.getElementById(props.id).querySelector(".editFolderBtn").style.display = "none";
+        // e.target.style.backgroundColor = '';
+    };
+
     return (
-        <TreeItem
+        <TreeItem onMouseOver={over} onMouseOut={out}
             label={
-                <div className={classes.hover}>
-                    <div className={classes.labelRoot}>
-                        <LabelIcon color="inherit" className={classes.labelIcon} />
-                        <Typography variant="body2" className={classes.labelText}>
-                            {labelText}
-                        </Typography>
-                        <Typography variant="caption" color="inherit">
-                            {labelInfo}
-                        </Typography>
+                <div className={classes.labelRoot}>
+                    <LabelIcon color="inherit" className={classes.labelIcon} />
+                    <Typography variant="body2" className={classes.labelText}>
+                        {labelText}
+                    </Typography>
+                    <Typography variant="caption" color="inherit">
+                        {labelInfo}
+                    </Typography>
+                    <div className="deleteFolderBtn" style={{ display: "none", color: "red" }} onClick={() => { props.deleteFolder(props.id) }}>
+                        {/* De */}
+                        <i className="material-icons md-18">delete_forever</i>
+                    </div>
+                    <div className="editFolderBtn" style={{ display: "none", color: "blue" }} onClick={() => { alert(props.id) }}>
+                        {/* Ed */}
+                        <i className="material-icons md-18">edit</i>
                     </div>
                 </div>
             }
@@ -113,7 +137,7 @@ StyledTreeItem.propTypes = {
 
 const useStyles = makeStyles({
     root: {
-        height: 264,
+        minHeight: 264,
         flexGrow: 1,
         maxWidth: 400,
     },
@@ -122,15 +146,19 @@ const useStyles = makeStyles({
 function CustomizedTreeView(props) {
     const classes = useStyles();
 
-    const { folders, setCurrentFolderId } = props;
+    const { folders, setCurrentFolder } = props;
 
-    const handleClick = (folderId, folderTypeId, path) => {
-        props.history.push('/personalLibrary/' + path + "/" + folderId);
-        setCurrentFolderId(folderId, folderTypeId);
+    const handleClick = (folder, subType, path) => {
+        props.history.push('/personalLibrary/' + path + "/" + folder.folderId);
+        setCurrentFolder(folder.folderId, folder.folderTypeId, subType);
     }
 
     const foldersToTree = (folders) => {
         let rootFolders = rootFoldersFilter(folders);
+        rootFolders[0].subType = "knowledgeGroup";
+        rootFolders[1].subType = "test";
+        rootFolders[2].subType = "groups";
+        // rootFolders[3].subType = "notification";
         return recursiveTree(folders, rootFolders)
     }
 
@@ -143,28 +171,32 @@ function CustomizedTreeView(props) {
     const recursiveTree = (folders, rootFolders) => {
         return rootFolders.map(folder => {
             let subfolders = folders.filter(subfolder => {
-                return subfolder.parentFolderId == folder.folderId;
+                if (subfolder.parentFolderId == folder.folderId) {
+                    subfolder.subType = folder.subType;
+                    return true;
+                }
+                return false;
             })
             if (subfolders.length > 0) {
                 return (
                     <StyledTreeItem nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={Folder} color="#1a73e8"
-                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} onClick={() => setCurrentFolderId(folder.folderId, folder.folderTypeId)}>
+                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={true} onClick={() => setCurrentFolder(folder, folder.subType)}>
                         <div style={{ paddingLeft: "10px" }}>{recursiveTree(folders, subfolders)}</div>
                     </StyledTreeItem>
                 )
             } else {
                 if (folder.folderTypeId == 1) {
-                    return <StyledTreeItem nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={FolderOpenIcon} color="#1a73e8"
-                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} onClick={() => setCurrentFolderId(folder.folderId, folder.folderTypeId)}/>
+                    return <StyledTreeItem deleteFolder={props.deleteFolder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={FolderOpenIcon} color="#1a73e8"
+                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={() => setCurrentFolder(folder, folder.subType)} />
                 } else if (folder.folderTypeId == 2) {
-                    return <StyledTreeItem nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={DescriptionIcon} color="#1a73e8"
-                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} onClick={() => handleClick(folder.folderId, folder.folderTypeId, "knowledgeGroup")} />
+                    return <StyledTreeItem deleteFolder={props.deleteFolder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={DescriptionIcon} color="#1a73e8"
+                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={() => handleClick(folder, folder.subType, "knowledgeGroup")} />
                 } else if (folder.folderTypeId == 3) {
-                    return <StyledTreeItem nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={DescriptionIcon} color="#1a73e8"
-                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} onClick={() => handleClick(folder.folderId, folder.folderTypeId, "test")} />
+                    return <StyledTreeItem deleteFolder={props.deleteFolder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={DescriptionIcon} color="#1a73e8"
+                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={() => handleClick(folder, folder.subType, "test")} />
                 } else {
-                    return <StyledTreeItem nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={FolderOpenIcon} color="#1a73e8"
-                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} onClick={() => setCurrentFolderId(folder.folderId, folder.folderTypeId)}/>
+                    return <StyledTreeItem deleteFolder={props.deleteFolder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={FolderOpenIcon} color="#1a73e8"
+                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={() => setCurrentFolder(folder, folder.subType)} />
                 }
             }
         })
@@ -184,8 +216,8 @@ function CustomizedTreeView(props) {
             defaultExpandIcon={<ArrowRightIcon />}
             defaultEndIcon={<div style={{ width: 22 }} />}
         >
-            {/* <StyledTreeItem nodeId="1" labelText="All Mail" labelIcon={MailIcon} />
-            <StyledTreeItem nodeId="2" labelText="Trash" labelIcon={DeleteIcon} />
+            <StyledTreeItem style={{display: "none"}} nodeId="0" labelText="" labelIcon={DeleteIcon} />
+            {/* <StyledTreeItem nodeId="2" labelText="Trash" labelIcon={DeleteIcon} />
             <StyledTreeItem nodeId="3" labelText="Categories" labelIcon={Label}>
                 <StyledTreeItem
                     nodeId="5"

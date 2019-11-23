@@ -25,7 +25,7 @@ const Sidenav = (props) => {
     return (
         <div>
             {props.user.role === 3 &&
-                <div className="my-sidenav container z-depth-2 white">
+                <div className="my-sidenav z-depth-2 white">
                     <Link exact to='/home'>
                         <div className='side-nav-logo' >
                             {/* <p className="brand-logo blue-text text-darken-3 bold">HGE</p> */}
@@ -58,7 +58,7 @@ const Sidenav = (props) => {
                 </div>
             }
             {props.user.role === 2 &&
-                <div className="my-sidenav container z-depth-2 white">
+                <div className="my-sidenav z-depth-2 white">
                     <Link exact to='/home'>
                         <div className='side-nav-logo' >
                             {/* <p className="brand-logo blue-text text-darken-3 bold">HGE</p> */}
@@ -118,8 +118,8 @@ const Sidenav = (props) => {
                         <span style={iconColor}>Người dùng</span>
                     </NavLink>
                 </div>
-                </ul>
-                <ul className="sidenav" id='sidenavMod'>
+            </ul>
+            <ul className="sidenav" id='sidenavMod'>
                 <div className="my-sidenav-big container white">
                     <Link to='/home'>
                         <div className='side-nav-logo flex-row' >

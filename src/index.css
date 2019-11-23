@@ -132,7 +132,12 @@ i{
   left:0px;
   top:0px;
   height: 100vh;
+  overflow: scroll;
   /* width:100px; */
+}
+
+.personalLibrary-nav::-webkit-scrollbar{
+  display:none
 }
 
 .line{
@@ -359,7 +364,7 @@ i{
 }
 
 .search-field::before {
-  background-image: ;
+  /* background-image: ; */
 }
 
 .search-field::placeholder {
