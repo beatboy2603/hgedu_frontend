@@ -3,206 +3,115 @@ import { Link, NavLink, withRouter } from 'react-router-dom';
 import Logo from './../resources/logo.png';
 import SmallLogo from './../resources/logo.svg';
 import { connect } from 'react-redux';
-import DropdownButton from 'react-bootstrap/DropdownButton'
-import React, { Component } from 'react'
-
-export default class Sidenav extends Component {
-    render() {
-        const style = {
-            logout: {
-                width: '200px',
-                height: '50px',
-                position: 'relative',
-                top: '-50px',
-                backgroundColor: '#e3e3e3'
-            },
-        }
-        const change = {
-            display: 'block'
-        }
-    
-        const iconColor = {
-            color: "#3A3A3A"
-        }
-        
-        // showObj = () => {
-        //     this.setState({
-        //         display: { ...this.state.display, display:'block' }
-        //     })
-        // },
-    
-        // hideObj = () => {
-        //     this.setState({
-        //         display: { ...this.state.display, display: 'none' }
-        //     })
-        // }
-    
-        return (
-            <div>
-                {props.user.role == "admin" &&
-                    <div className="my-sidenav container z-depth-2 white">
-                        <Link exact to='/home'>
-                            <div className='side-nav-logo' >
-                                <p className="brand-logo blue-text text-darken-3 bold">HGE</p>
-                                <img src={SmallLogo} alt="HGEdu Logo" style={{ width: "20px", marginTop: "-7vh" }} />
-                            </div>
-                        </Link>
-                        <div className="flex-column">
-                            <Link className="sidenav-trigger" data-target='sidenavAdmin'>
-                                <i className="material-icons padding-vertical-10" style={iconColor}>menu</i>
-                            </Link>
-                            <NavLink to="/home" activeClassName="side-nav-active">
-                                <i className="material-icons padding-vertical-10" style={iconColor}>home</i>
-                            </NavLink>
-                            <NavLink to="/personalLibrary" activeClassName="side-nav-active">
-                                <i className="material-icons padding-vertical-10" style={iconColor}>library_books</i>
-                            </NavLink>
-                            <NavLink to='/abbreviationLibrary' activeClassName="side-nav-active">
-                                <i className="material-icons padding-vertical-10" style={iconColor}>border_color</i>
-                            </NavLink>
-                            <NavLink to='/studentManagement' activeClassName="side-nav-active">
-                                <i className="material-icons padding-vertical-10" style={iconColor}>group</i>
-                            </NavLink>
-                            <NavLink to='/testManagement' activeClassName="side-nav-active">
-                                <i className="material-icons padding-vertical-10" style={iconColor}>check_box</i>
-                            </NavLink>
-                        </div>
-                        <NavLink to="/user">
-                            <i className="material-icons padding-vertical-10" style={iconColor} onMouseOver={this.showStatus}>account_circle</i>
-                        </NavLink>
-                        <div id="logout" style={this.state.display}>
-                            <Link to="/home/logout">Đăng xuất</Link>
-                            <DropdownButton
-                                drop = 'up'
-                                variant = 'secondary'
-                                title = 'Chuyển role'
-                            >
-                                <Dropdown.Item eventKey = "1">Giáo Viên</Dropdown.Item>
-                                <Dropdown.Item eventKey = "2">Học Sinh</Dropdown.Item>
-                            </DropdownButton>
-                        </div>
-                    </div>
-                }
-                <ul className="sidenav" id='sidenavAdmin'>
-                    <div className="my-sidenav-big container white">
-                        <Link to='/home'>
-                            <div className='side-nav-logo flex-row' >
-                                <img src={Logo} alt="HGEdu Logo" />
-                            </div>
-                        </Link>
-                        <div className="flex-column">
-                            <Link className="sidenav-trigger" data-target='sidenav'>
-                                <i className="material-icons blue-text text-darken-2 padding-vertical-10">menu</i>
-                            </Link>
-                            <NavLink to="/home" className='flex-row' activeClassName="side-nav-active">
-                                <i className="material-icons left padding-vertical-10" style={iconColor}>home</i>
-                                <span style={iconColor}>Trang chủ</span>
-                            </NavLink>
-                            <NavLink to="/personalLibrary" className='flex-row' activeClassName="side-nav-active">
-                                <i className="material-icons left padding-vertical-10" style={iconColor}>library_books</i>
-                                <span style={iconColor}>Thư viện cá nhân</span>
-                            </NavLink>
-                            <NavLink to='/abbreviationLibrary' className='flex-row' activeClassName="side-nav-active">
-                                <i className="material-icons left padding-vertical-10" style={iconColor}>border_color</i>
-                                <span style={iconColor}>Thư viện viết tắt</span>
-                            </NavLink>
-                            <NavLink to='/studentManagement' className='flex-row' activeClassName="side-nav-active">
-                                <i className="material-icons left padding-vertical-10" style={iconColor}>group</i>
-                                <span style={iconColor}>Quản lí học sinh</span>
-                            </NavLink>
-                            <NavLink to='/testManagement' className='flex-row' activeClassName="side-nav-active">
-                                <i className="material-icons left padding-vertical-10" style={iconColor}>check_box</i>
-                                <span style={iconColor}>Quản lí kiểm tra</span>
-                            </NavLink>
-                        </div>
-                        <NavLink className='flex-row' to='/user'>
-                            <i className="material-icons left padding-vertical-10" style={iconColor} >account_circle</i>
-                            <span style={iconColor}>Người dùng</span>
-                        </NavLink>
-                    </div>
-                </ul>
-            </div>
-    
-        )
-    }
-}
 
 const Sidenav = (props) => {
     const style = {
-        logout: {
-            width: '200px',
-            height: '50px',
-            position: 'relative',
-            top: '-50px',
-            backgroundColor: '#e3e3e3'
+        userOption: {
+            display: 'flex',
+            flexDirection: 'row',
+            width: 'fit-content'
         },
-    }
-    const change = {
-        display: 'block'
-    }
+        logoutHidden: {
+            display: 'flex',
+            flexDirection:'row',
+            backgroundColor: '#fff',
+            borderRadius: '3px',
+            width: '0px',
+            border: '1px',
+            whiteSpace: 'nowrap',
+            marginLeft: '12px',
+            boxShadow: '0px 4px 5px 0 #00000024',
+            zIndex: '-1',
+            overflow: 'hidden',
+            transition: 'width 1.05s',
+            // transitionTimingFunction: 'ease-out'
+
+        },
+        logoutDisplay: {
+            width: '150px',
+        },
+
+        firstIcon: {
+            marginLeft: '10px'
+        },
+
+        iconChoice: {
+            marginRight: '10px'
+        }
+    };
 
     const iconColor = {
         color: "#3A3A3A"
-    }
-    
-    // showObj = () => {
-    //     this.setState({
-    //         display: { ...this.state.display, display:'block' }
-    //     })
-    // },
+    };
 
-    // hideObj = () => {
-    //     this.setState({
-    //         display: { ...this.state.display, display: 'none' }
-    //     })
-    // }
+    const showObj = (e) => {
+        let userOption = document.getElementById("user-option");
+        Object.assign(userOption.style, style.logoutDisplay);
+        // let parent = e.target.parentNode.parentNode;
+        // parent.childNodes[1].animate({})
+        // Object.assign(parent.childNodes[1].style, style.logoutShow);
+    };
+
+    const hideObj = () => {
+        // let target = e.target;
+        // if (target.className != 'user-option') {
+        //     Object.assign(target.parentNode.childNodes[1], style.logout)
+        // }
+
+        let userOption = document.getElementById("user-option");
+        Object.assign(userOption.style, style.logoutHidden);
+    }
 
     return (
         <div>
-            {props.user.role == "admin" &&
-                <div className="my-sidenav container z-depth-2 white">
-                    <Link exact to='/home'>
-                        <div className='side-nav-logo' >
-                            <p className="brand-logo blue-text text-darken-3 bold">HGE</p>
-                            <img src={SmallLogo} alt="HGEdu Logo" style={{ width: "20px", marginTop: "-7vh" }} />
-                        </div>
-                    </Link>
-                    <div className="flex-column">
-                        <Link className="sidenav-trigger" data-target='sidenavAdmin'>
-                            <i className="material-icons padding-vertical-10" style={iconColor}>menu</i>
-                        </Link>
-                        <NavLink to="/home" activeClassName="side-nav-active">
-                            <i className="material-icons padding-vertical-10" style={iconColor}>home</i>
-                        </NavLink>
-                        <NavLink to="/personalLibrary" activeClassName="side-nav-active">
-                            <i className="material-icons padding-vertical-10" style={iconColor}>library_books</i>
-                        </NavLink>
-                        <NavLink to='/abbreviationLibrary' activeClassName="side-nav-active">
-                            <i className="material-icons padding-vertical-10" style={iconColor}>border_color</i>
-                        </NavLink>
-                        <NavLink to='/studentManagement' activeClassName="side-nav-active">
-                            <i className="material-icons padding-vertical-10" style={iconColor}>group</i>
-                        </NavLink>
-                        <NavLink to='/testManagement' activeClassName="side-nav-active">
-                            <i className="material-icons padding-vertical-10" style={iconColor}>check_box</i>
-                        </NavLink>
+            {/* {props.user.role == "admin" && */}
+            <div className="my-sidenav container z-depth-2 white">
+                <Link exact to='/home'>
+                    <div className='side-nav-logo' >
+                        {/* <p className="brand-logo blue-text text-darken-3 bold">HGE</p> */}
+                        <img src={SmallLogo} alt="HGEdu Logo" style={{ width: "20px", marginTop: "-7vh" }} />
                     </div>
-                    <NavLink to="/user">
-                        <i className="material-icons padding-vertical-10" style={iconColor} onMouseOver={this.showStatus}>account_circle</i>
+                </Link>
+                <div className="flex-column">
+                    <Link className="sidenav-trigger" data-target='sidenavAdmin'>
+                        <i className="material-icons padding-vertical-10" style={iconColor}>menu</i>
+                    </Link>
+                    <NavLink to="/home" activeClassName="side-nav-active">
+                        <i className="material-icons padding-vertical-10" style={iconColor}>home</i>
                     </NavLink>
-                    <div id="logout" style={this.state.display}>
-                        <Link to="/home/logout">Đăng xuất</Link>
-                        <DropdownButton
-                            drop = 'up'
-                            variant = 'secondary'
-                            title = 'Chuyển role'
-                        >
-                            <Dropdown.Item eventKey = "1">Giáo Viên</Dropdown.Item>
-                            <Dropdown.Item eventKey = "2">Học Sinh</Dropdown.Item>
-                        </DropdownButton>
+                    <NavLink to="/personalLibrary" activeClassName="side-nav-active">
+                        <i className="material-icons padding-vertical-10" style={iconColor}>library_books</i>
+                    </NavLink>
+                    <NavLink to='/abbreviationLibrary' activeClassName="side-nav-active">
+                        <i className="material-icons padding-vertical-10" style={iconColor}>border_color</i>
+                    </NavLink>
+                    <NavLink to='/studentManagement' activeClassName="side-nav-active">
+                        <i className="material-icons padding-vertical-10" style={iconColor}>group</i>
+                    </NavLink>
+                    <NavLink to='/testManagement' activeClassName="side-nav-active">
+                        <i className="material-icons padding-vertical-10" style={iconColor}>check_box</i>
+                    </NavLink>
+                </div>
+
+                {/* Logout section */}
+                <div className="user-option" style={style.userOption} onMouseLeave={hideObj} >
+                    <NavLink to="/user" >
+                        <i onMouseOver={showObj} className="material-icons padding-vertical-10" style={iconColor} >account_circle</i>
+                    </NavLink>
+                    <div id="user-option" style={style.logoutHidden}>
+                        <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor, ...style.firstIcon }} >exit_to_app</i></Link>
+                        <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person_pin</i></Link>
+
+                        <div class="role-changer" style={{display:'flex', flexDirection:'row'}}>
+                            <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person</i></Link>
+                            <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >people_alt</i></Link>
+                        </div>
                     </div>
                 </div>
-            }
+                {/* -------------- */}
+
+            </div>
+
             <ul className="sidenav" id='sidenavAdmin'>
                 <div className="my-sidenav-big container white">
                     <Link to='/home'>

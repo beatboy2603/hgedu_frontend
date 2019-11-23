@@ -18,16 +18,6 @@ class UserInfo extends Component {
         user: []
     }
 
-    componentDidMount() {
-
-        axios.get('http://localhost:8080/api/user/2')
-            .then(res => {
-                this.setState({
-                    user: res.data
-                })
-            });
-    }
-
     render() {
         const { user } = this.state;
         const style = {

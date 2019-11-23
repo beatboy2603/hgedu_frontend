@@ -2,10 +2,9 @@ import React, { Component } from 'react'
 import axios from 'axios';
 import { Avatar, Button, RadioGroup, FormControlLabel, Radio } from '@material-ui/core'
 import { NavLink, Link, Redirect } from 'react-router-dom/cjs/react-router-dom.min'
+import { makeStyles } from '@material-ui/styles'
 export default class PersonalInfoEdit extends Component {
-    // state = {
-    //     user: {}
-    // }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -27,10 +26,10 @@ export default class PersonalInfoEdit extends Component {
     submitData(e) {
         e.preventDefault();
         axios.put('http://localhost:8080/api/user/2', this.state.user)
-            .then(res => 
+            .then(res =>
                 console.log(res.status));
-                if(window.confirm('Sure to update?'))
-                return <Redirect to='/home/personalInfo'/>
+        if (window.confirm('Sure to update?'))
+            return <Redirect to='/home/personalInfo' />
     }
 
     str2bool = (string) => {
@@ -45,11 +44,11 @@ export default class PersonalInfoEdit extends Component {
             user: { ...this.state.user, [e.target.name]: this.str2bool(e.target.value) }
         })
         console.log(this.state.user)
+    };
 
-    }
 
     render() {
-        const { user } = this.state
+        const { user } = this.state;
         const style = {
             inputname: {
                 height: '30px'
@@ -102,8 +101,9 @@ export default class PersonalInfoEdit extends Component {
                                 </div>
                                 <div style={style.field}>
                                     <p style={style.detail.title}>Điện thoại:</p>
-                                    <input name="phoneNumber" type="text" style={style.detail.content} value={user.phoneNumber} />
+                                    <input name="phoneNumber" type="text" style={style.detail.content} onChange={this.changeInfo} value={user.phoneNumber} />
                                 </div>
+                                {/* Radio-button gender chooser section */}
                                 <div style={style.field}>
                                     <p style={style.detail.title}>Giới tính:</p>
                                     <RadioGroup name="gender">
@@ -111,6 +111,7 @@ export default class PersonalInfoEdit extends Component {
                                         <FormControlLabel value={false} checked={user.gender === false} name="gender" control={<Radio color="primary" />} onChange={this.changeInfo} label="Female" />
                                     </RadioGroup>
                                 </div>
+                                <customizedRadio />
                                 <div style={style.field}>
                                     <p style={style.detail.title}>Ngày sinh:</p>
                                     <input type="text" style={style.detail.content} defaultValue="10/01/1997" onChange={((e) => { console.log(e.target.value) })} />
@@ -124,7 +125,10 @@ export default class PersonalInfoEdit extends Component {
                         <div className="col s2 no-padding">
                             <Link style={{ marginRight: '10px', color: '#3a3a3a' }} to="/user/personalInfo">Huỷ</Link>
                             <Link onClick={this.submitData}>Lưu</Link>
+                            <Link style={{ marginLeft: '10px' }} onClick={this.parentStudentBox}>Liên kết</Link>
                         </div>
+
+                        
                     </div>
                 }
             </div>
