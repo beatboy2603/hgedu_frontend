@@ -4,24 +4,64 @@ import Logo from '../../resources/logo.png';
 import SmallLogo from '../../resources/logo.svg';
 import { connect } from 'react-redux';
 
-
 const Sidenav = (props) => {
+    const style = {
+        userOption: {
+            display: 'flex',
+            flexDirection: 'row',
+            width: 'fit-content'
+        },
+        logoutHidden: {
+            display: 'flex',
+            flexDirection: 'row',
+            backgroundColor: '#fff',
+            borderRadius: '3px',
+            width: '0px',
+            border: '1px',
+            whiteSpace: 'nowrap',
+            marginLeft: '12px',
+            boxShadow: '0px 4px 5px 0 #00000024',
+            zIndex: '-1',
+            overflow: 'hidden',
+            transition: 'width 1.05s',
+            // transitionTimingFunction: 'ease-out'
 
-    const logout = {
-        position: "relative",
-        bottom: "10px",
-        color: "000"
-    };
-    const iconColor = {
-        color: "#3A3A3A"
-    },
-        print = () => {
-            console.log("hover in");
+        },
+        logoutDisplay: {
+            width: '150px',
         },
 
-        outprint = () => {
-            console.log("Out hover");
+        firstIcon: {
+            marginLeft: '10px'
+        },
+
+        iconChoice: {
+            marginRight: '10px'
         }
+    };
+
+    const iconColor = {
+        color: "#3A3A3A"
+    };
+
+    const showObj = (e) => {
+        let userOption = document.getElementById("user-option");
+        Object.assign(userOption.style, style.logoutDisplay);
+        // let parent = e.target.parentNode.parentNode;
+        // parent.childNodes[1].animate({})
+        // Object.assign(parent.childNodes[1].style, style.logoutShow);
+    };
+
+    const hideObj = () => {
+        // let target = e.target;
+        // if (target.className != 'user-option') {
+        //     Object.assign(target.parentNode.childNodes[1], style.logout)
+        // }
+
+        let userOption = document.getElementById("user-option");
+        Object.assign(userOption.style, style.logoutHidden);
+    }
+
     return (
         <div>
             {props.user.role === 3 &&
@@ -33,7 +73,7 @@ const Sidenav = (props) => {
                         </div>
                     </Link>
                     <div className="flex-column">
-                        <Link className="sidenav-trigger" data-target='sidenavAdmin'>
+                        <Link className="sidenav-trigger" data-target='sideNavUser'>
                             <i className="material-icons padding-vertical-10" style={iconColor}>menu</i>
                         </Link>
                         <NavLink to="/home" activeClassName="side-nav-active">
@@ -52,9 +92,20 @@ const Sidenav = (props) => {
                             <i className="material-icons padding-vertical-10" style={iconColor}>check_box</i>
                         </NavLink>
                     </div>
-                    <NavLink>
-                        <i className="material-icons padding-vertical-10" style={iconColor}>account_circle</i>
-                    </NavLink>
+                    <div className="user-option" style={style.userOption} onMouseLeave={hideObj} >
+                        <NavLink to="/user" >
+                            <i onMouseOver={showObj} className="material-icons padding-vertical-10" style={iconColor} >account_circle</i>
+                        </NavLink>
+                        <div id="user-option" style={style.logoutHidden}>
+                            <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor, ...style.firstIcon }} >exit_to_app</i></Link>
+                            <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person_pin</i></Link>
+
+                            <div class="role-changer" style={{ display: 'flex', flexDirection: 'row' }}>
+                                <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person</i></Link>
+                                <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >people_alt</i></Link>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             }
             {props.user.role === 2 &&
@@ -81,7 +132,7 @@ const Sidenav = (props) => {
                     </NavLink>
                 </div>
             }
-            <ul className="sidenav" id='sidenavAdmin'>
+            <ul className="sidenav" id='sideNavUser'>
                 <div className="my-sidenav-big container white">
                     <Link to='/home'>
                         <div className='side-nav-logo flex-row' >
@@ -113,7 +164,7 @@ const Sidenav = (props) => {
                             <span style={iconColor}>Quản lí kiểm tra</span>
                         </NavLink>
                     </div>
-                    <NavLink className='flex-row'>
+                    <NavLink className='flex-row' to='/user'>
                         <i className="material-icons left padding-vertical-10" style={iconColor}>account_circle</i>
                         <span style={iconColor}>Người dùng</span>
                     </NavLink>
@@ -139,13 +190,13 @@ const Sidenav = (props) => {
                             <span style={iconColor}>Quản lí bài đăng</span>
                         </NavLink>
                     </div>
-                    <NavLink className='flex-row'>
+                    <NavLink className='flex-row' to='/user'>
                         <i className="material-icons left padding-vertical-10" style={iconColor}>account_circle</i>
                         <span style={iconColor}>Người dùng</span>
                     </NavLink>
                 </div>
             </ul>
-        </div>
+        </div >
 
     )
 }

@@ -45,6 +45,7 @@ class App extends Component {
               <Switch>
                 <Route exact path='/' component={LandingPage} />
                 <Route path='/home' component={Home} />
+                <Route path='/user' component={UserInfo} />
                 <Route path='/signup' component={SignUp} />
                 <Route path='/signin' component={SignIn} />
                 <Route path='/personalLibrary' component={PersonalLibrary} />

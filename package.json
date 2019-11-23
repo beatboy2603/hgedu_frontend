@@ -9,6 +9,7 @@
     "@material-ui/icons": "^4.2.1",
     "@material-ui/lab": "^4.0.0-alpha.25",
     "@material-ui/pickers": "^3.2.8",
+    "@material-ui/styles": "^4.6.0",
     "axios": "^0.19.0",
     "date-fns": "^2.7.0",
     "gapi-script": "0.0.5",
