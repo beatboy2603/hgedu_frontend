@@ -33,7 +33,7 @@ export default class TestWord extends Component {
     data.append("file", this.state.file);
     data.append("name", this.state.file.name);
 
-    fetch("http://localhost:8080/api/upload", {
+    fetch("http://localhost:8080/testimportexport/upload", {
       method: "POST",
       body: data
     })
@@ -47,27 +47,31 @@ export default class TestWord extends Component {
   };
 
   importFile = event => {
-    axios.get("http://localhost:8080/api/test2/import").then(res => {
-      console.log("import OK")
-    })
-  }
-
-  exportFile = event => {
-    axios.get("http://localhost:8080/api/test2/export").then(res => {
-      console.log("Export ok")
-    })
-  }
-
+    axios.get("http://localhost:8080/testimportexport/import").then(res => {
+      console.log("import OK");
+    });
+  };
 
   render() {
     return (
       <div className="container center-align">
         <h4 style={{ color: "red" }}>{this.state.error}</h4>
         <h4 style={{ color: "green" }}>{this.state.msg}</h4>
-        <input onChange={this.onFileChange} type="file"></input>
-        <Button variant="outlined" color="primary" onClick={this.uploadFile}>Upload</Button>
-        <Button variant="outlined" color="primary" onClick={this.importFile}>Import</Button>
-        <Button variant="outlined" color="primary" onClick={this.exportFile}>Export</Button>    
+        <input onChange={this.onFileChange} type="file" accept=".xlsx"></input>
+        <Button variant="outlined" color="primary" onClick={this.uploadFile}>
+          Upload
+        </Button>
+        <Button variant="outlined" color="primary" onClick={this.importFile}>
+          Import
+        </Button>
+        <Button
+          href="http://localhost:8080/testimportexport/download"
+          variant="outlined"
+          color="primary"
+          download
+        >
+          Export
+        </Button>
       </div>
     );
   }
