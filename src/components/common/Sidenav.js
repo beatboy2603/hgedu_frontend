@@ -3,6 +3,7 @@ import { Link, NavLink, withRouter } from 'react-router-dom';
 import Logo from '../../resources/logo.png';
 import SmallLogo from '../../resources/logo.svg';
 import { connect } from 'react-redux';
+import { gapi } from "gapi-script";
 
 const Sidenav = (props) => {
     const style = {
@@ -21,7 +22,7 @@ const Sidenav = (props) => {
             whiteSpace: 'nowrap',
             marginLeft: '12px',
             boxShadow: '0px 4px 5px 0 #00000024',
-            zIndex: '-1',
+            zIndex: '0',
             overflow: 'hidden',
             transition: 'width 1.05s',
             // transitionTimingFunction: 'ease-out'
@@ -62,6 +63,39 @@ const Sidenav = (props) => {
         Object.assign(userOption.style, style.logoutHidden);
     }
 
+    const signOut = () => {
+        var auth2 = gapi.auth2.getAuthInstance();
+        if (!auth2) {
+            gapi.client.init({
+                'clientId': '1072039829865-jc2jf9cv96ifoph4ptpg1840s8n5gg5b.apps.googleusercontent.com',
+                'scope': 'https://www.googleapis.com/auth/drive.metadata.readonly',
+            }).then(() => {
+                var auth2 = gapi.auth2.getAuthInstance();
+                if (auth2) {
+                    auth2.signOut().then(() => {
+                        console.log('User signed out.');
+                        props.dispatch({ type: "SIGN_OUT", payload: null });
+                        redirect();
+                    });
+                }
+            });
+        } else {
+            auth2.signOut().then(() => {
+                console.log('User signed out.');
+                props.dispatch({ type: "SIGN_OUT", payload: null });
+                redirect();
+            });
+        }
+    }
+
+    const redirect = () => {
+        if (props.user.role) {
+            props.history.push('/home');
+        } else {
+            props.history.push('/');
+        }
+    }
+
     return (
         <div>
             {props.user.role === 3 &&
@@ -97,7 +131,9 @@ const Sidenav = (props) => {
                             <i onMouseOver={showObj} className="material-icons padding-vertical-10" style={iconColor} >account_circle</i>
                         </NavLink>
                         <div id="user-option" style={style.logoutHidden}>
-                            <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor, ...style.firstIcon }} >exit_to_app</i></Link>
+                            {/* <a href="#" onClick={() => signOut()}> */}
+                                <i onClick={() => signOut()} className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor, ...style.firstIcon, cursor:"pointer" }} >exit_to_app</i>
+                            {/* </a> */}
                             <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person_pin</i></Link>
 
                             <div class="role-changer" style={{ display: 'flex', flexDirection: 'row' }}>

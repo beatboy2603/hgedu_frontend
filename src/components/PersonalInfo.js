@@ -4,13 +4,14 @@ import { Avatar, Button } from '@material-ui/core'
 import { Link, Switch, Route } from 'react-router-dom/cjs/react-router-dom.min'
 import PersonalInfoEdit from './PersonalInfoEdit'
 import Modal from 'react-materialize'
+import {serverUrl} from './common/common'
 export default class PersonalInfo extends Component {
     state = {
         user: null
     }
 
     componentDidMount() {
-        axios.get('http://localhost:8080/api/user/' + '2')
+        axios.get(serverUrl+'api/user/' + '2')
             .then(res => {
                 this.setState({
                     user: res.data
@@ -91,7 +92,7 @@ export default class PersonalInfo extends Component {
                                 <h5 className="font-montserrat" style={{ ...style.colorizedText }}>Liên kết với học sinh</h5>
                                 <label style={{ fontSize: '20px', color: '#000' }} htmlFor="">Email học sinh:</label>
                                 <input type="text" name="email" id="email" />
-                                <button style={{ float: 'right' }} onSubmit={this.sendLinkRequest}>Gửi</button>
+                                <button style={{ float: 'right' }} onSubmit={()=>{this.sendLinkRequest()}}>Gửi</button>
                                 <div style={{ clear: 'both' }}></div>
                             </form>
                         </div>

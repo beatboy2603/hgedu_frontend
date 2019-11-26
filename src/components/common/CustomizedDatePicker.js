@@ -28,7 +28,7 @@ const CustomizedDatePicker = (props) => {
         newState[key] = date;
         setState(newState);
         if (handleParentState) {
-            handleParentState(val);
+            handleParentState(val.getTime());
         }
     }
 
@@ -37,7 +37,7 @@ const CustomizedDatePicker = (props) => {
             <DatePicker style={{ width: width, height: "20px" }}
                 value={state.myDate}
                 id="dob"
-                options={{ format: 'dd/mm/yyyy', minDate: new Date("1900-01-01"), maxDate: new Date(), yearRange: new Number(100) }}
+                options={{ format: 'dd/mm/yyyy', minDate: new Date("1900-01-01"), maxDate: new Date() }}
                 onChange={(newDate) => {
                     handleChange({
                         target: {

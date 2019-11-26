@@ -21,15 +21,17 @@ class LandingPage extends Component {
 
     onSignIn = (googleUser) => { }
 
-    signOut = () => {
-        let props = this.props;
-        var auth2 = gapi.auth2.getAuthInstance();
-        auth2.signOut().then(() => {
-            console.log('User signed out.');
-            props.dispatch({ type: "SIGN_OUT", payload: null });
-            this.redirect();
-        });
-    }
+    // signOut = () => {
+    //     let props = this.props;
+    //     var auth2 = gapi.auth2.getAuthInstance();
+    //     if (auth2) {
+    //         auth2.signOut().then(() => {
+    //             console.log('User signed out.');
+    //             props.dispatch({ type: "SIGN_OUT", payload: null });
+    //             this.redirect();
+    //         });
+    //     }
+    // }
 
     redirect = () => {
         if (this.props.user.role) {
@@ -73,8 +75,16 @@ class LandingPage extends Component {
                 token
             }).then(res => {
                 if (res.data.message == "SignUp") {
-                    console.log(res.data);
-                    this.signOut();
+                    console.log("signup");
+
+                    let user = {
+                        email: res.data.email,
+                        name: res.data.name,
+                        picture: res.data.picture,
+                    }
+                    this.props.dispatch({ type: "UPDATE_USER", payload: user });
+                    this.props.dispatch({ type: "UPDATE_USER", payload: {googleJwt: token} });
+                    this.props.history.push('/signup');
                 } else {
                     let user = res.data.user;
                     let jwt = res.data.jwt;
@@ -94,19 +104,21 @@ class LandingPage extends Component {
                             uid: user.userId,
                             phone: user.phoneNumber,
                             gender: user.gender,
-                            role: user.roleId,
+                            // role: user.roleId,
+                            role: 3,
                         }
                     });
                     this.props.dispatch({ type: "UPDATE_JWT", payload: jwt });
+                    this.redirect();
                 }
-                this.redirect();
+                // this.redirect();
             })
         }
 
         return (
             <div className="row">
                 <div style={{ maxWidth: "100vw", minHeight: "100vh", backgroundImage: `url(${BackGroundIMG})`, backgroundSize: "cover" }}>
-                    <img src={Logo} alt="Logo" style={{ width: "8vw", position: "absolute", top: "5vh", left: "5vw" }} />
+                    <img onClick={() => { this.props.history.push('/signup'); }} src={Logo} alt="Logo" style={{ width: "8vw", position: "absolute", top: "5vh", left: "5vw" }} />
                     <GoogleLogin
                         clientId="1072039829865-jc2jf9cv96ifoph4ptpg1840s8n5gg5b.apps.googleusercontent.com"
                         render={renderProps => (
@@ -122,14 +134,14 @@ class LandingPage extends Component {
                     <div className="flex-column" style={{ width: "60vw", position: "absolute", top: "35vh", left: "20vw", color: "#ffffff", fontSize: "43px" }}>
                         <p align="center" className="font-montserrat" style={{ margin: "0", padding: "0", color: "#ffffff", fontSize: "43px" }}>MỘT NỀN GIÁO DỤC THÔNG MINH</p>
                         <p align="center" className="font-montserrat" style={{ margin: "0", padding: "0", color: "#ffffff", fontSize: "43px" }}>LÀ MỘT NỀN GIÁO DỤC LINH HOẠT</p>
-                        <p align="center"  style={{ color: "#ffffff", fontSize: "30px" }}>Cùng nhau tham gia vào cuộc cách mạng giáo dục Việt Nam!</p>
+                        <p align="center" style={{ color: "#ffffff", fontSize: "30px" }}>Cùng nhau tham gia vào cuộc cách mạng giáo dục Việt Nam!</p>
                     </div>
                     <a href="" onClick={this.goToNews}>
                         <i className="material-icons" style={{ position: "absolute", top: "90vh", left: "47vw", color: "#ffffff", fontSize: "50px" }}>arrow_drop_down_circle</i>
                     </a>
                 </div>
                 {/* <div className="g-signin2" onSuccess={() => this.onSignIn()}></div> */}
-                <a href="#" onClick={() => this.signOut()}>Sign out</a>
+                {/* <a href="#" onClick={() => this.signOut()}>Sign out</a> */}
                 {/* <button onClick={() => { this.handleLoading() }}>loading</button>
                 {this.state.isLoading && <Loading type={"spokes"} color={"#999999"} />}
                 <button onClick={() => { console.log(auth.getAuth()) }}>test</button>

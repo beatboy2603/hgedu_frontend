@@ -86,7 +86,7 @@ export default class ModalQuestion extends Component {
                 <a href="#addQuestion" className="btn-floating btn-large blue my-floating-btn modal-trigger">
                     <i className="material-icons" onClick={() => { console.log(this.state) }}>add</i>
                 </a>
-                <Modal id="addQuestion" options={{ preventScrolling: true }} style={{ width: "80vw", height: "80vh", overflow: "hidden" }} actions={[]}>
+                <Modal id="addQuestion" options={{ preventScrolling: true }} style={{ width: "80vw", height: "80vh", overflow: "hidden", borderRadius: "25px" }} actions={[]}>
                     <div style={{ paddingTop: "52.5vh" }}></div>
                     <div className="modal-content" style={{
                         position: "absolute",

@@ -41,7 +41,9 @@ class App extends Component {
         <PersistGate loading={null} persistor={persistor}>
           <BrowserRouter>
             <div className="App">
-              <Sidenav />
+              <div style={{zIndex: "1"}}>
+                <Sidenav />
+              </div>
               <Switch>
                 <Route exact path='/' component={LandingPage} />
                 <Route path='/home' component={Home} />
