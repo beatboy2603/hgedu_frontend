@@ -18,7 +18,7 @@ import { store, persistor } from './components/common/Store'
 import SignUp from './components/common/SignUp';
 import SignIn from './components/common/SignIn';
 import UserInfo from './components/UserInfo';
-
+import TestWord from './components/TestWord';
 
 // const persistConfig = {
 //   key: 'root',
@@ -56,6 +56,7 @@ class App extends Component {
                 <Route path='/studentManagement' component={StudentManagement} />
                 <Route path='/testManagement' component={TestManagement} />
                 <Route path='/newsList' component={NewsList} />
+                <Route path='/testWord' component={TestWord} />
                 {/* <Route path='/userInfo' component={UserInfo}/> */}
               </Switch>
             </div>
