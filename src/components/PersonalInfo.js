@@ -1,12 +1,17 @@
 import React, { Component } from 'react'
 import axios from 'axios';
-import { Avatar, Button } from '@material-ui/core'
+import { Avatar, Button, Hidden, Divider } from '@material-ui/core'
 import { Link, Switch, Route } from 'react-router-dom/cjs/react-router-dom.min'
+import { Modal } from 'react-materialize'
 import PersonalInfoEdit from './PersonalInfoEdit'
-import Modal from 'react-materialize'
 export default class PersonalInfo extends Component {
     state = {
-        user: null
+        user: null,
+        request: {
+            parentMail: null,
+            studentMail: null,
+
+        }
     }
 
     componentDidMount() {
@@ -17,9 +22,41 @@ export default class PersonalInfo extends Component {
                 })
                 console.log(this.state.user);
             });
+
+        axios.get('http://localhost:8080/api/user/request/' + '2')
+            .then(res => {
+                this.setState({
+                    request:res.data
+                })
+                console.log(this.state.request)
+            });
+
     }
+
+
+    checkRequestLink = () =>{
+
+    }
+
+    requestLink = (e) => {
+        e.preventDefault();
+        axios.post('http://localhost:8080/api/user', {
+            studentMail: this.state.request.studentMail,
+            parentMail: this.state.user.email
+        })
+        if (window.confirm("Do you want to link to this email?")) {
+            window.alert(this.state.request.studentMail + "\n" + this.state.request.parentMail)
+        }
+    }
+
+    fillLinkMail = (e) => {
+        this.state.request.studentMail = e.target.value
+        this.state.request.parentMail = this.state.user.email
+    }
+
     render() {
         const { user } = this.state
+        const { request } = this.state
         const style = {
             margin0: {
                 margin: '0px'
@@ -52,7 +89,7 @@ export default class PersonalInfo extends Component {
         }
         return (
             <div>
-                {user &&
+                {user && 
                     <div>
                         <div className="col s12" style={{ margin: '5px' }}><h5 className='font-montserrat' style={{ ...style.colorizedText, ...style.margin30 }}>Thông tin cá nhân</h5>
                         </div>
@@ -84,27 +121,27 @@ export default class PersonalInfo extends Component {
                         </div>
                         <div className="col s2 no-padding">
                             <Link to='/user/personalInfo/edit'>Sửa</Link>
-                            <Link style={{marginLeft:'20px'}} to='/user/personalInfo/edit'>Liên kết</Link>
+                            <a style={{ marginLeft: '20px' }} href="#link-modal" className="modal-trigger">Liên kết</a>
                         </div>
-                        <div class="link-form" id="class-form" style={{ border: 'solid 1px #3a3a3a', backgroundColor: '#fff', width: '400px', position: 'fixed', top: '20%', left: '50%', zIndex: '100', transform: 'translate(-50%,-50%)' }}>
+                
+                        <Modal id="link-modal" options={{ preventScrolling: true }} style={{ width: "40vw", height: "45vh", overflow: "hidden" }} actions={[]}>
+                        <h5 className="font-montserrat center" style={{ ...style.colorizedText }}>Liên kết với học sinh</h5>
+
+                        {/* <div className="link-form" id="class-form" style={{ border: 'solid 1px #3a3a3a', backgroundColor: '#fff', width: '400px', position: 'fixed', top: '20%', left: '50%', zIndex: '100', transform: 'translate(-50%,-50%)' }}>
                             <form style={{ margin: '10px' }} action="">
-                                <h5 className="font-montserrat" style={{ ...style.colorizedText }}>Liên kết với học sinh</h5>
                                 <label style={{ fontSize: '20px', color: '#000' }} htmlFor="">Email học sinh:</label>
-                                <input type="text" name="email" id="email" />
-                                <button style={{ float: 'right' }} onSubmit={this.sendLinkRequest}>Gửi</button>
+                                <input className="validate" type="email" name="studentMail" id="studentMail" value={this.state.request.studentMail} onChange={this.fillLinkMail} required />
+                                <span className='helper-text' data-error="Mail sai định dạng"></span>
+                                <button style={{ float: 'right' }} onClick={this.requestLink}>Gửi</button>
                                 <div style={{ clear: 'both' }}></div>
                             </form>
-                        </div>
-                        <div style={{ position: 'fixed', top: '0', right: '0', bottom: '0', left: '0', backgroundColor: 'rgba(0,0,0,0.5)', pointerEvents: 'none' }}></div>
-                        {/* <div className="col s1 no-padding">
-                        <a href="#edit">Sửa</a>
-                        <Modal id="edit">
-                            
+                            <Divider variant="middle"/>
+                            <div className="listed-link" >
+                                {request.parentMail}
+                            </div>
+                        </div> */}
                         </Modal>
-      
-                    </div> */}
                     </div>
-
                 }
             </div>
         )

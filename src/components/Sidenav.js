@@ -21,7 +21,7 @@ const Sidenav = (props) => {
             whiteSpace: 'nowrap',
             marginLeft: '12px',
             boxShadow: '0px 4px 5px 0 #00000024',
-            zIndex: '-1',
+            zIndex: '0',
             overflow: 'hidden',
             transition: 'width 1.05s',
             // transitionTimingFunction: 'ease-out'
@@ -95,7 +95,7 @@ const Sidenav = (props) => {
 
                 {/* Logout section */}
                 <div className="user-option" style={style.userOption} onMouseLeave={hideObj} >
-                    <NavLink to="/user" >
+                    <NavLink to="/user/personalInfo" >
                         <i onMouseOver={showObj} className="material-icons padding-vertical-10" style={iconColor} >account_circle</i>
                     </NavLink>
                     <div id="user-option" style={style.logoutHidden}>
