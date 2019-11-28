@@ -19,6 +19,8 @@ import SignUp from './components/common/SignUp';
 import SignIn from './components/common/SignIn';
 import UserInfo from './components/UserInfo';
 import TestWord from './components/TestWord';
+import ProtectedRoute from './components/common/ProtectedRoute';
+import { getAuthenCookie } from './components/common/common';
 
 // const persistConfig = {
 //   key: 'root',
@@ -35,21 +37,48 @@ import TestWord from './components/TestWord';
 // const persistor = persistStore(store);
 
 class App extends Component {
+  state = {
+    isAuthenticated: false,
+  }
+
+  checkAuthen = () => {
+    let isAuthenticated = getAuthenCookie();
+    this.setState({
+      isAuthenticated
+    })
+  }
+
+  componentDidMount() {
+    this.checkAuthen();
+  }
+
   render() {
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <BrowserRouter>
-            <div className="App">
-              <div style={{zIndex: "1"}}>
-                <Sidenav />
+            <div className="App" onClick={() => { this.checkAuthen() }}>
+              <div style={{ zIndex: "1" }}>
+                <Sidenav isAuthenticated={this.state.isAuthenticated} />
               </div>
               <Switch>
-                <Route exact path='/' component={LandingPage} />
-                <Route path='/home' component={Home} />
+                <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={false} exact path='/'>
+                  <LandingPage />
+                </ProtectedRoute>
+                <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/home'>
+                  <Home />
+                </ProtectedRoute>
+                {/* <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} children={Home} path='/home'/> */}
+                {/* <Route path='/home' component={Home} /> */}
                 <Route path='/user' component={UserInfo} />
-                <Route path='/signup' component={SignUp} />
-                <Route path='/signin' component={SignIn} />
+                <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={false} path='/signup'>
+                  <SignUp />
+                </ProtectedRoute>
+                {/* <Route path='/signup' component={SignUp} /> */}
+                <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={false} path='/signin'>
+                  <SignIn />
+                </ProtectedRoute>
+                {/* <Route path='/signin' component={SignIn} /> */}
                 <Route path='/personalLibrary' component={PersonalLibrary} />
                 <Route path='/personalLibrary/question/:questionId' component={PersonalLibrary} />
                 <Route path='/abbreviationLibrary' component={AbbreviationLibrary} />

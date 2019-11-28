@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import MainPost from './MainPost';
 import SubPost from './SubPost';
@@ -12,12 +12,6 @@ import axios from 'axios';
 
 class Home extends Component {
 
-    componentDidMount() {
-        if(!this.props.user.role){
-            this.props.history.push('/');
-        }
-        axios.get(serverUrl + '/api/hello')
-    }
     constructor(props) {
         super(props);
         this.state = {
@@ -39,6 +33,7 @@ class Home extends Component {
             <div className="home row">
                 <div className="col s1"></div>
                 <div className="col s7 container row">
+                    <button onClick={()=>{console.log(this.props.user)}}>click me</button>
                     <h5 className="blue-text text-darken-2 bold font-montserrat">Tin tức</h5>
                     {this.state.newsList.length !== 0 && 
     
@@ -75,4 +70,4 @@ const mapStateToProps = state => ({
     user: state.user,
 });
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps)(withRouter(Home));

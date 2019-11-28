@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Link, Route, Switch, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import CustomizedTreeView from '../common/CustomizedTreeView';
 import SimpleTable from '../common/TempTable';
@@ -330,5 +330,5 @@ const mapStateToProps = state => ({
     user: state.user,
 })
 
-export default connect(mapStateToProps)(PersonalLibrary);
+export default connect(mapStateToProps)(withRouter(PersonalLibrary));
 

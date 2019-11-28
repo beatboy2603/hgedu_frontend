@@ -4,6 +4,7 @@ import Logo from '../../resources/logo.png';
 import SmallLogo from '../../resources/logo.svg';
 import { connect } from 'react-redux';
 import { gapi } from "gapi-script";
+import { serverUrl, getCookie, setCookie, getAuthenCookie } from './common';
 
 const Sidenav = (props) => {
     const style = {
@@ -72,42 +73,33 @@ const Sidenav = (props) => {
             }).then(() => {
                 var auth2 = gapi.auth2.getAuthInstance();
                 if (auth2) {
+                    setCookie("authenticated", "false", -1);
                     auth2.signOut().then(() => {
-                        console.log('User signed out.');
                         props.dispatch({ type: "SIGN_OUT", payload: null });
-                        redirect();
+                        props.history.push('/');
                     });
                 }
             });
         } else {
+            setCookie("authenticated", "false", -1);
             auth2.signOut().then(() => {
-                console.log('User signed out.');
                 props.dispatch({ type: "SIGN_OUT", payload: null });
-                redirect();
+                props.history.push('/');
             });
-        }
-    }
-
-    const redirect = () => {
-        if (props.user.role) {
-            props.history.push('/home');
-        } else {
-            props.history.push('/');
         }
     }
 
     return (
         <div>
-            {props.user.role === 3 &&
+            {props.isAuthenticated && props.user.role === 3 && props.user.userRoleId === 1 &&
                 <div className="my-sidenav z-depth-2 white">
                     <Link exact to='/home'>
                         <div className='side-nav-logo' >
-                            {/* <p className="brand-logo blue-text text-darken-3 bold">HGE</p> */}
                             <img src={SmallLogo} alt="HGEdu Logo" style={{ width: "20px", marginTop: "-7vh" }} />
                         </div>
                     </Link>
                     <div className="flex-column">
-                        <Link className="sidenav-trigger" data-target='sideNavUser'>
+                        <Link className="sidenav-trigger" data-target='sideNavUserTeacher'>
                             <i className="material-icons padding-vertical-10" style={iconColor}>menu</i>
                         </Link>
                         <NavLink to="/home" activeClassName="side-nav-active">
@@ -144,7 +136,73 @@ const Sidenav = (props) => {
                     </div>
                 </div>
             }
-            {props.user.role === 2 &&
+            {props.isAuthenticated && props.user.role === 3 && props.user.userRoleId === 2 &&
+                <div className="my-sidenav z-depth-2 white">
+                    <Link exact to='/home'>
+                        <div className='side-nav-logo' >
+                            <img src={SmallLogo} alt="HGEdu Logo" style={{ width: "20px", marginTop: "-7vh" }} />
+                        </div>
+                    </Link>
+                    <div className="flex-column">
+                        <Link className="sidenav-trigger" data-target='sideNavUserStudent'>
+                            <i className="material-icons padding-vertical-10" style={iconColor}>menu</i>
+                        </Link>
+                        <NavLink to="/home" activeClassName="side-nav-active">
+                            <i className="material-icons padding-vertical-10" style={iconColor}>home</i>
+                        </NavLink>
+                    </div>
+                    <div className="user-option" style={style.userOption} onMouseLeave={hideObj} >
+                        <NavLink to="/user" >
+                            <i onMouseOver={showObj} className="material-icons padding-vertical-10" style={iconColor} >account_circle</i>
+                        </NavLink>
+                        <div id="user-option" style={style.logoutHidden}>
+                            {/* <a href="#" onClick={() => signOut()}> */}
+                                <i onClick={() => signOut()} className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor, ...style.firstIcon, cursor:"pointer" }} >exit_to_app</i>
+                            {/* </a> */}
+                            <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person_pin</i></Link>
+
+                            <div class="role-changer" style={{ display: 'flex', flexDirection: 'row' }}>
+                                <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person</i></Link>
+                                <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >people_alt</i></Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            {props.isAuthenticated && props.user.role === 3 && props.user.userRoleId === 3 &&
+                <div className="my-sidenav z-depth-2 white">
+                    <Link exact to='/home'>
+                        <div className='side-nav-logo' >
+                            <img src={SmallLogo} alt="HGEdu Logo" style={{ width: "20px", marginTop: "-7vh" }} />
+                        </div>
+                    </Link>
+                    <div className="flex-column">
+                        <Link className="sidenav-trigger" data-target='sideNavUserParent'>
+                            <i className="material-icons padding-vertical-10" style={iconColor}>menu</i>
+                        </Link>
+                        <NavLink to="/home" activeClassName="side-nav-active">
+                            <i className="material-icons padding-vertical-10" style={iconColor}>home</i>
+                        </NavLink>
+                    </div>
+                    <div className="user-option" style={style.userOption} onMouseLeave={hideObj} >
+                        <NavLink to="/user" >
+                            <i onMouseOver={showObj} className="material-icons padding-vertical-10" style={iconColor} >account_circle</i>
+                        </NavLink>
+                        <div id="user-option" style={style.logoutHidden}>
+                            {/* <a href="#" onClick={() => signOut()}> */}
+                                <i onClick={() => signOut()} className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor, ...style.firstIcon, cursor:"pointer" }} >exit_to_app</i>
+                            {/* </a> */}
+                            <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person_pin</i></Link>
+
+                            <div class="role-changer" style={{ display: 'flex', flexDirection: 'row' }}>
+                                <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person</i></Link>
+                                <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >people_alt</i></Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            {props.isAuthenticated && props.user.role === 2 &&
                 <div className="my-sidenav z-depth-2 white">
                     <Link exact to='/home'>
                         <div className='side-nav-logo' >
@@ -168,7 +226,7 @@ const Sidenav = (props) => {
                     </NavLink>
                 </div>
             }
-            <ul className="sidenav" id='sideNavUser'>
+            <ul className="sidenav" id='sideNavUserTeacher'>
                 <div className="my-sidenav-big container white">
                     <Link to='/home'>
                         <div className='side-nav-logo flex-row' >

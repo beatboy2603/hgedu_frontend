@@ -6,7 +6,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import CustomizedDatePicker from '../common/CustomizedDatePicker';
 import { DatePicker } from "react-materialize";
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { serverUrl } from './common';
 import axios from 'axios';
 
@@ -15,10 +15,11 @@ class SignUp extends Component {
         fullName: this.props.user.name,
         email: this.props.user.email,
         phone: "",
-        gender: null,
+        gender: "true",
         dob: null,
         school: "",
         errorText: "Bạn chưa điền số điện thoại!",
+        valid: false,
     }
 
     validatePhone = () => {
@@ -28,14 +29,21 @@ class SignUp extends Component {
         if (mobile) {
             if (vnf_regex.test(mobile) == false) {
                 this.setState({
-                    errorText: "Số điện thoại của bạn không đúng định dạng!"
+                    errorText: "Số điện thoại của bạn không đúng định dạng!",
+                    valid: false
                 })
+                return;
             }
         } else {
             this.setState({
-                errorText: "Bạn chưa điền số điện thoại!"
+                errorText: "Bạn chưa điền số điện thoại!",
+                valid: false
             })
+            return;
         }
+        this.setState({
+            valid: true
+        })
     }
 
     handleChange = (source, e) => {
@@ -67,41 +75,83 @@ class SignUp extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.user);
+        if (!this.props.user.email) {
+            this.props.history.push("/");
+        }
     }
 
-    test = () => {
-        console.log(new Date());
-        let date = new Date();
-        
-        console.log(new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toJSON().slice(0, 19).replace(/T/g, ' '));
-        // let date = new Date();
-        // console.log(date.toJSON());
-        axios.post(serverUrl + "api/test", {
-            date: (new Date()).getTime()
-        }).then(res => {
-            console.log(res);
-        })
+    decodeToken = (token) => {
+        return axios.get("https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=" + token)
+        // .then(res => {
+        //     console.log(res.data);
+        //     return res.data;
+        // })
+    }
+
+    signup = () => {
+        if (this.state.valid) {
+            axios.post(serverUrl + 'api/authen/signup', {
+                token: this.props.user.googleJwt,
+                phoneNumber: this.state.phone,
+                dob: this.state.dob,
+                gender: this.state.gender,
+                school: this.state.school,
+            }).then(res => {
+                if (res.data.message) {
+                    if (res.data.message === "signup succeeded") {
+                        axios.post(serverUrl + 'api/authen', {
+                            token: this.props.user.googleJwt,
+                        }).then(res => {
+                            let user = res.data.user;
+                            let jwt = res.data.jwt;
+                            this.decodeToken(this.props.user.googleJwt).then(res => {
+                                let googleToken = res.data;
+                                let user = {
+                                    email: googleToken.email,
+                                    name: googleToken.name,
+                                    picture: googleToken.picture,
+                                    sub: googleToken.sub,
+                                }
+                                this.props.dispatch({ type: "UPDATE_USER", payload: user });
+                            })
+                            this.props.dispatch({
+                                type: "UPDATE_USER", payload: {
+                                    uid: user.userId,
+                                    phone: user.phoneNumber,
+                                    gender: user.gender,
+                                    role: user.roleId,
+                                }
+                            });
+                            this.props.dispatch({ type: "UPDATE_JWT", payload: jwt });
+                            this.props.history.push('/signin');
+                        })
+                        
+                    } else {
+                        alert("Đăng kí thất bại");
+                    }
+                }
+            })
+        }
     }
 
     render() {
         return (
             <div className="signup row">
                 <div className="col s2">
-                    <Link to='/home'>
+                    <Link to='/'>
                         <i className="material-icons" style={{ margin: "10vh", color: "#3a3a3a", fontSize: "50px" }}>arrow_back</i>
                     </Link>
                 </div>
                 <div className="col s8 container flex-column center">
                     <div style={{ margin: "5vh 0" }}>
-                        <img onClick={() => console.log(this.state)} className="center-align" style={{ width: "7vw" }} src={Logo} alt="Logo" />
+                        <img className="center-align" style={{ width: "7vw" }} src={Logo} alt="Logo" />
                     </div>
                     <div>
-                        <h5 onClick={() => { this.test() }} className="blue-text text-darken-2 bold font-montserrat" style={{ marginTop: "0" }}>Chào mừng!</h5>
+                        <h5 className="blue-text text-darken-2 bold font-montserrat" style={{ marginTop: "0" }}>Chào mừng!</h5>
                         <p style={{ fontSize: "19px" }}>Bây giờ, chúng mình cần thông tin đầy đủ và xác thực của bạn.</p>
                         <div className="row">
                             <div className="col s2 offset-s2 center">
-                                <div>
+                                <div className="flex-row" style={{ minHeight: "50vh" }}>
                                     <img style={{ width: "9vw", borderRadius: "50%" }} src={this.props.user.picture} alt="Avatar" />
                                 </div>
                             </div>
@@ -137,7 +187,7 @@ class SignUp extends Component {
                                         <span style={{ fontSize: "19px" }}>Giới tính:</span>
                                     </div>
                                     <div className="col s8 left-align" >
-                                        <RadioGroup aria-label="gender" name="gender" style={{ display: "inline" }} onChange={(e) => { this.handleChange("gender", e) }}>
+                                        <RadioGroup aria-label="gender" name="gender" style={{ display: "inline" }} onChange={(e) => { this.handleChange("gender", e) }} value={this.state.gender}>
                                             <FormControlLabel style={{ color: "#000000" }} value="true" control={<Radio color="primary" />} label="Nam" />
                                             <FormControlLabel style={{ color: "#000000" }} value="false" control={<Radio />} label="Nữ" />
                                         </RadioGroup>
@@ -163,6 +213,16 @@ class SignUp extends Component {
                         </div>
                     </div>
                 </div>
+                {
+                    this.state.valid &&
+                    <div className="col s2">
+
+                        <div style={{ margin: "10vh 0", color: "#086bd1", cursor: "pointer" }} className='flex-row' onClick={() => { this.signup() }}>
+                            <span style={{ fontSize: "25px" }} >Tiếp theo</span>
+                            <i className="material-icons" style={{ fontSize: "50px" }}>arrow_forward</i>
+                        </div>
+                    </div>
+                }
             </div>
         )
     }
@@ -172,4 +232,4 @@ const mapStateToProps = state => ({
     user: state.user,
 })
 
-export default connect(mapStateToProps)(SignUp);
+export default connect(mapStateToProps)(withRouter(SignUp));

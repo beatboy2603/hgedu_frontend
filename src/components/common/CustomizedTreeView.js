@@ -78,16 +78,18 @@ function StyledTreeItem(props) {
         if (props.parentFolderId !== 0 && !props.hasChildren && props.id !== 4) {
             document.getElementById(props.id).querySelector(".deleteFolderBtn").style.display = "block";
         }
-        document.getElementById(props.id).querySelector(".editFolderBtn").style.display = "block";
-        // e.target.style.backgroundColor = "red";
+        if (props.parentFolderId !== 0) {
+            document.getElementById(props.id).querySelector(".editFolderBtn").style.display = "block";
+        }
     };
     const out = e => {
         e.stopPropagation();
         if (props.parentFolderId !== 0 && !props.hasChildren && props.id !== 4) {
             document.getElementById(props.id).querySelector(".deleteFolderBtn").style.display = "none";
         }
-        document.getElementById(props.id).querySelector(".editFolderBtn").style.display = "none";
-        // e.target.style.backgroundColor = '';
+        if (props.parentFolderId !== 0) {
+            document.getElementById(props.id).querySelector(".editFolderBtn").style.display = "none";
+        }
     };
 
     return (
@@ -216,7 +218,7 @@ function CustomizedTreeView(props) {
             defaultExpandIcon={<ArrowRightIcon />}
             defaultEndIcon={<div style={{ width: 22 }} />}
         >
-            <StyledTreeItem style={{display: "none"}} nodeId="0" labelText="" labelIcon={DeleteIcon} />
+            <StyledTreeItem style={{ display: "none" }} nodeId="0" labelText="" labelIcon={DeleteIcon} />
             {/* <StyledTreeItem nodeId="2" labelText="Trash" labelIcon={DeleteIcon} />
             <StyledTreeItem nodeId="3" labelText="Categories" labelIcon={Label}>
                 <StyledTreeItem

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { gapi } from "gapi-script";
 import axios from "axios";
 import { GoogleLogin } from 'react-google-login';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { serverUrl } from './common/common';
 import auth from './common/Auth';
@@ -74,16 +74,15 @@ class LandingPage extends Component {
             axios.post(serverUrl + 'api/authen', {
                 token
             }).then(res => {
-                if (res.data.message == "SignUp") {
+                if (res.data.message == "signup") {
                     console.log("signup");
-
                     let user = {
                         email: res.data.email,
                         name: res.data.name,
                         picture: res.data.picture,
                     }
                     this.props.dispatch({ type: "UPDATE_USER", payload: user });
-                    this.props.dispatch({ type: "UPDATE_USER", payload: {googleJwt: token} });
+                    this.props.dispatch({ type: "UPDATE_USER", payload: { googleJwt: token } });
                     this.props.history.push('/signup');
                 } else {
                     let user = res.data.user;
@@ -101,15 +100,15 @@ class LandingPage extends Component {
                     })
                     this.props.dispatch({
                         type: "UPDATE_USER", payload: {
+                            googleJwt: token,
                             uid: user.userId,
                             phone: user.phoneNumber,
                             gender: user.gender,
-                            // role: user.roleId,
-                            role: 3,
+                            role: user.roleId,
                         }
                     });
                     this.props.dispatch({ type: "UPDATE_JWT", payload: jwt });
-                    this.redirect();
+                    this.props.history.push('/signin');
                 }
                 // this.redirect();
             })
@@ -119,18 +118,20 @@ class LandingPage extends Component {
             <div className="row">
                 <div style={{ maxWidth: "100vw", minHeight: "100vh", backgroundImage: `url(${BackGroundIMG})`, backgroundSize: "cover" }}>
                     <img onClick={() => { this.props.history.push('/signup'); }} src={Logo} alt="Logo" style={{ width: "8vw", position: "absolute", top: "5vh", left: "5vw" }} />
-                    <GoogleLogin
-                        clientId="1072039829865-jc2jf9cv96ifoph4ptpg1840s8n5gg5b.apps.googleusercontent.com"
-                        render={renderProps => (
-                            <Link onClick={renderProps.onClick} disabled={renderProps.disabled} className='flex-row' style={{ position: "absolute", top: "7vh", left: "80vw" }}>
-                                <i className="material-icons left padding-vertical-10 md-36" style={{ color: "#ffffff", fontSize: "30px" }}>account_circle</i>
-                                <span style={{ color: "#ffffff", fontSize: "20px" }}>Đăng nhập với Google</span>
-                            </Link>
-                        )}
-                        onSuccess={responseGoogle}
-                        onFailure={responseGoogle}
-                        cookiePolicy={'single_host_origin'}
-                    />
+                    {/* {!this.props.isAuthenticated && */}
+                        < GoogleLogin
+                            clientId="1072039829865-jc2jf9cv96ifoph4ptpg1840s8n5gg5b.apps.googleusercontent.com"
+                            render={renderProps => (
+                                <Link onClick={renderProps.onClick} disabled={renderProps.disabled} className='flex-row' style={{ position: "absolute", top: "7vh", left: "80vw" }}>
+                                    <i className="material-icons left padding-vertical-10 md-36" style={{ color: "#ffffff", fontSize: "30px" }}>account_circle</i>
+                                    <span style={{ color: "#ffffff", fontSize: "20px" }}>Đăng nhập với Google</span>
+                                </Link>
+                            )}
+                            onSuccess={responseGoogle}
+                            onFailure={responseGoogle}
+                            cookiePolicy={'single_host_origin'}
+                        />
+                    {/* } */}
                     <div className="flex-column" style={{ width: "60vw", position: "absolute", top: "35vh", left: "20vw", color: "#ffffff", fontSize: "43px" }}>
                         <p align="center" className="font-montserrat" style={{ margin: "0", padding: "0", color: "#ffffff", fontSize: "43px" }}>MỘT NỀN GIÁO DỤC THÔNG MINH</p>
                         <p align="center" className="font-montserrat" style={{ margin: "0", padding: "0", color: "#ffffff", fontSize: "43px" }}>LÀ MỘT NỀN GIÁO DỤC LINH HOẠT</p>
@@ -173,4 +174,4 @@ const mapStateToProps = state => ({
     user: state.user,
 })
 
-export default connect(mapStateToProps)(LandingPage);
+export default connect(mapStateToProps)(withRouter(LandingPage));

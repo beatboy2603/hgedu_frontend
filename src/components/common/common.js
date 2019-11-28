@@ -28,3 +28,21 @@ export const getCookie = (key) => {
     }
     return "";
 }
+
+export const getAuthenCookie = () => {
+    let authenticated = getCookie("authenticated");
+    if (authenticated === "true") {
+        setCookie("authenticated", "true", 1);
+        return true;
+    }
+    return false;
+}
+
+export const getCurrentDate = () => {
+    let date = new Date();
+    return formatDate(date);
+}
+
+export const formatDate = (date) => {
+    return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toJSON().slice(0, 19).replace(/T/g, ' ');
+}

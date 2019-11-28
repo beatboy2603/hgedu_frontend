@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "materialize-css/dist/css/materialize.min.css";
 import "materialize-css/dist/js/materialize.min.js";
 import { DatePicker } from "react-materialize";
+import { formatDate as commonFormatDate} from './common';
 
 const CustomizedDatePicker = (props) => {
 
@@ -28,7 +29,7 @@ const CustomizedDatePicker = (props) => {
         newState[key] = date;
         setState(newState);
         if (handleParentState) {
-            handleParentState(val.getTime());
+            handleParentState(commonFormatDate(val));
         }
     }
 
@@ -37,7 +38,7 @@ const CustomizedDatePicker = (props) => {
             <DatePicker style={{ width: width, height: "20px" }}
                 value={state.myDate}
                 id="dob"
-                options={{ format: 'dd/mm/yyyy', minDate: new Date("1900-01-01"), maxDate: new Date() }}
+                options={{ format: 'dd/mm/yyyy', minDate: new Date("1900-01-01"), maxDate: new Date(), yearRange: 50 }}
                 onChange={(newDate) => {
                     handleChange({
                         target: {
