@@ -5,7 +5,7 @@ import { Link, Switch, Route } from 'react-router-dom/cjs/react-router-dom.min'
 import { Modal } from 'react-materialize'
 import PersonalInfoEdit from './PersonalInfoEdit'
 import Modal from 'react-materialize'
-import {serverUrl} from './common/common'
+import {serverUrl} from '../common'
 export default class PersonalInfo extends Component {
     state = {
         user: null,
