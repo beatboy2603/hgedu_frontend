@@ -17,7 +17,7 @@ import { Provider } from 'react-redux';
 import { store, persistor } from './components/common/Store'
 import SignUp from './components/common/SignUp';
 import SignIn from './components/common/SignIn';
-import UserInfo from './components/common/UserInfo/UserInfo';
+import UserInfo from './components/UserInfo/UserInfo';
 import TestWord from './components/TestWord';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import { getAuthenCookie } from './components/common/common';

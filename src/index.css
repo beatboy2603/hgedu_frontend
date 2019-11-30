@@ -153,8 +153,8 @@ i{
 
 .my-floating-btn{
   position:fixed;
-  left:93vw;
-  top:86vh;
+  left:90%;
+  top:84vh;
 }
 
 .modal{

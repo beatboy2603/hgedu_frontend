@@ -28,6 +28,7 @@ class KnowledgeGroup extends Component {
                 <div className="col s12 no-padding center">
                     <SimpleTable />
                 </div>
+                
             </div>
         )
     }

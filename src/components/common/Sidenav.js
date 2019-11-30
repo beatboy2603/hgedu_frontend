@@ -224,6 +224,62 @@ const Sidenav = (props) => {
                     <NavLink>
                         <i className="material-icons padding-vertical-10" style={iconColor}>account_circle</i>
                     </NavLink>
+                    <div className="user-option" style={style.userOption} onMouseLeave={hideObj} >
+                        <NavLink to="/user" >
+                            <i onMouseOver={showObj} className="material-icons padding-vertical-10" style={iconColor} >account_circle</i>
+                        </NavLink>
+                        <div id="user-option" style={style.logoutHidden}>
+                            {/* <a href="#" onClick={() => signOut()}> */}
+                                <i onClick={() => signOut()} className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor, ...style.firstIcon, cursor:"pointer" }} >exit_to_app</i>
+                            {/* </a> */}
+                            <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person_pin</i></Link>
+
+                            <div class="role-changer" style={{ display: 'flex', flexDirection: 'row' }}>
+                                <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person</i></Link>
+                                <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >people_alt</i></Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            {props.isAuthenticated && props.user.role === 1 &&
+                <div className="my-sidenav z-depth-2 white">
+                    <Link exact to='/home'>
+                        <div className='side-nav-logo' >
+                            {/* <p className="brand-logo blue-text text-darken-3 bold">HGE</p> */}
+                            <img src={SmallLogo} alt="HGEdu Logo" style={{ width: "20px", marginTop: "-7vh" }} />
+                        </div>
+                    </Link>
+                    <div className="flex-column">
+                        <Link className="sidenav-trigger" data-target='sidenavMod'>
+                            <i className="material-icons padding-vertical-10" style={iconColor}>menu</i>
+                        </Link>
+                        <NavLink to="/home" activeClassName="side-nav-active">
+                            <i className="material-icons padding-vertical-10" style={iconColor}>home</i>
+                        </NavLink>
+                        <NavLink to='/newsList' activeClassName="side-nav-active">
+                            <i className="material-icons padding-vertical-10" style={iconColor}>event</i>
+                        </NavLink>
+                    </div>
+                    <NavLink>
+                        <i className="material-icons padding-vertical-10" style={iconColor}>account_circle</i>
+                    </NavLink>
+                    <div className="user-option" style={style.userOption} onMouseLeave={hideObj} >
+                        <NavLink to="/user" >
+                            <i onMouseOver={showObj} className="material-icons padding-vertical-10" style={iconColor} >account_circle</i>
+                        </NavLink>
+                        <div id="user-option" style={style.logoutHidden}>
+                            {/* <a href="#" onClick={() => signOut()}> */}
+                                <i onClick={() => signOut()} className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor, ...style.firstIcon, cursor:"pointer" }} >exit_to_app</i>
+                            {/* </a> */}
+                            <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person_pin</i></Link>
+
+                            <div class="role-changer" style={{ display: 'flex', flexDirection: 'row' }}>
+                                <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person</i></Link>
+                                <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >people_alt</i></Link>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             }
             <ul className="sidenav" id='sideNavUserTeacher'>
