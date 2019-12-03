@@ -374,3 +374,102 @@ i{
 .width-flex {
   width: 90%;
 }
+.userManagement{
+  font-family: sans-serif;
+}
+
+.userManagement header{
+  font-weight: bold;
+  color: aqua;
+}
+
+.userManagement menu{
+  background-color: gray;
+  padding: 5px 5px;
+  margin-right: 20px;
+}
+
+.userManagement menu #userFilter{
+  color: cyan;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
+}
+
+.wrap{
+  display: grid;
+  grid-template-rows: 50px 1150px;
+}
+
+.setBlue{
+  color: blue;
+}
+
+.header{
+  font-family: sans-serif;
+  background: #FAFAFA;
+  margin-top: 0px;
+  padding-top: 0px;
+  overflow: auto;
+}
+
+.header h5{
+  margin-left: 20px;
+  height: 100%;
+}
+
+.header span{
+  margin-left: 20px;
+  height: 100%;
+}
+
+.float-right{
+  float: right;
+}
+
+.header table{
+  padding-top: 0px;
+  border-top: 1px solid lightgray ;
+  margin-top: 10px;
+}
+
+.header table th{
+  margin-left: 5px;
+}
+
+.table{
+  border-collapse: collapse;
+  background-color: white;
+}
+
+.table tr{
+  margin-left: 20px;
+}
+
+.icon{
+  margin-right: 8px;
+  size: 80%;
+}
+
+.marginLeft{
+  margin-left: 55px;;
+}
+
+.a{
+  text-decoration: underline;
+  color: gray;
+}
+
+.menuTable tr th{
+  margin-right: 10px;
+}
+
+.center{
+  align-items: center;
+  align-content: center;
+}
+
+
+
+
+
+
+
