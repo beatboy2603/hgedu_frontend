@@ -103,13 +103,13 @@ function StyledTreeItem(props) {
                     <Typography variant="caption" color="inherit">
                         {labelInfo}
                     </Typography>
+                    <div className="editFolderBtn" style={{ display: "none" }} onClick={() => { alert(props.id) }}>
+                        {/* Ed */}
+                        <i className="material-icons md-18 grey-text text-darken-3">edit</i>
+                    </div>
                     <div className="deleteFolderBtn" style={{ display: "none", color: "red" }} onClick={() => { props.deleteFolder(props.id) }}>
                         {/* De */}
                         <i className="material-icons md-18">delete_forever</i>
-                    </div>
-                    <div className="editFolderBtn" style={{ display: "none", color: "blue" }} onClick={() => { alert(props.id) }}>
-                        {/* Ed */}
-                        <i className="material-icons md-18">edit</i>
                     </div>
                 </div>
             }
@@ -150,17 +150,14 @@ function CustomizedTreeView(props) {
 
     const { folders, setCurrentFolder } = props;
 
-    const handleClick = (folder, subType, path) => {
+    const handleClick = (folder, path) => {
         props.history.push('/personalLibrary/' + path + "/" + folder.folderId);
-        setCurrentFolder(folder.folderId, folder.folderTypeId, subType);
+        // setCurrentFolder(folder.folderId, folder.folderTypeId, folder.subTypeId);
+        setCurrentFolder(folder);
     }
 
     const foldersToTree = (folders) => {
         let rootFolders = rootFoldersFilter(folders);
-        rootFolders[0].subType = "knowledgeGroup";
-        rootFolders[1].subType = "test";
-        rootFolders[2].subType = "groups";
-        // rootFolders[3].subType = "notification";
         return recursiveTree(folders, rootFolders)
     }
 
@@ -173,32 +170,33 @@ function CustomizedTreeView(props) {
     const recursiveTree = (folders, rootFolders) => {
         return rootFolders.map(folder => {
             let subfolders = folders.filter(subfolder => {
-                if (subfolder.parentFolderId == folder.folderId) {
-                    subfolder.subType = folder.subType;
-                    return true;
-                }
-                return false;
+                // if (subfolder.parentFolderId == folder.folderId) {
+                //     subfolder.subType = folder.subType;
+                //     return true;
+                // }
+                // return false;
+                return subfolder.parentFolderId == folder.folderId;
             })
             if (subfolders.length > 0) {
                 return (
                     <StyledTreeItem nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={Folder} color="#1a73e8"
-                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={true} onClick={() => setCurrentFolder(folder, folder.subType)}>
+                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={true} onClick={() => setCurrentFolder(folder)}>
                         <div style={{ paddingLeft: "10px" }}>{recursiveTree(folders, subfolders)}</div>
                     </StyledTreeItem>
                 )
             } else {
                 if (folder.folderTypeId == 1) {
                     return <StyledTreeItem deleteFolder={props.deleteFolder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={FolderOpenIcon} color="#1a73e8"
-                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={() => setCurrentFolder(folder, folder.subType)} />
+                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={() => setCurrentFolder(folder)} />
                 } else if (folder.folderTypeId == 2) {
                     return <StyledTreeItem deleteFolder={props.deleteFolder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={DescriptionIcon} color="#1a73e8"
-                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={() => handleClick(folder, folder.subType, "knowledgeGroup")} />
+                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={() => handleClick(folder, "knowledgeGroup")} />
                 } else if (folder.folderTypeId == 3) {
                     return <StyledTreeItem deleteFolder={props.deleteFolder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={DescriptionIcon} color="#1a73e8"
-                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={() => handleClick(folder, folder.subType, "test")} />
+                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={() => handleClick(folder, "test")} />
                 } else {
                     return <StyledTreeItem deleteFolder={props.deleteFolder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={FolderOpenIcon} color="#1a73e8"
-                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={() => setCurrentFolder(folder, folder.subType)} />
+                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={() => setCurrentFolder(folder)} />
                 }
             }
         })

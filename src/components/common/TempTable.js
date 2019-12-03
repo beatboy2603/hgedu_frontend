@@ -52,10 +52,6 @@ export default function SimpleTable() {
             <TableCell style={{ color: "#086bd1" }}><span className="bold font-montserrat font-size-15">Câu hỏi</span></TableCell>
             <TableCell style={{ color: "#086bd1" }}><span className="bold font-montserrat font-size-15">Mức khó</span></TableCell>
             <TableCell style={{ color: "#086bd1" }}><span className="bold font-montserrat font-size-15">Trình độ</span></TableCell>
-            <TableCell style={{ color: "#086bd1" }}><span className="bold font-montserrat font-size-15">Thuộc tính</span></TableCell>
-            <TableCell style={{ color: "#086bd1" }}><span className="bold font-montserrat font-size-15">Thuộc tính</span></TableCell>
-            <TableCell style={{ color: "#086bd1" }}><span className="bold font-montserrat font-size-15">Thuộc tính</span></TableCell>
-            <TableCell style={{ color: "#086bd1" }}><span className="bold font-montserrat font-size-15">Thuộc tính</span></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

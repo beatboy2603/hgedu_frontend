@@ -8,8 +8,9 @@ import Toggle from "../../common/Toggle";
 export default class ModalQuestion extends Component {
 
     state = {
+        currentFolder: null,
         questionDetail: {
-            questionCode: null,
+            questionCode: "",
             questionSeries: false,
             folderId: null,
             question: null,
@@ -76,6 +77,22 @@ export default class ModalQuestion extends Component {
         }
     }
 
+    componentDidUpdate() {
+        let { currentFolder } = this.props;
+        if (currentFolder !== this.state.currentFolder) {
+            this.setState({
+                currentFolder,
+            })
+        }
+    }
+
+    componentDidMount() {
+        let { currentFolder } = this.props;
+        this.setState({
+            currentFolder,
+        })
+    }
+
     render() {
         const lineSpacing = {
             marginTop: "25px",
@@ -86,6 +103,7 @@ export default class ModalQuestion extends Component {
                 <a href="#addQuestion" className="btn-floating btn-large blue my-floating-btn modal-trigger">
                     <i className="material-icons" onClick={() => { console.log(this.state) }}>add</i>
                 </a>
+                <button onClick={() => { console.log(this.state) }}>Click me bitch</button>
                 <Modal id="addQuestion" options={{ preventScrolling: true }} style={{ width: "80vw", height: "80vh", overflow: "hidden", borderRadius: "25px" }} actions={[]}>
                     <div style={{ paddingTop: "52.5vh" }}></div>
                     <div className="modal-content" style={{

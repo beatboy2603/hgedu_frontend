@@ -27,6 +27,7 @@ export default function CustomizedSelect({ items }) {
     const menuItems = items.map(item => {
         return <MenuItem value={item.value}>{item.text}</MenuItem>
     });
+    
     return (
         <div>
             <FormControl className={classes.formControl}>

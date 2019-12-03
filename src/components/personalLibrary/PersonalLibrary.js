@@ -37,10 +37,11 @@ class PersonalLibrary extends Component {
     explaination = null;
     state = {
         folders: null,
-        currentFolderId: null,
-        currentFolderTypeId: null,
-        addFolderName: null,
-        test: false,
+        currentFolder: null,
+        // currentFolderId: null,
+        // currentFolderTypeId: null,
+        // currentFolderSubGroupId: null,
+        addFolderName: "",
     }
 
     handleToggleChange = (e) => {
@@ -66,11 +67,9 @@ class PersonalLibrary extends Component {
         }
     }
 
-    setCurrentFolder = (folder, subType) => {
+    setCurrentFolder = (folder) => {
         this.setState({
-            currentFolderId: folder.folderId,
-            currentFolderTypeId: folder.folderTypeId,
-            currentFolderSubType: subType,
+            currentFolder: folder,
         })
     }
 
@@ -85,10 +84,10 @@ class PersonalLibrary extends Component {
         if (this.state.addFolderName) {
             let folders = this.state.folders;
             const check = folders.filter(folder => {
-                return folder.folderName == this.state.addFolderName && folder.parentFolderId == this.state.currentFolderId;
+                return folder.folderName == this.state.addFolderName && folder.parentFolderId == this.state.currentFolder.folderId;
             })
             if (check.length != 0) {
-                alert("trùng tên rồi ơ kìa bạn?");
+                alert("Tên thư mục bị trùng!");
                 return;
             }
             let folderTemp = {
@@ -96,7 +95,8 @@ class PersonalLibrary extends Component {
                 teacherId: this.props.user.uid,
                 folderName: this.state.addFolderName,
                 folderTypeId: type,
-                parentFolderId: this.state.currentFolderId,
+                parentFolderId: this.state.currentFolder.folderId,
+                subGroupId: this.state.currentFolder.subGroupId,
             }
             this.setState(prevState => ({
                 folders: [...prevState.folders, folderTemp]
@@ -105,7 +105,8 @@ class PersonalLibrary extends Component {
                 teacherId: this.props.user.uid,
                 folderName: this.state.addFolderName,
                 folderTypeId: type,
-                parentFolderId: this.state.currentFolderId,
+                parentFolderId: this.state.currentFolder.folderId,
+                subGroupId: this.state.currentFolder.subGroupId,
             }).then(res => {
                 axios.post(serverUrl + "api/folder/getFoldersForNav", null, {
                     params: {
@@ -171,15 +172,6 @@ class PersonalLibrary extends Component {
     }
 
     componentDidMount() {
-        var currentFolderId = this.props.match.params.folderId;
-        this.setState({
-            currentFolderId,
-            folderId: currentFolderId,
-        }, () =>{
-            console.log("test ti duoc khong");
-            console.log(this.state.currentFolderId);
-        })
-
         axios.post(serverUrl + "api/folder/getFoldersForNav", null, {
             params: {
                 uid: this.props.user.uid
@@ -199,7 +191,7 @@ class PersonalLibrary extends Component {
             // }
 
             // folders.push(folderTemp);
-            
+
             console.log(this.state.folders);
             // console.log(folderTemp);
         }).catch(function (error) {
@@ -216,23 +208,27 @@ class PersonalLibrary extends Component {
                     {/* filler */}
                     <div className="col s2"></div>
                     <div className="col s10">
+                        <button onClick={() => { console.log(this.state) }}>Click me</button>
                         <Link to='/personalLibrary'><h5 className="blue-text text-darken-3 bold font-montserrat">Thư viện</h5></Link>
                         {/* modals */}
                         <div>
                             {/* modal for addFolder */}
                             <div className='inline-block'>
                                 {
-                                    this.state.currentFolderId &&
-                                    <a href="#addFolder" className="modal-trigger">
-                                        <i className="material-icons grey-text text-darken-3">create_new_folder</i>
-                                    </a>
+                                    this.state.currentFolder && this.state.currentFolder.folderTypeId == 1 && this.state.currentFolder.subGroupId != 3 ? (
+                                        <a href="#addFolder" className="modal-trigger">
+                                            <i className="material-icons grey-text text-darken-3">create_new_folder</i>
+                                        </a>
+                                    ) : (
+                                            <i className="material-icons grey-text">create_new_folder</i>
+                                        )
                                 }
-                                {
-                                    !this.state.currentFolderId &&
+                                {/* {
+                                    (!this.state.currentFolder || this.state.currentFolder.folderTypeId != 1 || this.state.currentFolder.folderTypeId == 4) &&
                                     <i className="material-icons grey-text">create_new_folder</i>
-                                }
+                                } */}
                                 {/* actions = {[]} with no element to get rid of default "close" button */}
-                                <Modal id="addFolder" options={{ preventScrolling: true }} style={{ width: "40vw", height: "45vh", overflow: "hidden" }} actions={[]}>
+                                <Modal id="addFolder" options={{ preventScrolling: true }} style={{ width: "40vw", height: "45vh", overflow: "hidden", borderRadius: "25px" }} actions={[]}>
                                     <div className="modal-content" style={{
                                         position: "absolute",
                                         top: "0",
@@ -260,27 +256,50 @@ class PersonalLibrary extends Component {
                             {/* modal for addKnowledgeGroup */}
                             <div className='inline-block'>
                                 {
-                                    (this.state.currentFolderId && ((this.state.currentFolderTypeId == 1 && this.state.currentFolderSubType=="knowledgeGroup") || this.state.currentFolderTypeId == 4)) &&
+                                    this.state.currentFolder && this.state.currentFolder.folderTypeId == 1 ? this.state.currentFolder.subGroupId == 1 ? (
+                                        <a href="#addKnowledgeGroup" className="modal-trigger">
+                                            <i className="material-icons grey-text text-darken-3">note_add</i>
+                                        </a>
+                                    ) : this.state.currentFolder.subGroupId == 2 ? (
+                                        <a href="#addTest" className="modal-trigger" onClick={() => { alert("test") }}>
+                                            <i className="material-icons grey-text text-darken-3">note_add</i>
+                                        </a>
+                                    ) : this.state.currentFolder.subGroupId == 3 ? (
+                                        <a href="#addGroup" className="modal-trigger" onClick={() => { alert("groups") }}>
+                                            <i className="material-icons grey-text text-darken-3">note_add</i>
+                                        </a>
+                                    ) : (
+                                                    <i className="material-icons grey-text">note_add</i>
+                                                ) : this.state.currentFolder && this.state.currentFolder.folderTypeId == 4 ? (
+                                                    <a href="#addKnowledgeGroup" className="modal-trigger">
+                                                        <i className="material-icons grey-text text-darken-3">note_add</i>
+                                                    </a>
+                                                ) : (
+                                                <i className="material-icons grey-text">note_add</i>
+                                            )
+                                }
+                                {/* {
+                                    (this.state.currentFolderId && ((this.state.currentFolderTypeId == 1 && this.state.currentFolderSubType == "knowledgeGroup") || this.state.currentFolderTypeId == 4)) &&
                                     <a href="#addKnowledgeGroup" className="modal-trigger">
                                         <i className="material-icons grey-text text-darken-3">note_add</i>
                                     </a>
                                 }
                                 {
-                                    (this.state.currentFolderId && this.state.currentFolderTypeId == 1 && this.state.currentFolderSubType=="test") &&
-                                    <a href="#addTest" className="modal-trigger" onClick={()=>{alert("test")}}>
+                                    (this.state.currentFolderId && this.state.currentFolderTypeId == 1 && this.state.currentFolderSubType == "test") &&
+                                    <a href="#addTest" className="modal-trigger" onClick={() => { alert("test") }}>
                                         <i className="material-icons grey-text text-darken-3">note_add</i>
                                     </a>
                                 }
                                 {
-                                    (this.state.currentFolderId && this.state.currentFolderTypeId == 1 && this.state.currentFolderSubType=="groups") &&
-                                    <a href="#addGroup" className="modal-trigger" onClick={()=>{alert("groups")}}>
+                                    (this.state.currentFolderId && this.state.currentFolderTypeId == 1 && this.state.currentFolderSubType == "groups") &&
+                                    <a href="#addGroup" className="modal-trigger" onClick={() => { alert("groups") }}>
                                         <i className="material-icons grey-text text-darken-3">note_add</i>
                                     </a>
                                 }
-                                {(!this.state.currentFolderId || (this.state.currentFolderTypeId != 1 && this.state.currentFolderTypeId != 4 ) ) &&
+                                {(!this.state.currentFolderId || (this.state.currentFolderTypeId != 1 && this.state.currentFolderTypeId != 4)) &&
                                     <i className="material-icons grey-text">note_add</i>
-                                }
-                                <Modal id="addKnowledgeGroup" options={{ preventScrolling: true }} style={{ width: "40vw", height: "45vh", overflow: "hidden" }} actions={[]}>
+                                } */}
+                                <Modal id="addKnowledgeGroup" options={{ preventScrolling: true }} style={{ width: "40vw", height: "45vh", overflow: "hidden", borderRadius: "25px" }} actions={[]}>
                                     <div className="modal-content" style={{
                                         position: "absolute",
                                         top: "0",
@@ -320,7 +339,7 @@ class PersonalLibrary extends Component {
                         <Route path={'/personalLibrary/test/:folderId'} render={(props) => <ModalTest {...props} />} />
                     </Switch>
                 </div>
-                                        
+
             </div>
         )
     }
