@@ -20,6 +20,7 @@ import SignIn from './components/common/SignIn';
 import UserInfo from './components/UserInfo/UserInfo';
 import TestWord from './components/TestWord';
 import ProtectedRoute from './components/common/ProtectedRoute';
+import UserManagement from './components/UserManagement/UserManagement';
 import { getAuthenCookie } from './components/common/common';
 
 // const persistConfig = {
@@ -86,6 +87,7 @@ class App extends Component {
                 <Route path='/testManagement' component={TestManagement} />
                 <Route path='/newsList' component={NewsList} />
                 <Route path='/testWord' component={TestWord} />
+                <Route path='/userManagement' component={UserManagement} />
                 {/* <Route path='/userInfo' component={UserInfo}/> */}
               </Switch>
             </div>
