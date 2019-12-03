@@ -30,6 +30,7 @@ class App extends Component {
               <Route exact path='/' component={LandingPage} />
               {/* <Route path='/home' component={Home} /> */}
               <Route path='/home' component={UserManagemnt} />
+              {/* <Route path='/adminHome' component={UserManagemnt} /> */}
               <Route path='/personalLibrary' component={PersonalLibrary} />
               <Route path='/personalLibrary/question/:questionId' component={PersonalLibrary} />
               <Route path='/abbreviationLibrary' component={AbbreviationLibrary} />

@@ -306,6 +306,29 @@ i{
   margin-left: 20px;
 }
 
+.icon{
+  margin-right: 8px;
+  size: 80%;
+}
+
+.marginLeft{
+  margin-left: 55px;;
+}
+
+.a{
+  text-decoration: underline;
+  color: gray;
+}
+
+.menuTable tr th{
+  margin-right: 10px;
+}
+
+.center{
+  align-items: center;
+  align-content: center;
+}
+
 
 
 
