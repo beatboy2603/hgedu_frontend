@@ -6,11 +6,11 @@ import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import { CustomCheckbox } from '../../common/CustomCheckbox';
+import { CustomCheckbox } from '../common/CustomCheckbox';
 import Divider from '@material-ui/core/Divider';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getTestsRootFolder, getTestsAndFolders} from '../../../actions/examTestAction';
+import { getTestsRootFolder, getTestsAndFolders} from '../../actions/examTestAction';
 
 class TestSelector extends Component {
 
@@ -52,7 +52,7 @@ class TestSelector extends Component {
                                 currentFolderId: Number(testRoot.folderId)});
         let originalFolderTest = this.state.originalFolderTest;
         this.setState({folderList: originalFolderTest.childFolderList, testList: originalFolderTest.testList});
-        this.props.getTestsAndFolders(this.state.testRoot.folderId, this.props.user.userId);
+        this.props.getTestsAndFolders(this.state.testRoot.folderId, this.props.user.uid);
         // this.setState({isUpdated: false});
     }
 
@@ -83,7 +83,7 @@ class TestSelector extends Component {
     handleBack = () => {
         let path = this.state.path;
         if(path && path.length === 1) {
-            this.props.getTestsAndFolders(this.state.testRoot.folderId, this.props.user.userId);
+            this.props.getTestsAndFolders(this.state.testRoot.folderId, this.props.user.uid);
             this.setState({path: []})
             this.setState({currentFolderId: this.state.testRoot.folderId});
         } else if (path && path.length > 1){
@@ -101,7 +101,7 @@ class TestSelector extends Component {
                 if(nextCurrentFolder) {
                     this.setState({currentFolderId: nextCurrentFolder.id})
                     this.setState({path});
-                    this.props.getTestsAndFolders(nextCurrentFolder.id, this.props.user.userId);
+                    this.props.getTestsAndFolders(nextCurrentFolder.id, this.props.user.uid);
                 }
             }
         }
@@ -122,7 +122,7 @@ class TestSelector extends Component {
                 path = path.slice(0, indexOfCurrentFolder + 1);
                 this.setState({path});
                 this.setState({currentFolderId: folderId});
-                this.props.getTestsAndFolders(folderId, this.props.user.userId);
+                this.props.getTestsAndFolders(folderId, this.props.user.uid);
             }
         }
     }
@@ -137,7 +137,7 @@ class TestSelector extends Component {
             this.setState({currentFolderId: folderId})
             path.push(currentFolder);
             this.setState({path});
-            this.props.getTestsAndFolders(folderId, this.props.user.userId);
+            this.props.getTestsAndFolders(folderId, this.props.user.uid);
         }
     }
 
@@ -200,7 +200,7 @@ class TestSelector extends Component {
 
     componentDidMount() {
         if(this.isEmpty(this.state.testRoot)) {
-            this.props.getTestsRootFolder(this.props.user.userId);
+            this.props.getTestsRootFolder(this.props.user.uid);
         } 
     }
 
@@ -210,7 +210,7 @@ class TestSelector extends Component {
             && this.state.testRoot.folderId === this.state.currentFolderId
             && this.state.isUpdated === false) {
             console.log("update root")
-            this.props.getTestsAndFolders(this.state.testRoot.folderId, this.props.user.userId);
+            this.props.getTestsAndFolders(this.state.testRoot.folderId, this.props.user.uid);
             this.setState({isUpdated: true});
         }
         // if(!this.isTestEqual(this.props.selectedTests, this.state.selectedTestList)) {

@@ -11,18 +11,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import Search from './Search'
-import { withStyles } from '@material-ui/styles'
-
-const useStyles = makeStyles(theme => ({
-    root: {
-      width: '100%',
-      borderTop: '1px solid gray',
-    },
-    divider: {
-        borderRight: '1px solid black',
-    }
-  }));
-  
 
 class NewsList extends Component {
 
@@ -36,39 +24,37 @@ class NewsList extends Component {
 
     handleUpdateList(object, type) {
         let updatedList = []
-        switch(type) {
+        switch (type) {
             case "CREATE":
                 updatedList = [object, ...this.state.newsList]
-                this.setState({newsList: updatedList})
+                this.setState({ newsList: updatedList })
                 break;
             case "UPDATE":
                 updatedList = this.state.newsList.map(news => {
-                    if(news.id === object.id) {
+                    if (news.id === object.id) {
                         return object
                     }
                     return news
                 })
-                this.setState({newsList: updatedList})
+                this.setState({ newsList: updatedList })
                 break;
             case "DELETE":
                 updatedList = this.state.newsList.filter(news => news.id !== object)
-                this.setState({newsList: updatedList})
+                this.setState({ newsList: updatedList })
                 break;
             default:
         }
     }
 
     componentWillMount() {
-        axios.get('http://localhost:8084/news/' + this.props.user.userId + "/all" )
+        axios.get('http://localhost:8084/news/' + this.props.user.uid + "/all")
             .then(res => {
                 console.log(res);
-                this.setState({newsList: res.data})
+                this.setState({ newsList: res.data })
             })
     }
 
     render() {
-        const { classes } = this.props;
-
         return (
             <div className="newsManagement row">
                 {/* main content */}
@@ -82,7 +68,7 @@ class NewsList extends Component {
                     <div className="col s12 container-fluid">
                         <div className="row" >
                             <div className="col s6">
-                                <div style={{paddingLeft: "62px"}}>Thể loại</div>
+                                <div style={{ paddingLeft: "62px" }}>Thể loại</div>
                             </div>
                             {/* <Divider orientation="vertical"/> */}
                             <div className="col s6" >
@@ -92,8 +78,8 @@ class NewsList extends Component {
                     </div>
                     <div className="col s12 center padding-filler-nav posts">
                         {
-                            this.state.newsList.map( post =>                                
-                                 <div key={post.id} className="col s4 small-post">
+                            this.state.newsList.map(post =>
+                                <div key={post.id} className="col s4 small-post">
                                     <SmallPost
                                         id={post.id}
                                         body={post.description}
@@ -101,18 +87,18 @@ class NewsList extends Component {
                                         title={post.title}
                                         updateList={this.handleUpdateList}
                                         imgSrc={'http://localhost:8084/' + post.thumbnail} />
-                                </div>                           
-                        )}
+                                </div>
+                            )}
                     </div>
                 </div>
-                    
+
                 <div>
                     <a href="#addNews" className="btn-floating btn-large blue my-floating-btn modal-trigger">
                         <i className="material-icons">add</i>
                     </a>
-                    <Modal id="addNews" fixedFooter  style={{ width: "40vw", minHeight: "50vh", overflow: "hidden" }}
-                      options={{ preventScrolling: true, dismissible: false }}>
-                        <div className="modal-content" 
+                    <Modal id="addNews" fixedFooter style={{ width: "40vw", minHeight: "50vh", overflow: "hidden" }}
+                        options={{ preventScrolling: true, dismissible: false }}>
+                        <div className="modal-content"
                             style={{
                                 position: "absolute",
                                 top: "0",
@@ -142,4 +128,4 @@ const mapStateToProps = state => ({
     user: state.user,
 })
 
-export default connect(mapStateToProps)(withStyles(useStyles)(NewsList));
+export default connect(mapStateToProps)(NewsList);

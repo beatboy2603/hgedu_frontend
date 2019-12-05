@@ -6,7 +6,7 @@ import { Modal } from 'react-materialize'
 import ExamForm from './ExamForm'
 import Divider from '@material-ui/core/Divider';
 import Button from 'react-materialize/lib/Button';
-import { getExamCurrent, getExamHistory } from '../../../actions/examAction';
+import { getExamCurrent, getExamHistory } from '../../actions/examAction';
 import PropTypes from 'prop-types';
 
 class TestManagement extends Component {
@@ -49,10 +49,10 @@ class TestManagement extends Component {
             this.setState({type: this.props.type})
             if(this.props.type === 'SCHEDULE') {
                 console.log(">>>>>>>CREATE SCHEDULE")
-                this.props.getExamCurrent(this.props.user.userId);
+                this.props.getExamCurrent(this.props.user.uid);
             } else {
                 console.log(">>>>>>>CREATE HISTORY");
-                this.props.getExamHistory(this.props.user.userId);
+                this.props.getExamHistory(this.props.user.uid);
             }
         } 
     }
@@ -64,11 +64,11 @@ class TestManagement extends Component {
             if(this.props.type === 'SCHEDULE' && this.props.type !== this.state.type) {
                 console.log(">>>>>>>UPDATE SCHEDULE")
                 //if(this.props.examsCurrentMap )
-                this.props.getExamCurrent(this.props.user.userId);
+                this.props.getExamCurrent(this.props.user.uid);
                 this.setState({type: this.props.type})
             } else if (this.props.type === 'HISTORY' && this.props.type !== this.state.type) {
                 console.log(">>>>>>>UPDATE HISTORY");
-                this.props.getExamHistory(this.props.user.userId);
+                this.props.getExamHistory(this.props.user.uid);
                 this.setState({type: this.props.type})
             }
         } 
@@ -133,7 +133,7 @@ class TestManagement extends Component {
                     </div>
                 </div>
                 <div>
-                    <a href="#addExam" className="btn-floating btn-large blue my-floating-btn modal-trigger">
+                    <a href="#addExam" style={{position:"fixed"}} className="btn-floating btn-large blue my-floating-btn modal-trigger">
                         <i className="material-icons">add</i>
                     </a>
                     <Modal id="addExam" options={{ preventScrolling: false }} actions={<Button style={{display: 'none'}}></Button>}> 

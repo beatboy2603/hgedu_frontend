@@ -3,11 +3,11 @@ import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import {CustomCheckbox} from '../../common/CustomCheckbox'
+import {CustomCheckbox} from '../common/CustomCheckbox'
 import Divider from '@material-ui/core/Divider';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getClasses } from '../../../actions/classAction';
+import { getClasses } from '../../actions/classAction';
 
 class ClassSelector extends Component {
 
@@ -58,7 +58,7 @@ class ClassSelector extends Component {
     }
 
     componentDidMount() {
-        this.props.getClasses(this.props.user.userId);
+        this.props.getClasses(this.props.user.uid);
     }
 
     render() {

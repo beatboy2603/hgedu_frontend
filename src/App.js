@@ -5,7 +5,7 @@ import PersonalLibrary from './components/personalLibrary/PersonalLibrary';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import AbbreviationLibrary from './components/abbreviation/AbbreviationLibrary';
 import StudentManagement from './components/StudentManagement';
-import TestManagement from './components/personalLibrary/test/TestManagement';
+import TestManagement from './components/Exams/TestManagement';
 import LandingPage from './components/LandingPage';
 import NewsList from './components/News/NewsList';
 import { PersistGate } from 'redux-persist/lib/integration/react';

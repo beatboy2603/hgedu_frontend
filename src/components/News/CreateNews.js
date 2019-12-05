@@ -39,7 +39,7 @@ class CreateNews extends Component {
           const form = new FormData()
           form.append('image', file)
           form.append('dateCreated', new Date().toJSON().slice(0, 19).replace(/T|-|:/g, ''))
-          form.append('userId', this.props.user.userId)
+          form.append('userId', this.props.user.uid)
   
           //use axios to upload
           axios.post(URL, form)
@@ -83,7 +83,7 @@ class CreateNews extends Component {
             content: JSON.stringify(this.state.content), 
             thumbnail: this.state.thumbnail,
             dateCreated: new Date().toJSON().slice(0, 19).replace('T', ' '),
-            modId: '' + this.props.user.userId}
+            modId: '' + this.props.user.uid}
 
         this.resetForm();
         //use axios to upload

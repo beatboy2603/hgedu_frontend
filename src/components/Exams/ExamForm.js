@@ -28,12 +28,12 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import DateFnsUtils from '@date-io/date-fns';
 import TextField from '@material-ui/core/TextField';
-import { createExam, updateExam } from '../../../actions/examAction';
-import { getSelectedExamTests, deleteExamTests } from '../../../actions/examTestAction';
-import { getSelectedExamClasses, deleteExamClasses } from '../../../actions/examClassAction';
+import { createExam, updateExam } from '../../actions/examAction';
+import { getSelectedExamTests, deleteExamTests } from '../../actions/examTestAction';
+import { getSelectedExamClasses, deleteExamClasses } from '../../actions/examClassAction';
 import classnames from 'classnames';
 import Link from '@material-ui/core/Link';
-import {CustomCheckbox} from '../../common/CustomCheckbox';
+import {CustomCheckbox} from '../common/CustomCheckbox';
 import axios from 'axios';
 
 const styles = makeStyles(theme => ({
@@ -216,7 +216,7 @@ class ExamForm extends Component {
             let date = new Date();
             const exam = {
                 id: this.state._id,
-                teacherId: this.props.user.userId,
+                teacherId: this.props.user.uid,
                 title: this.state.title,
                 startEntryTime: this.state.startEntryTime ? this.state.startEntryTime : '0000-00-00 00:00:00',
                 endEntryTime: this.state.endEntryTime ? this.state.endEntryTime : '0000-00-00 00:00:00',
@@ -234,7 +234,7 @@ class ExamForm extends Component {
         } else {
             let date = new Date();
             const exam = {
-                teacherId: this.props.user.userId,
+                teacherId: this.props.user.uid,
                 title: this.state.title,
                 startEntryTime: this.state.startEntryTime ? this.state.startEntryTime : '0000-00-00 00:00:00',
                 endEntryTime: this.state.endEntryTime ? this.state.endEntryTime : '0000-00-00 00:00:00',
