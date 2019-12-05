@@ -59,7 +59,7 @@ class NewsList extends Component {
     }
 
     componentWillMount() {
-        axios.get('http://localhost:8084/news')
+        axios.get('http://localhost:8084/news/' + this.props.user.userId + "/all" )
             .then(res => {
                 console.log(res);
                 this.setState({newsList: res.data})
@@ -135,6 +135,11 @@ class NewsList extends Component {
 
 NewsList.propTypes = {
     classes: PropTypes.object.isRequired,
+    user: PropTypes.object.isRequired
 }
 
-export default withStyles(useStyles)(NewsList);
+const mapStateToProps = state => ({
+    user: state.user,
+})
+
+export default connect(mapStateToProps)(withStyles(useStyles)(NewsList));

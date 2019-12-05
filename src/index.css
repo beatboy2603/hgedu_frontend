@@ -161,6 +161,11 @@ i{
   border-radius: 25px;
 }
 
+.customizedModal .modal-content h4 {
+  text-align: center;
+  position: sticky;
+}
+
 .scroll-content {
   position: absolute;
 }
@@ -222,6 +227,10 @@ i{
 
 .font-size-15{
   font-size: 15px;
+}
+
+.font-size-16{
+  font-size: 16px;
 }
 
 .font-size-18{
@@ -374,102 +383,239 @@ i{
 .width-flex {
   width: 90%;
 }
-.userManagement{
-  font-family: sans-serif;
+
+.inputLabel {
+  font-size: inherit;
 }
 
-.userManagement header{
-  font-weight: bold;
-  color: aqua;
+.required .inputLabel::after {
+   color: #e32;
+  content: ' *';
 }
 
-.userManagement menu{
-  background-color: gray;
-  padding: 5px 5px;
-  margin-right: 20px;
+.scroll-with-page {
+  overflow-y:auto;
+    max-height:90%;
+    margin-top:-45%;
 }
 
-.userManagement menu #userFilter{
-  color: cyan;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
-}
-
-.wrap{
-  display: grid;
-  grid-template-rows: 50px 1150px;
-}
-
-.setBlue{
-  color: blue;
-}
-
-.header{
-  font-family: sans-serif;
-  background: #FAFAFA;
-  margin-top: 0px;
-  padding-top: 0px;
-  overflow: auto;
-}
-
-.header h5{
-  margin-left: 20px;
-  height: 100%;
-}
-
-.header span{
-  margin-left: 20px;
-  height: 100%;
-}
-
-.float-right{
-  float: right;
-}
-
-.header table{
-  padding-top: 0px;
-  border-top: 1px solid lightgray ;
-  margin-top: 10px;
-}
-
-.header table th{
-  margin-left: 5px;
-}
-
-.table{
-  border-collapse: collapse;
-  background-color: white;
-}
-
-.table tr{
-  margin-left: 20px;
-}
-
-.icon{
-  margin-right: 8px;
-  size: 80%;
-}
-
-.marginLeft{
-  margin-left: 55px;;
-}
-
-.a{
-  text-decoration: underline;
-  color: gray;
-}
-
-.menuTable tr th{
-  margin-right: 10px;
-}
-
-.center{
+.center-content {
+  width: 100%;
+  margin: 0;
+  height: fit-content;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  align-content: center;
+  justify-content: center;
+}
+
+.form-label {
+  text-decoration-color: black;
+}
+
+.hide-input {
+  display: none;
+}
+
+.show-input {
+  height: fit-content;
+  width: fit-content;
+  display: flex
+}
+
+.fit-modal .modal-content {
+  width: fit-content;
+}
+
+.fit-modal .modal-content h4 {
+  display: none;
+}
+
+.fit-modal .modal-footer {
+  display: none;
+}
+
+.fit-content {
+  width: fit-content;
+}
+
+.date-picker {
+  width: fit-content;
+  height: fit-content;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.date-picker-col {
+  width: fit-content;
+}
+
+.customized-input .MuiInput-underline:before {
+  display: none;
+}
+
+.customized-input .MuiInput-underline:after {
+  display: none;
 }
 
 
+.icon-space {
+  margin-right: 5px;
+}
 
+.icon-text-center {
+  display: flex;
+  align-items: center;
+}
 
+.icon-center-text .MuiFormControlLabel-label {
+  display: flex;
+  align-items: center;
+}
 
+.space-top {
+  margin-top: 15px;
+}
 
+.time-picker {
+    display: flex;
+    overflow: hidden;
+    min-width: 310px;
+    background-color: #fff;
+}
 
+.time-picker-item {
+  flex: 1 1 0;
+  width: 0;
+}
+
+.fill-height-container {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -moz-box-orient: vertical;
+  -moz-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+} 
+
+.fill-height-item {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -moz-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -moz-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -moz-box-orient: vertical;
+  -moz-box-direction: normal;
+  -ms-flex-direction: column;
+}
+
+.align-flex-item-center {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  align-items: center;
+}
+.full-width-flex-item {
+  flex-basis: 100%;
+  text-align: center;
+  /** Get item closer vertically*/
+  margin-bottom: -5px;
+}
+
+.no-background:focus {
+  background-color: transparent !important;
+  outline: none;
+}
+
+.presentaton button:focus {
+  color: #fff;
+  font-weight: 500;
+  background-color: #3f51b5;
+}
+
+.icon-text-center span {
+  color: #3A3A3A;
+}
+
+.icon-color-black {
+  color: #3A3A3A
+}
+
+.expand-table .MuiPaper-elevation1 {
+  box-shadow: none;
+}
+
+.table-col-width-10 {
+  width: 10%;
+}
+
+.table-col-width-15 {
+  width: 15%;
+}
+
+.table-col-width-20 {
+  width: 20%;
+}
+
+.table-col-width-35 {
+  width: 35%;
+}
+
+.row-hover tr:hover {
+  background-color:  #f5f5f5;
+}
+
+.link-active div > i, .link-active div > span {
+  color: #1565c0 !important;
+}
+
+.hide-item {
+  visibility: hidden;
+}
+
+.unhide-item {
+  visibility: visible;
+}
+
+.view-exam .modal-content {
+  padding: 0
+}
+
+.view-exam .modal-footer {
+  display: none;
+}
+
+.view-exam .modal-content h4 {
+  display: none;
+}
+
+.exam-tabs button:focus {
+  background-color: transparent;
+}
+
+.exam-tabs .MuiTab-textColorSecondary.Mui-selected {
+  color: #086bd1
+}
+
+.exam-tabs .PrivateTabIndicator-colorSecondary-300 {
+  background-color: #086bd1
+}

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Sidenav from './components/common/Sidenav';
 import Home from './components/Home';
 import PersonalLibrary from './components/personalLibrary/PersonalLibrary';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import AbbreviationLibrary from './components/abbreviation/AbbreviationLibrary';
 import StudentManagement from './components/StudentManagement';
 import TestManagement from './components/personalLibrary/test/TestManagement';
@@ -22,7 +22,7 @@ import TestWord from './components/TestWord';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import UserManagement from './components/UserManagement/UserManagement';
 import { getAuthenCookie } from './components/common/common';
-
+import ViewNews from './components/News/ViewNews';
 // const persistConfig = {
 //   key: 'root',
 //   storage: storage,
@@ -84,10 +84,15 @@ class App extends Component {
                 <Route path='/personalLibrary/question/:questionId' component={PersonalLibrary} />
                 <Route path='/abbreviationLibrary' component={AbbreviationLibrary} />
                 <Route path='/studentManagement' component={StudentManagement} />
-                <Route path='/testManagement' component={TestManagement} />
+                <Route exact path="/testManagement" render={() => (
+                    <Redirect to="/testManagement/examHistory"/>
+                )}/>
+                <Route path='/testManagement/examSchedule' render={ () => <TestManagement type="SCHEDULE"/> } />
+                <Route path='/testManagement/examHistory' render={() => <TestManagement type="HISTORY"/>} />
                 <Route path='/newsList' component={NewsList} />
                 <Route path='/testWord' component={TestWord} />
                 <Route path='/userManagement' component={UserManagement} />
+                <Route path='/news/view/:newsTitle' component={ViewNews} />
                 {/* <Route path='/userInfo' component={UserInfo}/> */}
               </Switch>
             </div>

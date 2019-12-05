@@ -1,17 +1,27 @@
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { combineReducers, createStore } from 'redux';
+import { combineReducers, createStore, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk'
 
 import userReducer from '../../reducers/userReducer';
+import errorReducer from '../../reducers/errorReducer';
+import classReducer from '../../reducers/classReducer';
+import examReducer from '../../reducers/examReducer';
+import examTestReducer from '../../reducers/examTestReducer';
 
 const persistConfig = {
     key: 'root',
     storage: storage,
+    blacklist: ['error', 'class', 'exam', 'examTest']
 };
 
 const reducers = combineReducers({
     // root: rootReducer,
     user: userReducer,
+    error: errorReducer,
+    class: classReducer,
+    exam: examReducer,
+    examTest: examTestReducer
 })
 
 const rootReducer = (state, action) => {
@@ -25,6 +35,10 @@ const rootReducer = (state, action) => {
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
+const midlleware = [thunk]
 
-export const store = createStore(persistedReducer);
+export const store = createStore(
+    persistedReducer,
+    compose(applyMiddleware(...midlleware))
+);
 export const persistor = persistStore(store);
