@@ -158,7 +158,7 @@ i{
 }
 
 .modal{
-  border-radius: 25px;
+  border-radius: 25px !important;
 }
 
 .customizedModal .modal-content h4 {
