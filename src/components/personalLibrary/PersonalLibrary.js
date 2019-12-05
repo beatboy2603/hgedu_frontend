@@ -311,7 +311,7 @@ class PersonalLibrary extends Component {
                                     }}>
                                         <h5 className="center">Thêm nhóm kiến thức</h5>
                                         <div className="line" style={{ marginTop: "30px" }}></div>
-                                        <div className="row">
+                                        <div className="row col s12">
                                             <form className="row col s12" onSubmit={this.handleFormSubmit}>
                                                 <div className="input-field inline col s12">
                                                     <input id='folderNameInput' type="text" className="validate" onChange={this.handleInputChange("folderName")} value={this.state.addFolderName} />

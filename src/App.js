@@ -23,6 +23,8 @@ import ProtectedRoute from './components/common/ProtectedRoute';
 import UserManagement from './components/UserManagement/UserManagement';
 import { getAuthenCookie } from './components/common/common';
 import ViewNews from './components/News/ViewNews';
+import PersonalInfo from './components/UserInfo/PersonalInfo';
+
 // const persistConfig = {
 //   key: 'root',
 //   storage: storage,
