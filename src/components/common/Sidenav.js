@@ -69,7 +69,8 @@ const Sidenav = (props) => {
         if (!auth2) {
             gapi.client.init({
                 'clientId': '1072039829865-jc2jf9cv96ifoph4ptpg1840s8n5gg5b.apps.googleusercontent.com',
-                'scope': 'https://www.googleapis.com/auth/drive.metadata.readonly',
+                // 'scope': 'https://www.googleapis.com/auth/drive.metadata.readonly',
+                'scope': 'https://www.googleapis.com/auth/userinfo.profile'
             }).then(() => {
                 var auth2 = gapi.auth2.getAuthInstance();
                 if (auth2) {
@@ -221,7 +222,7 @@ const Sidenav = (props) => {
                             <i className="material-icons padding-vertical-10" style={iconColor}>event</i>
                         </NavLink>
                     </div>
-                    <NavLink>
+                    <NavLink to="/user">
                         <i className="material-icons padding-vertical-10" style={iconColor}>account_circle</i>
                     </NavLink>
                     <div className="user-option" style={style.userOption} onMouseLeave={hideObj} >
@@ -261,7 +262,7 @@ const Sidenav = (props) => {
                             <i className="material-icons padding-vertical-10" style={iconColor}>event</i>
                         </NavLink>
                     </div>
-                    <NavLink>
+                    <NavLink to="/user">
                         <i className="material-icons padding-vertical-10" style={iconColor}>account_circle</i>
                     </NavLink>
                     <div className="user-option" style={style.userOption} onMouseLeave={hideObj} >

@@ -17,6 +17,7 @@ import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import { withRouter } from 'react-router-dom';
+import { Modal } from 'react-materialize';
 
 const useTreeItemStyles = makeStyles(theme => ({
     root: {
@@ -103,9 +104,13 @@ function StyledTreeItem(props) {
                     <Typography variant="caption" color="inherit">
                         {labelInfo}
                     </Typography>
-                    <div className="editFolderBtn" style={{ display: "none" }} onClick={() => { alert(props.id) }}>
+                    {/* <div className="editFolderBtn" style={{ display: "none" }} onClick={() => { alert(props.id) }}> */}
+                    <div className="editFolderBtn" style={{ display: "none" }}>
+                        <a href="#editFolderName" className="modal-trigger">
+                            <i className="material-icons md-18 grey-text text-darken-3">edit</i>
+                        </a>
                         {/* Ed */}
-                        <i className="material-icons md-18 grey-text text-darken-3">edit</i>
+                        {/* <i className="material-icons md-18 grey-text text-darken-3">edit</i> */}
                     </div>
                     <div className="deleteFolderBtn" style={{ display: "none", color: "red" }} onClick={() => { props.deleteFolder(props.id) }}>
                         {/* De */}
@@ -148,7 +153,7 @@ const useStyles = makeStyles({
 function CustomizedTreeView(props) {
     const classes = useStyles();
 
-    const { folders, setCurrentFolder } = props;
+    const { folders, setCurrentFolder, handleFormSubmit, addFolderName, addFolder, handleInputChange } = props;
 
     const handleClick = (folder, path) => {
         props.history.push('/personalLibrary/' + path + "/" + folder.folderId);
@@ -158,7 +163,7 @@ function CustomizedTreeView(props) {
 
     const foldersToTree = (folders) => {
         let rootFolders = rootFoldersFilter(folders);
-        return recursiveTree(folders, rootFolders)
+        return recursiveTree(folders, rootFolders);
     }
 
     let rootFoldersFilter = (folders) => {
@@ -254,6 +259,30 @@ function CustomizedTreeView(props) {
             </StyledTreeItem>
             <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} /> */}
             {folderNav}
+            <Modal id="editFolderName" options={{ preventScrolling: true }} style={{ width: "40vw", height: "45vh", overflow: "hidden", borderRadius: "25px" }} actions={[]}>
+                <div className="modal-content" style={{
+                    position: "absolute",
+                    top: "0",
+                    bottom: "0",
+                    left: "0",
+                    right: "-17px", /* Increase/Decrease this value for cross-browser compatibility */
+                    overflowY: "scroll"
+                }}>
+                    <h5 className="center">Sửa tên thư mục</h5>
+                    <div className="line" style={{ marginTop: "30px" }}></div>
+                    <div className="row">
+                        <form className="row col s12" onSubmit={handleFormSubmit}>
+                            <div className="input-field inline col s12">
+                                <input id='folderNameInput' type="text" className="validate" onChange={() => { handleInputChange("folderName") }} value={addFolderName} />
+                                <label htmlFor="folderNameInput" style={{ userSelect: "none" }}>Tên thư mục</label>
+                            </div>
+                        </form>
+                    </div>
+                    {/* <div className="line"></div> */}
+                    <a className="modal-action modal-close black-text lighten-1" style={{ margin: "0 1.5vw", float: "left" }}>Hủy thao tác</a>
+                    <a id="buttonAddFolder" className="modal-action modal-close blue-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }} onClick={() => addFolder(1)}>Hoàn tất</a>
+                </div>
+            </Modal>
         </TreeView>
     );
 }

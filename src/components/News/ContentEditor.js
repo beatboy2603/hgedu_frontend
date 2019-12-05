@@ -7,7 +7,7 @@ import axios, {post} from 'axios';
 // import { throwStatement } from '@babel/types';
 import { debounce } from 'lodash';
 import { throwStatement } from '@babel/types';
-import { connect } from 'net';
+import { connect } from 'react-redux';
 
 // BEGIN allow image alignment styles
 const ImageFormatAttributesList = [
@@ -41,7 +41,7 @@ const ImageFormatAttributesList = [
   }
   // END allow image alignment styles
 
- export default class ContentEditor extends Component {
+class ContentEditor extends Component {
     constructor(props) {
         super(props);
 
@@ -155,6 +155,7 @@ const ImageFormatAttributesList = [
         const form = new FormData()
         form.append('image', file)
         form.append('dateCreated', new Date().toJSON().slice(0, 19).replace(/T|-|:/g, ''))
+        // form.append('userId', this.props.user.uid)
         form.append('userId', 1)
         //use axios to upload
         axios.post(URL, form)
@@ -424,5 +425,11 @@ const ImageFormatAttributesList = [
             </div>
         );
     }
-
 }
+
+// const mapStateToProps = state => ({
+//     user: state.user,
+// })
+
+// export default connect(mapStateToProps)(ContentEditor);
+export default ContentEditor;

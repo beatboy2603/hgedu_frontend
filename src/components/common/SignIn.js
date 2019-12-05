@@ -35,7 +35,7 @@ class SignIn extends Component {
     }
 
     componentDidMount() {
-        if(!this.props.user.jwt){
+        if (!this.props.user.jwt) {
             this.props.history.push("/");
         }
     }
@@ -43,13 +43,15 @@ class SignIn extends Component {
     render() {
         const { classes } = this.props;
         return (
-            <div className="signup row flex-column" style={{ minHeight: "100vh", margin: "0" }}>
+            // <div className="signup row flex-column" style={{ minHeight: "100vh", margin: "0" }}>
+            <div className="signup row flex-column center" style={{ minHeight: "100vh", margin: "0" }}>
                 <div className="col s2">
                     {/* <Link to='/home'>
                         <i className="material-icons" style={{ margin: "10vh", color: "#3a3a3a", fontSize: "50px" }}>arrow_back</i>
                     </Link> */}
                 </div>
-                <div className="col s8 container flex-column center">
+                {/* <div className="col s8 container flex-column center"> */}
+                <div className="col s8 container flex-column">
                     <div style={{ margin: "5vh 0" }}>
                         <Link to='/'>
                             <img className="center-align" style={{ width: "7vw" }} src={Logo} alt="Logo" />

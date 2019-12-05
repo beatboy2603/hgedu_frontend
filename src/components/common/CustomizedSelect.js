@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -16,18 +16,22 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function CustomizedSelect({ items }) {
+export default function CustomizedSelect(props) {
     const classes = useStyles();
     const [item, setItem] = React.useState('');
+    let { items, handleParentSelect, source } = props;
 
     const handleChange = event => {
         setItem(event.target.value);
+        if (handleParentSelect) {
+            handleParentSelect(source, event.target.value)
+        }
     };
 
     const menuItems = items.map(item => {
         return <MenuItem value={item.value}>{item.text}</MenuItem>
     });
-    
+
     return (
         <div>
             <FormControl className={classes.formControl}>
@@ -36,10 +40,28 @@ export default function CustomizedSelect({ items }) {
                     id="demo-simple-select"
                     value={item}
                     onChange={handleChange}
+                    // onOpen={() => { setItem("default") }}
                 >
+                    {/* <Temp setItem={setItem}></Temp>
+                    <MenuItem value={"default"} disabled={true}>Chọn</MenuItem> */}
                     {menuItems}
                 </Select>
             </FormControl>
         </div>
     );
 }
+
+// class Temp extends Component {
+//     componentDidMount() {
+//         let {setItem} = this.props;
+//         console.log("yeah");
+//         setItem("default");
+//     }
+    
+//     render(){
+//         return(
+//             // <MenuItem value={"default"} disabled={true}>Chọn</MenuItem>
+//             <div></div>
+//         )
+//     }
+// }

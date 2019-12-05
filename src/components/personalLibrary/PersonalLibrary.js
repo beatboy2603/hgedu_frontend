@@ -22,6 +22,7 @@ import 'katex/dist/katex.min.css';
 import Editor from "../common/Editor";
 import { debounce } from 'lodash';
 import ModalTest from './test/ModalTest';
+import CustomizedTable from '../common/CustomizedTable';
 window.katex = katex;
 
 
@@ -326,17 +327,18 @@ class PersonalLibrary extends Component {
 
                         </div>
                         <div className="line"></div>
-                        <CustomizedTreeView folders={this.state.folders} setCurrentFolder={this.setCurrentFolder} deleteFolder={this.deleteFolder} />
+                        <CustomizedTreeView folders={this.state.folders} setCurrentFolder={this.setCurrentFolder} deleteFolder={this.deleteFolder} handleFormSubmit={this.handleFormSubmit} addFolderName={this.state.addFolderName} addFolder={this.addFolder} handleInputChange={this.handleInputChange}/>
                     </div>
                 </div>
                 {/* filler for navigation bar */}
                 <div className="col s3 z-depth-3 grey lighten-5"></div>
                 {/* main content */}
-                <div className="row col s9 no-padding">
+                <div className="row col s9">
                     <Switch>
                         <Route exact path={'/personalLibrary'} component={PersonalLibraryFiller} />
                         <Route path={'/personalLibrary/knowledgeGroup/:folderId'} render={(props) => <KnowledgeGroup {...props} setQuestionFolderId={this.setQuestionFolderId} />} />
                         <Route path={'/personalLibrary/test/:folderId'} render={(props) => <ModalTest {...props} />} />
+                        <Route path={'/personalLibrary/table'} render={(props) => <CustomizedTable {...props} />} />
                     </Switch>
                 </div>
 

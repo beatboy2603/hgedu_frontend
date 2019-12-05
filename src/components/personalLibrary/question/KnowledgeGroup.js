@@ -15,23 +15,30 @@ class KnowledgeGroup extends Component {
         questionList: [],
     }
 
-    // componentDidUpdate() {
-    //     if (currentFolder !== this.state.currentFolder) {
-    //         this.setState({
-    //             currentFolder,
-    //         })
-    //     }
-    // }
-
-    componentDidMount() {
-        let { setQuestionFolderId } = this.props;
-        // this.setState({
-        //     currentFolder,
-        // })
-        setQuestionFolderId(this.props.match.params.folderId);
+    componentDidUpdate() {
         let folderId = this.props.match.params.folderId;
         axios.get(serverUrl + "api/folder/" + folderId).then(res => {
-            console.log(res);
+            let currentFolder = res.data;
+            if (currentFolder !== this.state.currentFolder) {
+                this.setState({
+                    currentFolder,
+                })
+            }
+        })
+    }
+
+    componentDidMount() {
+        // let { setQuestionFolderId } = this.props;
+        // // this.setState({
+        // //     currentFolder,
+        // // })
+        // setQuestionFolderId(this.props.match.params.folderId);
+        let folderId = this.props.match.params.folderId;
+        axios.get(serverUrl + "api/folder/" + folderId).then(res => {
+            // console.log(res);
+            this.setState({
+                currentFolder: res.data,
+            })
         })
     }
 

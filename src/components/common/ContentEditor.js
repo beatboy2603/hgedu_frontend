@@ -2,41 +2,74 @@ import React, { Component, useRef } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css';
-import ImageResize from 'quill-image-resize-module-react';
-import axios, {post} from 'axios';
+import ImageResize from '@capaj/quill-image-resize-module-react';
+import axios, { post } from 'axios';
 // import { throwStatement } from '@babel/types';
 import { debounce } from 'lodash';
 import { throwStatement } from '@babel/types';
-import { connect } from 'net';
+import { connect } from 'react-redux';
 
- export default class ContentEditor extends Component {
+// BEGIN allow image alignment styles
+const ImageFormatAttributesList = [
+    'alt',
+    'height',
+    'width',
+    'style'
+];
+
+const BaseImageFormat = Quill.import('formats/image');
+class ImageFormat extends BaseImageFormat {
+    static formats(domNode) {
+        return ImageFormatAttributesList.reduce(function (formats, attribute) {
+            if (domNode.hasAttribute(attribute)) {
+                formats[attribute] = domNode.getAttribute(attribute);
+            }
+            return formats;
+        }, {});
+    }
+    format(name, value) {
+        if (ImageFormatAttributesList.indexOf(name) > -1) {
+            if (value) {
+                this.domNode.setAttribute(name, value);
+            } else {
+                this.domNode.removeAttribute(name);
+            }
+        } else {
+            super.format(name, value);
+        }
+    }
+}
+// END allow image alignment styles
+
+class ContentEditor extends Component {
     constructor(props) {
         super(props);
 
+        var AlignStyle = Quill.import('attributors/style/align');
         Quill.register('modules/imageResize', ImageResize);
+        Quill.register(ImageFormat, true);
+        Quill.register(AlignStyle, true)
+        var SizeStyle = Quill.import('attributors/style/size');
+        // delete SizeStyle.whitelist;  // accept all
+        SizeStyle.whitelist = ['10px', '20px', '40px'];
+        Quill.register(SizeStyle, true);
+        var FontStyle = Quill.import('attributors/style/font');
+        Quill.register(FontStyle, true)
 
         this.modules = {
             toolbar: {
-                container: [[{ 'font': [] }],
-                [{ 'size': ['small', false, 'large', 'huge'] }],
-                ['bold', 'italic', 'underline'],
-                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                [{ 'align': ['','center', 'right', 'justify'] }],
-                [{ 'color': [] }, { 'background': [] }],
-                ['clean'],
-                ['formula'],
-                ['image']],
+                container: this.props.toolbarModules,
                 handlers: {
                     image: this.imageHandler
                 }
             },
             imageResize: {
                 handleStyles: {
-                  backgroundColor: 'black',
-                  border: 'none',
-                  color: 'white',
+                    backgroundColor: 'black',
+                    border: 'none',
+                    color: 'white',
                 },
-                modules: ['Resize', 'DisplaySize', 'Toolbar'],
+                parchment: Quill.import('parchment')
             }
         };
 
@@ -44,6 +77,8 @@ import { connect } from 'net';
             'font',
             'size',
             'header',
+            'width',
+            'style',
             'bold', 'italic', 'underline',
             'list', 'bullet',
             'align',
@@ -79,7 +114,7 @@ import { connect } from 'net';
 
     if(editor) {
         editor.on("text-change", (delta, oldDelta, source) => {
-            if(source === "api") {
+            if (source === "api") {
                 console.log("api changes")
             } else if (source === "user") {
                 let diffObj = oldDelta.diff(editor.getContents);
@@ -100,7 +135,7 @@ import { connect } from 'net';
         if (/^image\//.test(file.type)) {
             this.saveImageToServer(file)
         } else {
-        console.warn('You could upload images only.');
+            console.warn('You could upload images only.');
         }
 
         document.getElementById('imgFile').value = "";
@@ -112,24 +147,25 @@ import { connect } from 'net';
         const form = new FormData()
         form.append('image', file)
         form.append('dateCreated', new Date().toJSON().slice(0, 19).replace(/T|-|:/g, ''))
-        form.append('userId', 1)
+        form.append('userId', this.props.user.uid)
+        // form.append('userId', 1)
         //use axios to upload
         axios.post(URL, form)
-        .then(res => {
-          if(res != null){
-            let range = this.editor.getSelection();
-            this.editor.insertEmbed(range.index, 'image', 
-            host + res.data, "user");
-            //console.log(res.data);
-            this.setState({imageData: [...this.state.imageData, host + res.data]})
-            alert("File uploaded successfully.")
-          }else {
-            console.error(res.data);
-          }
-        })
-        .catch(e => {
-          console.error(e);
-        });
+            .then(res => {
+                if (res != null) {
+                    let range = this.editor.getSelection();
+                    this.editor.insertEmbed(range.index, 'image',
+                        host + res.data, "user");
+                    //console.log(res.data);
+                    this.setState({ imageData: [...this.state.imageData, host + res.data] })
+                    //alert("File uploaded successfully.")
+                } else {
+                    console.error(res.data);
+                }
+            })
+            .catch(e => {
+                console.error(e);
+            });
     }
 
     updateImagesArray = (image) => {
@@ -141,19 +177,19 @@ import { connect } from 'net';
         const file = e.target.files[0];
         console.log("hehe", this.editor)
         //this.updateImagesArray(file)
-            // if(this.editor) 
-            //     this.editor.insertEmbed(this.editor.getSelection(), 'image',reader.result, "user")
+        // if(this.editor) 
+        //     this.editor.insertEmbed(this.editor.getSelection(), 'image',reader.result, "user")
         // let reader = new FileReader();
         // reader.onload = (e) => {
         //         let range = this.editor.getSelection();
         //         this.editor.insertEmbed(range.index ,'image', e.target.result, "user");
         // }
         // reader.readAsDataURL(file);
-            // file type is only image.
+        // file type is only image.
         if (/^image\//.test(file.type)) {
-          this.saveImageToServer(file);
+            this.saveImageToServer(file);
         } else {
-          console.warn('You could upload images only.');
+            console.warn('You could upload images only.');
         }
 
         document.getElementById('imgFile').value = "";
@@ -164,11 +200,13 @@ import { connect } from 'net';
      */
     getImageData = (delta) => {
         var imageData = []
-        delta.ops.map((deltaPart) => {
-            if(deltaPart.insert !== undefined && deltaPart.insert.image) {
-                imageData.push(deltaPart.insert.image)
-            }
-        })
+        if (delta !== undefined) {
+            delta.ops.map((deltaPart) => {
+                if (deltaPart.insert !== undefined && deltaPart.insert.image) {
+                    imageData.push(deltaPart.insert.image)
+                }
+            })
+        }
         return imageData
     }
 
@@ -200,8 +238,10 @@ import { connect } from 'net';
      */
     resetEditorOnUpdate = () => {
         const currentImageData = this.state.imageData;
-        if(currentImageData !== this.state.originalImageData) {
+        // console.log("original:", this.state.originalImageData);
+        if (currentImageData !== this.state.originalImageData) {
             let removedImageFromOriginal = this.state.originalImageData.filter(item => currentImageData.includes(item) === false);
+            console.log("removed:", removedImageFromOriginal)
             this.deleteImage(removedImageFromOriginal);
         }
         this.setState({
@@ -220,9 +260,10 @@ import { connect } from 'net';
      * and set the state of current states to original
      */
     resetEditor = () => {
-        const currentImageData = this.state.imageData;
-        if(currentImageData !== this.state.originalImageData) {
-            this.deleteImage(currentImageData);
+        const originalImageData = this.state.originalImageData;
+        if (originalImageData !== this.state.currentImageData) {
+            let removedImageNotOriginal = this.state.currentImageData.filter(item => originalImageData.includes(item) === false);
+            this.deleteImage(removedImageNotOriginal);
         }
         this.setState({
             comments: '',
@@ -260,44 +301,51 @@ import { connect } from 'net';
         var removedImages = oldImageData.filter(item => imageData.includes(item) === false);
         var removedImagesNotOriginal = removedImages.filter(item => this.state.originalImageData.includes(item) === false);
         this.deleteImage(removedImagesNotOriginal);
-        this.setState({imageData})
+        this.setState({ imageData })
     }
 
     deleteImage = (removedImages) => {
         removedImages.map(async item => {
             await axios.delete(item)
-            .then(res => console.log("OK"))
-            .catch(e => console.log(e))
+                .then(res => console.log("OK"))
+                .catch(e => console.log(e))
         });
     }
 
     rteChange = (content, delta, source, editor) => {
-        if(source === "api" && this.editor.getSelection() === null) {
-            console.log("Triggered");
+        if (source === "api" && this.editor.getSelection() === null) {
             let length = this.editor.getLength();
             this.editor.setSelection(length - 1, length, "user");
-        } 
-        this.setState({content: content})
-        var oldImageData = this.state.imageData;
-        var imageData = this.getImageData(editor.getContents());
-        //console.log("images:", this.state.images);
-        //console.log("data: ", imageData)
+        } else {
+            this.setState({ content: editor.getContents() })
+            var oldImageData = this.state.imageData;
+            var imageData = this.getImageData(editor.getContents());
+            this.setState({ imageData })
+            //console.log("images:", this.state.images);
+            //console.log("data: ", imageData)
 
-        //console.log("current-delta: ", this.editor.getContents())
-        this.props.updateContent(this.editor.getContents());
-        // var imageFileMap
-        
-        //Handle image change when delete
-        if(oldImageData.length !== 0 &&  
-            oldImageData.length > imageData.length) {
-            //imageFileMap = this.updateFileMap(imageData)
-            console.log(oldImageData)
-            this.handleDeleteImage(imageData);
+            //console.log("current-delta: ", this.editor.getContents())
+            this.props.updateContent(this.editor.getContents());
+            // var imageFileMap
+
+            //Handle image change when delete
+            if (oldImageData.length !== 0 &&
+                oldImageData.length > imageData.length) {
+                //imageFileMap = this.updateFileMap(imageData)
+                console.log(oldImageData)
+                this.handleDeleteImage(imageData);
+            }
         }
         // else {
         //     imageFileMap = this.getImageFileMap(this.state.images, imageData);
         // }
         // this.setState({imageData, imageFileMap})
+    }
+
+    convertDeltaToHtml = (delta) => {
+        var tempCont = document.createElement("div");
+        (new Quill(tempCont)).setContents(delta);
+        return tempCont.getElementsByClassName("ql-editor")[0].innerHTML;
     }
 
     htmlContent = (delta) => {
@@ -309,7 +357,7 @@ import { connect } from 'net';
 
         var converter = new QuillDeltaToHtmlConverter(delta[Object.keys(delta)[0]], cfg);
 
-        var html = converter.convert(); 
+        var html = converter.convert();
 
         return html;
     }
@@ -340,28 +388,42 @@ import { connect } from 'net';
      * Set the states when editting
      */
     componentDidUpdate() {
-        if(this.state.content === '' && this.state.originalContent === '' && this.props.content !== undefined) {
-            const html = this.htmlContent(this.props.content);
-            this.editor.setContents(this.props.content);
-            this.setState({originalContent: this.editor.getContents()});
-            this.setState({content: this.editor.getContents()});
-            let data = this.getImageData(this.editor.getContents());
-            this.setState({originalImageData: data});
+        if (this.state.content === '' && this.state.originalContent === '' && this.props.content) {
+            const html = this.convertDeltaToHtml(this.props.content);
+            //document.getElementsByClassName("ql-editor")[0].innerHTML = html;
+            console.log(html)
+            this.editor.setContents([]);
+            this.setState({ originalContent: this.props.content });
+            this.editor.clipboard.dangerouslyPasteHTML(0, html);
+            this.setState({ content: this.props.content });
+            let data = this.getImageData(this.props.content);
+            console.log("preset_data:", data);
+            this.setState({ originalImageData: data });
+            this.setState({ currentImageData: data });
+        } else {
+            //console.log("content:",this.state.content)
         }
     }
 
     render() {
         return (
             <div>
-                <ReactQuill ref={this.reactEditor} theme="snow" modules={this.modules}
-                    formats={this.formats} 
+                <ReactQuill
+                    style={this.props.customStyle}
+                    ref={this.reactEditor} theme="snow" modules={this.modules}
+                    formats={this.formats}
                     onBlur={this.handleQuillBlur}
-                    onChange={this.rteChange} 
-                    value={this.state.content || ''}
-                    defaultValue={''} />
-                <input type="file" id="imgFile" hidden/>
+                    onChange={this.rteChange}
+                    defaultValue={this.state.content || ''} />
+                <input type="file" id="imgFile" hidden />
             </div>
         );
     }
-
 }
+
+const mapStateToProps = state => ({
+    user: state.user,
+})
+
+export default connect(mapStateToProps)(ContentEditor);
+// export default ContentEditor;

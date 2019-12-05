@@ -129,6 +129,7 @@ class LandingPage extends Component {
                     {/* {!this.props.isAuthenticated && */}
                     < GoogleLogin
                         clientId="1072039829865-jc2jf9cv96ifoph4ptpg1840s8n5gg5b.apps.googleusercontent.com"
+                        scope= 'https://www.googleapis.com/auth/userinfo.profile'
                         render={renderProps => (
                             <Link onClick={renderProps.onClick} disabled={renderProps.disabled} className='flex-row' style={{ position: "absolute", top: "7vh", left: "80vw" }}>
                                 <i className="material-icons left padding-vertical-10 md-36" style={{ color: "#ffffff", fontSize: "30px" }}>account_circle</i>

@@ -152,8 +152,8 @@ i{
 }
 
 .my-floating-btn{
-  position:fixed;
-  left:90%;
+  position: fixed;
+  left:92vw;
   top:84vh;
 }
 
