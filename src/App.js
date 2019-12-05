@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Sidenav from './components/common/Sidenav';
 import Home from './components/Home';
 import PersonalLibrary from './components/personalLibrary/PersonalLibrary';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import AbbreviationLibrary from './components/abbreviation/AbbreviationLibrary';
 import StudentManagement from './components/StudentManagement';
 import TestManagement from './components/personalLibrary/test/TestManagement';
@@ -21,6 +21,7 @@ import UserInfo from './components/UserInfo/UserInfo';
 import TestWord from './components/TestWord';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import { getAuthenCookie } from './components/common/common';
+import PersonalInfo from './components/UserInfo/PersonalInfo';
 
 // const persistConfig = {
 //   key: 'root',
@@ -86,7 +87,8 @@ class App extends Component {
                 <Route path='/testManagement' component={TestManagement} />
                 <Route path='/newsList' component={NewsList} />
                 <Route path='/testWord' component={TestWord} />
-                {/* <Route path='/userInfo' component={UserInfo}/> */}
+                {/* <Route path='/user/personalInfo' component={PersonalInfo}/>
+                <Route path='/user/setting'/> */}
               </Switch>
             </div>
           </BrowserRouter>

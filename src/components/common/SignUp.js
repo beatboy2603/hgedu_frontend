@@ -120,12 +120,14 @@ class SignUp extends Component {
                                     phone: user.phoneNumber,
                                     gender: user.gender,
                                     role: user.roleId,
+                                    dob: user.dob,
+                                    school: user.school,
                                 }
                             });
                             this.props.dispatch({ type: "UPDATE_JWT", payload: jwt });
                             this.props.history.push('/signin');
                         })
-                        
+
                     } else {
                         alert("Đăng kí thất bại");
                     }

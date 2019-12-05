@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
-import SettingsIcon from '@material-ui/icons/Settings'
+import CreditCardIcon from '@material-ui/icons/CreditCard';
 import { Switch, NavLink, Route, Link } from 'react-router-dom/cjs/react-router-dom.min'
 import { Avatar, Button } from '@material-ui/core'
 import axios from 'axios'
@@ -60,10 +60,10 @@ class UserInfo extends Component {
                             <h5 className='font-montserrat' style={{ ...style.margin30, ...style.colorizedText }}>Tài khoản</h5>
                             <div className="line"></div>
                             <div className='flex-row padding-vertical-10'>
-                                <NavLink className='flex-row' to='/user/personalInfo'><AccountCircleIcon /> <span style={{ fontSize: '13px' }}>Thông tin cá nhân</span></NavLink>
+                                <NavLink className='flex-row' style = {{color:'#3a3a3a'}}to='/user/personalInfo' activeStyle={style.colorizedText}><AccountCircleIcon style={{marginRight: '8px'}}/> <span style={{ fontSize: '13px' }}>Thông tin cá nhân</span></NavLink>
                             </div>
                             <div className="flex-row">
-                                <NavLink className='flex-row' to='/#'><SettingsIcon className='' /> <span style={{ fontSize: '13px' }}>Cài đặt</span></NavLink>
+                                <NavLink className='flex-row'style = {{color:'#3a3a3a'}} to='/user/setting' activeStyle={style.colorizedText}><CreditCardIcon style={{marginRight: '8px'}} /> <span style={{ fontSize: '13px' }}>Thuê bao</span></NavLink>
                             </div>
                         </div>
                     </div>
@@ -71,7 +71,7 @@ class UserInfo extends Component {
                         <Switch>
                             <Route path="/user/personalInfo/edit" component={PersonalInfoEdit} />
                             <Route path="/user/personalInfo" component={PersonalInfo} />
-                            <Route path="/setting"></Route>
+                            <Route path="/user/setting"></Route>
                         </Switch>
                     </div>
                 </div>

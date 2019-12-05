@@ -39,6 +39,10 @@ const Sidenav = (props) => {
 
         iconChoice: {
             marginRight: '10px'
+        },
+
+        iconColorActive: {
+            color: '#1565c0'
         }
     };
 
@@ -49,19 +53,33 @@ const Sidenav = (props) => {
     const showObj = (e) => {
         let userOption = document.getElementById("user-option");
         Object.assign(userOption.style, style.logoutDisplay);
-        // let parent = e.target.parentNode.parentNode;
-        // parent.childNodes[1].animate({})
-        // Object.assign(parent.childNodes[1].style, style.logoutShow);
     };
 
     const hideObj = () => {
-        // let target = e.target;
-        // if (target.className != 'user-option') {
-        //     Object.assign(target.parentNode.childNodes[1], style.logout)
-        // }
-
         let userOption = document.getElementById("user-option");
         Object.assign(userOption.style, style.logoutHidden);
+    }
+
+    const toTeacher = () => {
+        props.dispatch({
+            type: "UPDATE_USER", payload: {
+                userRoleId: 1
+            }
+        });
+    }
+    const toStudent = () => {
+        props.dispatch({
+            type: "UPDATE_USER", payload: {
+                userRoleId: 2
+            }
+        });
+    }
+    const toParent = () => {
+        props.dispatch({
+            type: "UPDATE_USER", payload: {
+                userRoleId: 3
+            }
+        });
     }
 
     const signOut = () => {
@@ -89,6 +107,56 @@ const Sidenav = (props) => {
         }
     }
 
+
+    const link = (path, icon) => {
+        return (
+            <NavLink to={path} activeClassName="side-nav-active">
+                <i className="material-icons padding-vertical-10" style={iconColor}>{icon}</i>
+            </NavLink>
+        )
+    }
+
+    const changeRole = (role, userRoleId) => {
+        return (
+            <div className="user-option" style={style.userOption} onMouseLeave={hideObj} >
+                <NavLink to="/user/personalInfo" >
+                    <i onMouseOver={showObj} className="material-icons padding-vertical-10" style={iconColor} >account_circle</i>
+                </NavLink>
+                <div id="user-option" style={style.logoutHidden}>
+                    <i onClick={() => signOut()} className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor, ...style.firstIcon, cursor: "pointer" }} >exit_to_app</i>
+                    <div className="role-changer" style={{ display: 'flex', flexDirection: 'row' }}>
+                        {role === 3 && userRoleId === 1 ?
+                            (
+                                <i className="material-icons padding-vertical-10"style={{ ...style.iconChoice, ...style.iconColorActive }} >import_contacts</i>
+                            ) : (
+                                <Link to="/home">
+                                    <i className="material-icons padding-vertical-10" onClick= {toTeacher} style={{ ...style.iconChoice, ...iconColor }} >import_contacts</i>
+                                </Link>
+                            )
+                        }
+                        {role === 3 && userRoleId === 2 ?
+                            (<i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...style.iconColorActive }} >school</i>
+                            ) : (
+                                <Link to="/home">
+                                    <i className="material-icons padding-vertical-10" onClick= {toStudent} style={{ ...style.iconChoice, ...iconColor }} >school</i>
+                                </Link>
+                            )
+                        }
+                        {role === 3 && userRoleId === 3 ?
+                            (
+                                <i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...style.iconColorActive }} >people_alt</i>
+                            ) : (
+                                <Link to="/home">
+                                    <i className="material-icons padding-vertical-10" onClick={toParent} style={{ ...style.iconChoice, ...iconColor }} >people_alt</i>
+                                </Link>
+                            )
+                        }
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div>
             {props.isAuthenticated && props.user.role === 3 && props.user.userRoleId === 1 &&
@@ -102,38 +170,17 @@ const Sidenav = (props) => {
                         <Link className="sidenav-trigger" data-target='sideNavUserTeacher'>
                             <i className="material-icons padding-vertical-10" style={iconColor}>menu</i>
                         </Link>
-                        <NavLink to="/home" activeClassName="side-nav-active">
-                            <i className="material-icons padding-vertical-10" style={iconColor}>home</i>
-                        </NavLink>
-                        <NavLink to="/personalLibrary" activeClassName="side-nav-active">
-                            <i className="material-icons padding-vertical-10" style={iconColor}>library_books</i>
-                        </NavLink>
-                        <NavLink to='/abbreviationLibrary' activeClassName="side-nav-active">
-                            <i className="material-icons padding-vertical-10" style={iconColor}>border_color</i>
-                        </NavLink>
-                        <NavLink to='/studentManagement' activeClassName="side-nav-active">
-                            <i className="material-icons padding-vertical-10" style={iconColor}>group</i>
-                        </NavLink>
-                        <NavLink to='/testManagement' activeClassName="side-nav-active">
-                            <i className="material-icons padding-vertical-10" style={iconColor}>check_box</i>
-                        </NavLink>
-                    </div>
-                    <div className="user-option" style={style.userOption} onMouseLeave={hideObj} >
-                        <NavLink to="/user" >
-                            <i onMouseOver={showObj} className="material-icons padding-vertical-10" style={iconColor} >account_circle</i>
-                        </NavLink>
-                        <div id="user-option" style={style.logoutHidden}>
-                            {/* <a href="#" onClick={() => signOut()}> */}
-                                <i onClick={() => signOut()} className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor, ...style.firstIcon, cursor:"pointer" }} >exit_to_app</i>
-                            {/* </a> */}
-                            <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person_pin</i></Link>
+                        {link("/home", "home")}
 
-                            <div class="role-changer" style={{ display: 'flex', flexDirection: 'row' }}>
-                                <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person</i></Link>
-                                <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >people_alt</i></Link>
-                            </div>
-                        </div>
+                        {link("/personalLibrary", "library_books")}
+
+                        {link("/abbreviationLibrary", "border_color")}
+
+                        {link("/studentManagement", "group")}
+
+                        {link("/testManagement", "check_box")}
                     </div>
+                    {changeRole(props.user.role, props.user.userRoleId)}
                 </div>
             }
             {props.isAuthenticated && props.user.role === 3 && props.user.userRoleId === 2 &&
@@ -151,22 +198,7 @@ const Sidenav = (props) => {
                             <i className="material-icons padding-vertical-10" style={iconColor}>home</i>
                         </NavLink>
                     </div>
-                    <div className="user-option" style={style.userOption} onMouseLeave={hideObj} >
-                        <NavLink to="/user" >
-                            <i onMouseOver={showObj} className="material-icons padding-vertical-10" style={iconColor} >account_circle</i>
-                        </NavLink>
-                        <div id="user-option" style={style.logoutHidden}>
-                            {/* <a href="#" onClick={() => signOut()}> */}
-                                <i onClick={() => signOut()} className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor, ...style.firstIcon, cursor:"pointer" }} >exit_to_app</i>
-                            {/* </a> */}
-                            <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person_pin</i></Link>
-
-                            <div class="role-changer" style={{ display: 'flex', flexDirection: 'row' }}>
-                                <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person</i></Link>
-                                <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >people_alt</i></Link>
-                            </div>
-                        </div>
-                    </div>
+                    {changeRole(props.user.role, props.user.userRoleId)}
                 </div>
             }
             {props.isAuthenticated && props.user.role === 3 && props.user.userRoleId === 3 &&
@@ -184,22 +216,7 @@ const Sidenav = (props) => {
                             <i className="material-icons padding-vertical-10" style={iconColor}>home</i>
                         </NavLink>
                     </div>
-                    <div className="user-option" style={style.userOption} onMouseLeave={hideObj} >
-                        <NavLink to="/user" >
-                            <i onMouseOver={showObj} className="material-icons padding-vertical-10" style={iconColor} >account_circle</i>
-                        </NavLink>
-                        <div id="user-option" style={style.logoutHidden}>
-                            {/* <a href="#" onClick={() => signOut()}> */}
-                                <i onClick={() => signOut()} className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor, ...style.firstIcon, cursor:"pointer" }} >exit_to_app</i>
-                            {/* </a> */}
-                            <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person_pin</i></Link>
-
-                            <div class="role-changer" style={{ display: 'flex', flexDirection: 'row' }}>
-                                <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person</i></Link>
-                                <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >people_alt</i></Link>
-                            </div>
-                        </div>
-                    </div>
+                    {changeRole(props.user.role, props.user.userRoleId)}
                 </div>
             }
             {props.isAuthenticated && props.user.role === 2 &&
@@ -230,7 +247,7 @@ const Sidenav = (props) => {
                         </NavLink>
                         <div id="user-option" style={style.logoutHidden}>
                             {/* <a href="#" onClick={() => signOut()}> */}
-                                <i onClick={() => signOut()} className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor, ...style.firstIcon, cursor:"pointer" }} >exit_to_app</i>
+                            <i onClick={() => signOut()} className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor, ...style.firstIcon, cursor: "pointer" }} >exit_to_app</i>
                             {/* </a> */}
                             <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person_pin</i></Link>
 
@@ -270,7 +287,7 @@ const Sidenav = (props) => {
                         </NavLink>
                         <div id="user-option" style={style.logoutHidden}>
                             {/* <a href="#" onClick={() => signOut()}> */}
-                                <i onClick={() => signOut()} className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor, ...style.firstIcon, cursor:"pointer" }} >exit_to_app</i>
+                            <i onClick={() => signOut()} className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor, ...style.firstIcon, cursor: "pointer" }} >exit_to_app</i>
                             {/* </a> */}
                             <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person_pin</i></Link>
 
