@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Sidenav from './components/common/Sidenav';
 import Home from './components/Home';
 import PersonalLibrary from './components/personalLibrary/PersonalLibrary';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import AbbreviationLibrary from './components/abbreviation/AbbreviationLibrary';
 import StudentManagement from './components/StudentManagement';
 import TestManagement from './components/personalLibrary/test/TestManagement';
@@ -18,6 +18,7 @@ import { store, persistor } from './components/common/Store'
 import SignUp from './components/common/SignUp';
 import SignIn from './components/common/SignIn';
 import UserInfo from './components/UserInfo';
+import ViewNews from './components/News/ViewNews';
 
 
 // const persistConfig = {
@@ -51,8 +52,13 @@ class App extends Component {
                 <Route path='/personalLibrary/question/:questionId' component={PersonalLibrary} />
                 <Route path='/abbreviationLibrary' component={AbbreviationLibrary} />
                 <Route path='/studentManagement' component={StudentManagement} />
-                <Route path='/testManagement' component={TestManagement} />
+                <Route exact path="/testManagement" render={() => (
+                    <Redirect to="/testManagement/examHistory"/>
+                )}/>
+                <Route path='/testManagement/examSchedule' render={ () => <TestManagement type="SCHEDULE"/> } />
+                <Route path='/testManagement/examHistory' render={() => <TestManagement type="HISTORY"/>} />
                 <Route path='/newsList' component={NewsList} />
+                <Route path='/news/view/:newsTitle' component={ViewNews} />
                 {/* <Route path='/userInfo' component={UserInfo}/> */}
               </Switch>
             </div>

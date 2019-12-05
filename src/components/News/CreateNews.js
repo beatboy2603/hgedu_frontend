@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import ContentEditor from './ContentEditor';
+import PropTypes from 'prop-types';
 import axios, {post} from 'axios';
 
 class CreateNews extends Component {
@@ -38,7 +39,7 @@ class CreateNews extends Component {
           const form = new FormData()
           form.append('image', file)
           form.append('dateCreated', new Date().toJSON().slice(0, 19).replace(/T|-|:/g, ''))
-          form.append('userId', 1)
+          form.append('userId', this.props.user.userId)
   
           //use axios to upload
           axios.post(URL, form)
@@ -82,7 +83,7 @@ class CreateNews extends Component {
             content: JSON.stringify(this.state.content), 
             thumbnail: this.state.thumbnail,
             dateCreated: new Date().toJSON().slice(0, 19).replace('T', ' '),
-            modId: '1'}
+            modId: '' + this.props.user.userId}
 
         this.resetForm();
         //use axios to upload
@@ -152,5 +153,13 @@ class CreateNews extends Component {
     }
 }
 
-export default CreateNews;
+CreateNews.propTypes = {
+  user: PropTypes.object.isRequired
+}
+
+const mapStateToProps = state => ({
+  user: state.user,
+})
+
+export default connect(mapStateToProps)(CreateNews);
 

@@ -36,33 +36,49 @@ class MainPost extends Component {
     }
 
     render() {
-        const { imgSrc, title, body, post } = this.props;
+        const { imgSrc, title, body, post, view } = this.props;
         return (
             <div className="main-post white row z-depth-1 border-20" style={{margin: "1.5%"}}>
-                <div className="col s8 modal-trigger clickable" href={"#viewNews" + post.id} onClick={() => this.getHtmlContent(post.content)} style={{paddingLeft:"0", height:"100%"}}><img className='responsive-img' src={imgSrc} alt="Main Image" /></div>
-                
-                <div className="col s4 flex-column container modal-trigger clickable" onClick={() => this.getHtmlContent(post.content)} href={"#viewNews" + post.id}>
-                    <h6 className="blue-text bold">{title}</h6>
-                    <p>{body}</p>
-                    <a href={"#viewNews" + post.id} onClick={() => this.getHtmlContent(post.content)} className="modal-trigger">Đọc tiếp</a>
-                </div>
-
-                <div>
-                    <Modal id={"viewNews" + post.id} fixedFooter options={{ preventScrolling: true, dismissible: false }} style={{ width: "40vw", minHeight: "50vh", overflow: "hidden" }}>
-                        <div className="modal-content" style={{
-                                        position: "absolute",
-                                        top: "0",
-                                        bottom: "0",
-                                        left: "0",
-                                        right: "-17px", /* Increase/Decrease this value for cross-browser compatibility */
-                                        overflowY: "scroll"
-                                    }}>
-                            <h4>{post.title}</h4>
-                            <hr></hr>
-                            <div dangerouslySetInnerHTML={{__html: this.state.htmlContent}} />
+                { !view && 
+                    <>
+                        <div className="col s8 modal-trigger clickable" href={"#viewNews" + post.id} onClick={() => this.getHtmlContent(post.content)} style={{paddingLeft:"0", height:"100%"}}><img className='responsive-img' src={imgSrc} alt="Main Image" /></div>
+                        
+                        <div className="col s4 flex-column container modal-trigger clickable" onClick={() => this.getHtmlContent(post.content)} href={"#viewNews" + post.id}>
+                            <h6 className="blue-text bold">{title}</h6>
+                            <p>{body}</p>
+                            <a href={"#viewNews" + post.id} onClick={() => this.getHtmlContent(post.content)} className="modal-trigger">Đọc tiếp</a>
                         </div>
-                    </Modal>
-                </div>
+
+                        <div>
+                            <Modal id={"viewNews" + post.id} fixedFooter options={{ preventScrolling: true, dismissible: false }} style={{ width: "40vw", minHeight: "50vh", overflow: "hidden" }}>
+                                <div className="modal-content" style={{
+                                                position: "absolute",
+                                                top: "0",
+                                                bottom: "0",
+                                                left: "0",
+                                                right: "-17px", /* Increase/Decrease this value for cross-browser compatibility */
+                                                overflowY: "scroll"
+                                            }}>
+                                    <h4>{post.title}</h4>
+                                    <hr></hr>
+                                    <div dangerouslySetInnerHTML={{__html: this.state.htmlContent}} />
+                                </div>
+                            </Modal>
+                        </div>
+                    </>
+                }
+                { view && 
+                    <>
+                        <div className="col s8" style={{paddingLeft:"0", height:"100%"}}>
+                            <Link to={{pathname: '/news/view/' + post.title.replace(/\s/g,'-'), state: {id: post.id}}}><img className='responsive-img' src={imgSrc} alt="Main Image" /></Link>
+                        </div>      
+                        <div className="col s4 flex-column container">
+                            <Link to={{pathname: '/news/view/' + post.title.replace(/\s/g,'-'), state: {id: post.id}}}><h6 className="blue-text bold">{title}</h6></Link>
+                            <p>{body}</p>
+                            <Link to={{pathname: '/news/view/' + post.title.replace(/\s/g,'-'), state: {id: post.id}}}>Đọc tiếp</Link>
+                        </div>
+                    </>
+                }
             </div>
         )
     }

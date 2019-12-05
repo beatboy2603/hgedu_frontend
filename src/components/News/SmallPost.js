@@ -110,7 +110,7 @@ class SmallPost extends Component {
             const form = new FormData()
             form.append('image', file);
             form.append('dateCreated', new Date().toJSON().slice(0, 19).replace(/T|-|:/g, ''));
-            form.append('userId', 1);
+            form.append('userId', this.state.modId);
 
             //use axios to upload
             axios.post(URL, form)

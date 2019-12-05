@@ -46,7 +46,8 @@ class Home extends Component {
                         <MainPost imgSrc={'http://localhost:8084/' + this.state.newsList[0].thumbnail} 
                         title={this.state.newsList[0].title} 
                         body={this.state.newsList[0].description}
-                        post={this.state.newsList[0]} />
+                        post={this.state.newsList[0]}
+                        view='FULL' />
 
                     }
                     {
@@ -57,7 +58,8 @@ class Home extends Component {
                                     <SubPost imgSrc={'http://localhost:8084/' + post.thumbnail} 
                                         post={post}
                                         title={post.title}
-                                        body={post.description} />
+                                        body={post.description}
+                                        view='FULL' />
                                 </div>    
                             )}
                         </Carousel> 
