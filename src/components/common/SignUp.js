@@ -7,7 +7,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import CustomizedDatePicker from '../common/CustomizedDatePicker';
 import { DatePicker } from "react-materialize";
 import { Link, withRouter } from 'react-router-dom';
-import { serverUrl } from './common';
+import { serverUrl, setCookie } from './common';
 import axios from 'axios';
 
 class SignUp extends Component {
@@ -89,6 +89,7 @@ class SignUp extends Component {
     }
 
     signup = () => {
+        console.log(this.props.user);
         if (this.state.valid) {
             axios.post(serverUrl + 'api/authen/signup', {
                 token: this.props.user.googleJwt,
@@ -96,6 +97,7 @@ class SignUp extends Component {
                 dob: this.state.dob,
                 gender: this.state.gender,
                 school: this.state.school,
+                roleId: this.props.user.role,
             }).then(res => {
                 if (res.data.message) {
                     if (res.data.message === "signup succeeded") {
@@ -125,7 +127,12 @@ class SignUp extends Component {
                                 }
                             });
                             this.props.dispatch({ type: "UPDATE_JWT", payload: jwt });
-                            this.props.history.push('/signin');
+                            if (user.roleId == 3) {
+                                this.props.history.push('/signin');
+                            } else {
+                                setCookie("authenticated", "true", 1);
+                                this.props.history.push('/home');
+                            }
                         })
 
                     } else {
@@ -184,41 +191,53 @@ class SignUp extends Component {
                                     </div>
                                 </div>
                                 <p className="grey-text text-lighten-1 left-align" style={{ marginLeft: "1.5vw", textDecoration: "underline", fontSize: "13px" }}>*Nhớ sử dụng số điện thoại có thực bạn đang dùng nhé!</p>
-                                <div className="col s12 flex-row">
-                                    <div className="col s4 left-align">
-                                        <span style={{ fontSize: "19px" }}>Giới tính:</span>
+                                {this.props.user.role === 3 &&
+                                    <div>
+                                        <div className="col s12 flex-row">
+                                            <div className="col s4 left-align">
+                                                <span style={{ fontSize: "19px" }}>Giới tính:</span>
+                                            </div>
+                                            <div className="col s8 left-align" >
+                                                <RadioGroup aria-label="gender" name="gender" style={{ display: "inline" }} onChange={(e) => { this.handleChange("gender", e) }} value={this.state.gender}>
+                                                    <FormControlLabel style={{ color: "#000000" }} value="true" control={<Radio color="primary" />} label="Nam" />
+                                                    <FormControlLabel style={{ color: "#000000" }} value="false" control={<Radio />} label="Nữ" />
+                                                </RadioGroup>
+                                            </div>
+                                        </div>
+                                        <div className="col s12 flex-row">
+                                            <div className="col s4 left-align">
+                                                <span style={{ fontSize: "19px" }}>Ngày sinh:</span>
+                                            </div>
+                                            <div className="col s8" >
+                                                <CustomizedDatePicker width="21vw" handleParentState={this.handleDate} />
+                                            </div>
+                                        </div>
+                                        <div className="col s12 flex-row">
+                                            <div className="col s4 left-align">
+                                                <span style={{ fontSize: "19px" }}>Trường:</span>
+                                            </div>
+                                            <div className="col s8">
+                                                <input id='school' type="text" className="validate" value={this.state.school} onChange={e => { this.handleChange("school", e) }} />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="col s8 left-align" >
-                                        <RadioGroup aria-label="gender" name="gender" style={{ display: "inline" }} onChange={(e) => { this.handleChange("gender", e) }} value={this.state.gender}>
-                                            <FormControlLabel style={{ color: "#000000" }} value="true" control={<Radio color="primary" />} label="Nam" />
-                                            <FormControlLabel style={{ color: "#000000" }} value="false" control={<Radio />} label="Nữ" />
-                                        </RadioGroup>
-                                    </div>
-                                </div>
-                                <div className="col s12 flex-row">
-                                    <div className="col s4 left-align">
-                                        <span style={{ fontSize: "19px" }}>Ngày sinh:</span>
-                                    </div>
-                                    <div className="col s8" >
-                                        <CustomizedDatePicker width="21vw" handleParentState={this.handleDate} />
-                                    </div>
-                                </div>
-                                <div className="col s12 flex-row">
-                                    <div className="col s4 left-align">
-                                        <span style={{ fontSize: "19px" }}>Trường:</span>
-                                    </div>
-                                    <div className="col s8">
-                                        <input id='school' type="text" className="validate" value={this.state.school} onChange={e => { this.handleChange("school", e) }} />
-                                    </div>
-                                </div>
+                                }
                             </div>
                         </div>
                     </div>
                 </div>
                 {
-                    this.state.valid &&
+                    this.state.valid && this.props.user.role == 3 &&
                     <div className="col s2">
-
+                        <div style={{ margin: "10vh 0", color: "#086bd1", cursor: "pointer" }} className='flex-row' onClick={() => { this.signup() }}>
+                            <span style={{ fontSize: "25px" }} >Tiếp theo</span>
+                            <i className="material-icons" style={{ fontSize: "50px" }}>arrow_forward</i>
+                        </div>
+                    </div>
+                }
+                {
+                    this.state.valid && this.props.user.role == 2 &&
+                    <div className="col s2">
                         <div style={{ margin: "10vh 0", color: "#086bd1", cursor: "pointer" }} className='flex-row' onClick={() => { this.signup() }}>
                             <span style={{ fontSize: "25px" }} >Tiếp theo</span>
                             <i className="material-icons" style={{ fontSize: "50px" }}>arrow_forward</i>

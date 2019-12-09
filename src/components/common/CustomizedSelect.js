@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function CustomizedSelect(props) {
     const classes = useStyles();
-    const [item, setItem] = React.useState('');
+    const [item, setItem] = React.useState('default');
     let { items, handleParentSelect, source } = props;
 
     const handleChange = event => {
@@ -28,8 +28,8 @@ export default function CustomizedSelect(props) {
         }
     };
 
-    const menuItems = items.map(item => {
-        return <MenuItem value={item.value}>{item.text}</MenuItem>
+    const menuItems = items.map((item, i) => {
+        return <MenuItem key={i} value={item.value}>{item.text}</MenuItem>
     });
 
     return (
@@ -40,8 +40,8 @@ export default function CustomizedSelect(props) {
                     id="demo-simple-select"
                     value={item}
                     onChange={handleChange}
-                    // onOpen={() => { setItem("default") }}
                 >
+                    <MenuItem value={"default"} disabled={true}>Chọn</MenuItem>
                     {/* <Temp setItem={setItem}></Temp>
                     <MenuItem value={"default"} disabled={true}>Chọn</MenuItem> */}
                     {menuItems}

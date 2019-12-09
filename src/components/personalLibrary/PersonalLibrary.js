@@ -22,7 +22,7 @@ import 'katex/dist/katex.min.css';
 import Editor from "../common/Editor";
 import { debounce } from 'lodash';
 import ModalTest from './test/ModalTest';
-import CustomizedTable from '../common/CustomizedTable';
+import CustomizedTable from './question/CustomizedTable';
 window.katex = katex;
 
 
@@ -45,13 +45,17 @@ class PersonalLibrary extends Component {
         addFolderName: "",
     }
 
-    handleToggleChange = (e) => {
-        this.setState({
-            questionDetail: {
-                questionSeries: e.target.checked,
-            },
-        })
+    log = () => {
+        console.log(this.state);
     }
+
+    // handleToggleChange = (e) => {
+    //     this.setState({
+    //         questionDetail: {
+    //             questionSeries: e.target.checked,
+    //         },
+    //     })
+    // }
 
     handleInputChange = (source) => (e) => {
         if (source == "folderName") {
@@ -68,6 +72,12 @@ class PersonalLibrary extends Component {
         }
     }
 
+    handleEditInputChange = (value) => {
+        this.setState({
+            addFolderName: value,
+        })
+    }
+
     setCurrentFolder = (folder) => {
         this.setState({
             currentFolder: folder,
@@ -76,9 +86,9 @@ class PersonalLibrary extends Component {
 
     handleFormSubmit = (e) => {
         e.preventDefault();
-        if (this.state.addFolderName) {
-            document.getElementById("buttonAddFolder").click();
-        }
+        // if (this.state.addFolderName) {
+        //     document.getElementById("buttonAddFolder").click();
+        // }
     }
 
     addFolder = (type) => {
@@ -90,6 +100,15 @@ class PersonalLibrary extends Component {
             if (check.length != 0) {
                 alert("Tên thư mục bị trùng!");
                 return;
+            }
+            if(type==2){
+                const checkKnowledgeGroup = folders.filter(folder => {
+                    return folder.folderName == this.state.addFolderName && folder.folderTypeId == 2
+                })
+                if (checkKnowledgeGroup.length != 0) {
+                    alert("Nhóm kiến thức đã tồn tại");
+                    return;
+                }
             }
             let folderTemp = {
                 folderId: "temp",
@@ -108,6 +127,63 @@ class PersonalLibrary extends Component {
                 folderTypeId: type,
                 parentFolderId: this.state.currentFolder.folderId,
                 subGroupId: this.state.currentFolder.subGroupId,
+            }).then(res => {
+                axios.post(serverUrl + "api/folder/getFoldersForNav", null, {
+                    params: {
+                        uid: this.props.user.uid
+                    }
+                }).then(res => {
+                    let folders = Object.values(res.data)
+                    this.setState({
+                        folders: folders,
+                        addFolderName: "",
+                    })
+                }).catch(function (error) {
+                    // handle error
+                    console.log(error);
+                })
+            });
+        }
+    }
+
+    updateFolder = () => {
+        if (this.state.addFolderName) {
+            let folders = this.state.folders;
+            const check = folders.filter(folder => {
+                return folder.folderName == this.state.addFolderName && folder.parentFolderId == this.state.currentFolder.parentFolderId;
+            })
+            if (check.length != 0) {
+                alert("Tên thư mục bị trùng!");
+                return;
+            }
+            if(this.state.currentFolder.folderTypeId==2){
+                const checkKnowledgeGroup = folders.filter(folder => {
+                    return folder.folderName == this.state.addFolderName && folder.folderTypeId == 2
+                })
+                if (checkKnowledgeGroup.length != 0) {
+                    alert("Nhóm kiến thức đã tồn tại");
+                    return;
+                }
+            }
+            const newFolders = folders.map(folder => {
+                if (folder.folderId == this.state.currentFolder.folderId) {
+                    folder.folderName = this.state.addFolderName;
+                }
+                return folder;
+            })
+            this.setState(prevState => ({
+                folders: newFolders
+            }))
+            let newFolder = this.state.currentFolder;
+            newFolder.folderName = this.state.addFolderName;
+            console.log(newFolder);
+            axios.post(serverUrl + "api/folder/updateFolder", {
+                folderId: newFolder.folderId,
+                teacherId: newFolder.teacherId,
+                folderName: newFolder.folderName,
+                folderTypeId: newFolder.folderTypeId,
+                parentFolderId: newFolder.parentFolderId,
+                subGroupId: newFolder.subGroupId,
             }).then(res => {
                 axios.post(serverUrl + "api/folder/getFoldersForNav", null, {
                     params: {
@@ -327,7 +403,7 @@ class PersonalLibrary extends Component {
 
                         </div>
                         <div className="line"></div>
-                        <CustomizedTreeView folders={this.state.folders} setCurrentFolder={this.setCurrentFolder} deleteFolder={this.deleteFolder} handleFormSubmit={this.handleFormSubmit} addFolderName={this.state.addFolderName} addFolder={this.addFolder} handleInputChange={this.handleInputChange}/>
+                        <CustomizedTreeView folders={this.state.folders} setCurrentFolder={this.setCurrentFolder} deleteFolder={this.deleteFolder} handleFormSubmit={this.handleFormSubmit} addFolderName={this.state.addFolderName} addFolder={this.addFolder} handleInputChange={this.handleEditInputChange} updateFolder={this.updateFolder} />
                     </div>
                 </div>
                 {/* filler for navigation bar */}
@@ -338,7 +414,15 @@ class PersonalLibrary extends Component {
                         <Route exact path={'/personalLibrary'} component={PersonalLibraryFiller} />
                         <Route path={'/personalLibrary/knowledgeGroup/:folderId'} render={(props) => <KnowledgeGroup {...props} setQuestionFolderId={this.setQuestionFolderId} />} />
                         <Route path={'/personalLibrary/test/:folderId'} render={(props) => <ModalTest {...props} />} />
-                        <Route path={'/personalLibrary/table'} render={(props) => <CustomizedTable {...props} />} />
+                        <Route path={'/personalLibrary/table'} render={(props) => <CustomizedTable {...props} headCells={[
+                            { id: 'questionCode', numeric: false, disablePadding: false, label: 'Mã câu' },
+                            { id: 'question', numeric: false, disablePadding: false, label: 'Câu hỏi' },
+                            { id: 'difficulty', numeric: false, disablePadding: false, label: 'Mức khó' },
+                            { id: 'gradeLevel', numeric: false, disablePadding: false, label: 'Trình độ' },
+                            { id: 'type', numeric: false, disablePadding: false, label: 'Thuộc tính' },
+                        ]} rows={[
+                            {  questionCode:"Code", question:"question", difficulty: "difficulty", gradeLevel:"gradeLevel", type:"type" },
+                        ]} />} />
                     </Switch>
                 </div>
 

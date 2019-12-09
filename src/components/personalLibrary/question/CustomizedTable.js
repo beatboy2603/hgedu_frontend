@@ -19,6 +19,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import 'katex/dist/katex.min.css';
+import { InlineMath, BlockMath } from 'react-katex';
 
 // function createData(name, calories, fat, carbs, protein) {
 //   return { name, calories, fat, carbs, protein };
@@ -64,13 +66,13 @@ function getSorting(order, orderBy) {
   return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
 
-const headCells = [
-  { id: 'name', numeric: false, disablePadding: false, label: 'Dessert (100g serving)' },
-  { id: 'calories', numeric: true, disablePadding: false, label: 'Calories' },
-  { id: 'fat', numeric: true, disablePadding: false, label: 'Fat (g)' },
-  { id: 'carbs', numeric: true, disablePadding: false, label: 'Carbs (g)' },
-  { id: 'protein', numeric: true, disablePadding: false, label: 'Protein (g)' },
-];
+// const headCells = [
+//   { id: 'name', numeric: false, disablePadding: false, label: 'Dessert (100g serving)' },
+//   { id: 'calories', numeric: true, disablePadding: false, label: 'Calories' },
+//   { id: 'fat', numeric: true, disablePadding: false, label: 'Fat (g)' },
+//   { id: 'carbs', numeric: true, disablePadding: false, label: 'Carbs (g)' },
+//   { id: 'protein', numeric: true, disablePadding: false, label: 'Protein (g)' },
+// ];
 
 function EnhancedTableHead(props) {
   const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, ...rest } = props;
@@ -117,26 +119,6 @@ EnhancedTableHead.propTypes = {
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 };
-
-const useToolbarStyles = makeStyles(theme => ({
-  root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-  },
-  highlight:
-    theme.palette.type === 'light'
-      ? {
-        color: theme.palette.secondary.main,
-        backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-      }
-      : {
-        color: theme.palette.text.primary,
-        backgroundColor: theme.palette.secondary.dark,
-      },
-  title: {
-    flex: '1 1 100%',
-  },
-}));
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -257,20 +239,29 @@ export default function EnhancedTable({ headCells, rows }) {
                   return (
                     <TableRow
                       hover
-                      onClick={event => handleClick(event, row.name)}
+                      onClick={event => handleClick(event, row.questionCode)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.questionCode}
                       selected={isItemSelected}
                     >
                       <TableCell component="th" id={labelId} scope="row">
-                        {row.name}
+                        <span className="font-effra font-size-18 grey-text text-darken-3">{row.questionCode}</span>
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      {/* <TableCell><span className="font-effra font-size-18 grey-text text-darken-3">{row.content[0].insert}</span></TableCell> */}
+                      {/* <TableCell><span className="font-effra font-size-18 grey-text text-darken-3">{renderKatex(row.content)}</span></TableCell> */}
+                      <TableCell><span className="font-effra font-size-18 grey-text text-darken-3">{row.content.map(
+                        obj=>obj.insert.formula?(<InlineMath math={obj.insert.formula}/>):(<span> {obj.insert} </span>))
+                      }</span></TableCell>
+                      <TableCell><span className="font-effra font-size-18 grey-text text-darken-3">{row.difficultyId==1&&"Nhận biết"}
+                      {row.difficultyId==2&&"Thông hiểu"}
+                      {row.difficultyId==3&&"Vận dụng"}
+                      {row.difficultyId==4&&"Vận dụng cao"}</span></TableCell>
+                      <TableCell><span className="font-effra font-size-18 grey-text text-darken-3">{row.gradeLevelId!=0?("Lớp "+row.gradeLevelId):("Khác")}</span></TableCell>
+                      <TableCell><span className="font-effra font-size-18 grey-text text-darken-3">{row.questionTypeId==1&&"Lý thuyết"}
+                      {row.questionTypeId==2&&"Bài tập"}
+                      {row.questionTypeId==3&&"Câu hỏi chùm"}</span></TableCell>
                     </TableRow>
                   );
                 })}

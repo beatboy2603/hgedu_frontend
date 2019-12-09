@@ -74,48 +74,63 @@ class LandingPage extends Component {
             axios.post(serverUrl + 'api/authen', {
                 token
             }).then(res => {
+                console.log(res);
                 if (res.data.message == "signup") {
                     console.log("signup");
                     let user = {
                         email: res.data.email,
                         name: res.data.name,
                         picture: res.data.picture,
+                        role: 3,
+                    }
+                    this.props.dispatch({ type: "UPDATE_USER", payload: user });
+                    this.props.dispatch({ type: "UPDATE_USER", payload: { googleJwt: token } });
+                    this.props.history.push('/signup');
+                } else if (res.data.message == "signup-mod") {
+                    console.log("signupMod");
+                    let user = {
+                        email: res.data.email,
+                        name: res.data.name,
+                        picture: res.data.picture,
+                        role: 2,
                     }
                     this.props.dispatch({ type: "UPDATE_USER", payload: user });
                     this.props.dispatch({ type: "UPDATE_USER", payload: { googleJwt: token } });
                     this.props.history.push('/signup');
                 } else {
-                    let user = res.data.user;
-                    let jwt = res.data.jwt;
-                    // this.props.dispatch({ type: "CHANGE_ROLE", payload: user.roleId });
-                    this.decodeToken(token).then(res => {
-                        let googleToken = res.data;
-                        let user = {
-                            email: googleToken.email,
-                            name: googleToken.name,
-                            picture: googleToken.picture,
-                            sub: googleToken.sub,
+                    {
+                        let user = res.data.user;
+                        let jwt = res.data.jwt;
+                        // this.props.dispatch({ type: "CHANGE_ROLE", payload: user.roleId });
+                        this.decodeToken(token).then(res => {
+                            let googleToken = res.data;
+                            let user = {
+                                email: googleToken.email,
+                                name: googleToken.name,
+                                picture: googleToken.picture,
+                                sub: googleToken.sub,
+                            }
+                            this.props.dispatch({ type: "UPDATE_USER", payload: user });
+                        })
+                        this.props.dispatch({
+                            type: "UPDATE_USER", payload: {
+                                googleJwt: token,
+                                uid: user.userId,
+                                phone: user.phoneNumber,
+                                gender: user.gender,
+                                role: user.roleId,
+                                dob: user.dob,
+                                school: user.school,
+                            }
+                        });
+                        this.props.dispatch({ type: "UPDATE_JWT", payload: jwt });
+                        if (user.roleId === 3) {
+                            this.props.history.push('/signin');
+                        } else {
+                            console.log("alo?");
+                            setCookie("authenticated", "true", 1);
+                            this.props.history.push('/home');
                         }
-                        this.props.dispatch({ type: "UPDATE_USER", payload: user });
-                    })
-                    this.props.dispatch({
-                        type: "UPDATE_USER", payload: {
-                            googleJwt: token,
-                            uid: user.userId,
-                            phone: user.phoneNumber,
-                            gender: user.gender,
-                            role: user.roleId,
-                            dob: user.dob,
-                            school: user.school,
-                        }
-                    });
-                    this.props.dispatch({ type: "UPDATE_JWT", payload: jwt });
-                    if (user.roleId === 3) {
-                        this.props.history.push('/signin');
-                    } else {
-                        console.log("alo?");
-                        setCookie("authenticated", "true", 1);
-                        this.props.history.push('/home');
                     }
                 }
                 // this.redirect();
@@ -129,7 +144,7 @@ class LandingPage extends Component {
                     {/* {!this.props.isAuthenticated && */}
                     < GoogleLogin
                         clientId="1072039829865-jc2jf9cv96ifoph4ptpg1840s8n5gg5b.apps.googleusercontent.com"
-                        scope= 'https://www.googleapis.com/auth/userinfo.profile'
+                        scope='https://www.googleapis.com/auth/userinfo.profile'
                         render={renderProps => (
                             <Link onClick={renderProps.onClick} disabled={renderProps.disabled} className='flex-row' style={{ position: "absolute", top: "7vh", left: "80vw" }}>
                                 <i className="material-icons left padding-vertical-10 md-36" style={{ color: "#ffffff", fontSize: "30px" }}>account_circle</i>
@@ -174,6 +189,14 @@ class LandingPage extends Component {
                         }
                     </div>
                 </div>
+                {/* <button onClick={()=>{
+                    axios.post(serverUrl+"api/folder/testFolder", [
+                        {folderId: 100},
+                        {folderId: 2},
+                    ]).then(res=>{
+                        console.log(res);
+                    })
+                }}> Click </button> */}
             </div>
         )
     }
