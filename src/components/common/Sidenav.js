@@ -201,6 +201,9 @@ const Sidenav = (props) => {
                         <NavLink to="/home" activeClassName="side-nav-active">
                             <i className="material-icons padding-vertical-10" style={iconColor}>home</i>
                         </NavLink>
+                        <NavLink to="/teacherList" activeClassName="side-nav-active">
+                            <i className="material-icons padding-vertical-10" style={iconColor}>people</i>
+                        </NavLink>
                     </div>
                     {changeRole(props.user.role, props.user.userRoleId)}
                 </div>
@@ -242,9 +245,9 @@ const Sidenav = (props) => {
                             <i className="material-icons padding-vertical-10" style={iconColor}>event</i>
                         </NavLink>
                     </div>
-                    <NavLink to="/user">
+                    {/* <NavLink to="/user">
                         <i className="material-icons padding-vertical-10" style={iconColor}>account_circle</i>
-                    </NavLink>
+                    </NavLink> */}
                     <div className="user-option" style={style.userOption} onMouseLeave={hideObj} >
                         <NavLink to="/user" >
                             <i onMouseOver={showObj} className="material-icons padding-vertical-10" style={iconColor} >account_circle</i>
