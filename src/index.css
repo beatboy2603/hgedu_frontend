@@ -45,7 +45,7 @@ i{
   flex-direction: column;
   justify-content: space-between;
   padding-left: 15px;
-  z-index: 2;
+  z-index:2;
 }
 
 .my-sidenav-big{
@@ -133,6 +133,7 @@ i{
   top:0px;
   height: 100vh;
   overflow: scroll;
+  /* z-index: 50; */
   /* width:100px; */
 }
 
@@ -577,6 +578,9 @@ i{
 
 .table-col-width-35 {
   width: 35%;
+}
+.table-col-width-40 {
+  width: 40%;
 }
 
 .row-hover tr:hover {

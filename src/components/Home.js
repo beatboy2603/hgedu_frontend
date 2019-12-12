@@ -33,7 +33,8 @@ class Home extends Component {
             <div className="home row">
                 <div className="col s1"></div>
                 <div className="col s7 container row">
-                    <button onClick={()=>{console.log(this.props.user)}}>click me</button>
+                    <button onClick={()=>{console.log(this.props.user);
+                    }}>click me</button>
                     <h5 className="blue-text text-darken-2 bold font-montserrat">Tin tức</h5>
                     {this.state.newsList.length !== 0 && 
     

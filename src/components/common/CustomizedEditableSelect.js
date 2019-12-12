@@ -14,7 +14,8 @@ class CustomizedEditableSelect extends Component {
             handleParentSelect(source, currentInput);
         }
         const yourLogic = item.someAdditionalValue;
-        return (yourLogic.substr(0, currentInput.length).toUpperCase() === currentInput.toUpperCase());
+        return yourLogic?(yourLogic.substr(0, currentInput.length).toUpperCase() === currentInput.toUpperCase()):null;
+        // return (yourLogic.substr(0, currentInput.length).toUpperCase() === currentInput.toUpperCase());
     };
 
     /**
@@ -47,8 +48,8 @@ class CustomizedEditableSelect extends Component {
 
         return (
             <div>
-                <DataListInput
-                    items={items} onSelect={this.onSelect} match={this.matchCurrentInput} />
+                <DataListInput initialValue={this.props.defaultValue?this.props.defaultValue:""}
+                    items={items.length>0?items:[{value:"", text:""}]} onSelect={this.onSelect} match={this.matchCurrentInput} />
             </div>
         );
     }

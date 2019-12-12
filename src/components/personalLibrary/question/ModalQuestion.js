@@ -15,6 +15,9 @@ class ModalQuestion extends Component {
 
     state = {
         currentFolder: null,
+        resetAll: [],
+        formIdentifiers: [],
+        allSpecialKnowledge: [],
         questionDetail: {
             questionCode: "",
             content: "",
@@ -29,6 +32,7 @@ class ModalQuestion extends Component {
                     questionCode: "",
                     content: "",
                     specialKnowledge: null,
+                    formIdentifier: null,
                     explanation: null,
                     difficultyId: null,
                     description: null,
@@ -41,59 +45,93 @@ class ModalQuestion extends Component {
                     linkedAnswers: null
                 },
                 answers: []
-                // answer1: {
-                //     content: "",
-                //     isCorrect: false,
-                //     linkedAnswers: null
-                // },
-                // answer2: {
-                //     content: "",
-                //     isCorrect: false,
-                //     linkedAnswers: null
-                // },
-                // answer3: {
-                //     content: "",
-                //     isCorrect: false,
-                //     linkedAnswers: null
-                // },
-                // answer4: {
-                //     content: "",
-                //     isCorrect: false,
-                //     linkedAnswers: null
-                // },
             }
         ],
+        valid: false,
     }
 
-    contentEditor = React.createRef();
+    checkValid = () => {
+        let valid = true;
+        if (this.state.questionDetail.questionSeries) {
+
+        }
+        this.state.questionList.map((el, i) => {
+            if (this.isQuillEmpty(el.question.content)) {
+                valid = false;
+            }
+            el.answers.map((el, i) => {
+                if (this.isQuillEmpty(el.content)) {
+                    valid = false;
+                }
+            })
+        })
+    }
+
+    isQuillEmpty = (value) => {
+        let isEmpty = true;
+        if (value && value.ops && value.ops.length > 0) {
+            value.ops.map(el => {
+                if (el.insert.image) {
+                    isEmpty = false;
+                }
+                if (el.insert.formula && el.insert.formula.trim() != '') {
+                    isEmpty = false;
+                }
+                if (!el.insert.image && !el.insert.formula && el.insert.trim() != '') {
+                    isEmpty = false;
+                }
+            })
+        }
+        return isEmpty
+    }
+
+    resetAllEditors = () => {
+        if (this.state.resetAll) {
+            this.state.resetAll.map(reset => {
+                reset();
+            })
+        }
+    }
 
     handleQuillChange = (value, source, index) => {
         // console.log(source + " " + index + " " + value)
-        const questionList = this.state.questionList.map((questionDetail, i) => {
-            if (source == "question") {
-                if (i == index) {
-                    questionDetail.question.content = value;
+        if (source == "questionSeries") {
+            console.log("yes?");
+            this.setState(prevState => ({
+                ...prevState,
+                questionDetail: {
+                    // ...prevState.questionDetail,
+                    content: value,
+                },
+            }))
+        } else {
+            const questionList = this.state.questionList.map((questionDetail, i) => {
+                if (source == "question") {
+                    if (i == index) {
+                        questionDetail.question.content = value;
+                    }
                 }
-            }
-            if (source == "answer") {
-                if (i == index) {
-                    questionDetail.tempAnswer.content = value;
+                if (source == "answer") {
+                    if (i == index) {
+                        questionDetail.tempAnswer.content = value;
+                    }
                 }
-            }
-            if (source == "explanation") {
-                if (i == index) {
-                    questionDetail.question.explanation = value;
+                if (source == "explanation") {
+                    if (i == index) {
+                        questionDetail.question.explanation = value;
+                    }
                 }
-            }
-            return questionDetail;
-        })
-        this.setState(prevState => ({
-            ...prevState,
-            questionDetail: {
-                ...prevState.questionDetail,
-            },
-            questionList
-        }))
+                return questionDetail;
+            })
+            this.setState(prevState => ({
+                ...prevState,
+                questionDetail: {
+                    ...prevState.questionDetail,
+                },
+                questionList
+            }))
+        }
+
     }
 
     handleToggleChange = () => {
@@ -110,28 +148,46 @@ class ModalQuestion extends Component {
         }))
     }
 
-    handleInputChange = (source) => (e) => {
-        if (source == "folderName") {
-            this.setState({
-                addFolderName: e.target.value,
-            })
-        }
-        if (source == "questionCode") {
-            this.setState({
-                questionDetail: {
-                    questionCode: e.target.value,
-                }
-            })
-        }
+    handleQuestionSeriesCode = (e) => {
+        const value = e.target.value;
+        this.setState(prevState => ({
+            questionDetail: {
+                ...prevState.questionDetail,
+                questionCode: value,
+            }
+        }))
+    }
+
+    handleQuestionSeriesContent = (value, source, index) => {
+        this.setState(prevState => ({
+            questionDetail: {
+                ...prevState.questionDetail,
+                content: value,
+            }
+        }))
+        // console.log(this.state.questionDetail && this.state.questionDetail.content && this.state.questionDetail.content.ops && this.state.questionDetail.content.ops[0] && this.state.questionDetail.content.ops[0].insert.trim() ? "valid" : "invalid");
     }
 
     handleListInputChange = (source, index) => (e) => {
         const questionList = this.state.questionList.map((questionDetail, i) => {
-            if (source == "description") {
-                if (i == index) {
+            if (i == index) {
+                if (source == "description") {
                     questionDetail.question.description = e.target.value;
                 }
+                if (source == "questionCode") {
+                    questionDetail.question.questionCode = e.target.value;
+                }
             }
+            // if (source == "description") {
+            //     if (i == index) {
+            //         questionDetail.question.description = e.target.value;
+            //     }
+            // }
+            // if (source == "questionCode") {
+            //     if (i == index) {
+            //         questionDetail.question.questionCode = e.target.value;
+            //     }
+            // }
             return questionDetail;
         })
         this.setState(prevState => ({
@@ -144,28 +200,22 @@ class ModalQuestion extends Component {
     }
 
     handleSelectChange = (source, value) => {
-        // if (source == "difficulty") {
-        //     this.setState(prevState => ({
-        //         ...prevState,
-        //         questionDetail: {
-        //             ...prevState.questionDetail,
-        //             difficulty: value,
-        //         }
-        //     }))
-        // }
-        // if (source == "specialKnowledge") {
-        //     this.setState(prevState => ({
-        //         ...prevState,
-        //         questionDetail: {
-        //             ...prevState.questionDetail,
-        //             knowledgeGroup: value,
-        //         }
-        //     }))
-        // }
         const questionList = this.state.questionList.map((questionDetail, i) => {
             if (i == source.index) {
                 if (source.name == "difficultyId") {
                     questionDetail.question.difficultyId = value
+                }
+                if (source.name == "specialKnowledge") {
+                    questionDetail.question.specialKnowledge = value
+                }
+                if (source.name == "formIdentifier") {
+                    questionDetail.question.formIdentifier = value
+                }
+                if (source.name == "gradeLevelId") {
+                    questionDetail.question.gradeLevelId = value
+                }
+                if (source.name == "questionTypeId") {
+                    questionDetail.question.questionTypeId = value
                 }
             }
             return questionDetail;
@@ -242,25 +292,81 @@ class ModalQuestion extends Component {
             questionList
         }))
     }
+    deleteAnswerOption = (e, index, answerIndex) => {
+        e.preventDefault();
+        const questionList = this.state.questionList.map((questionDetail, i) => {
+            if (i == index) {
+                const newAnswers = questionDetail.answers.filter((item, j) => answerIndex != j);
+
+                questionDetail.answers = newAnswers;
+            }
+            return questionDetail;
+        })
+        this.setState(prevState => ({
+            ...prevState,
+            questionDetail: {
+                ...prevState.questionDetail,
+            },
+            questionList
+        }))
+    }
+
+    chooseRightAnswer = (questionIndex, answerIndex) => {
+        const questionList = this.state.questionList.map((questionDetail, i) => {
+            if (i == questionIndex) {
+                questionDetail.answers.map((answer, j) => {
+                    answer.isCorrect = false;
+                    if (j == answerIndex) {
+                        answer.isCorrect = true;
+                    }
+                })
+            }
+            return questionDetail;
+        })
+        this.setState(prevState => ({
+            ...prevState,
+            questionDetail: {
+                ...prevState.questionDetail,
+            },
+            questionList
+        }))
+    }
 
     renderAnswerOptions = (index) => {
-        const renderedAnswers = this.state.questionList[0].answers.map((answer, i) => {
+        const renderedAnswers = this.state.questionList[index].answers.map((answer, i) => {
             return (
-                <div className="flex-row" style={{ justifyContent: "space-between" }}>
+                <div >
                     {/* <div>
                         {i == 0 && "A:"}
                         {answer.content.map(
                             obj => obj.insert.formula ? (<InlineMath math={obj.insert.formula} />) : (<span> {obj.insert} </span>))}
                     </div> */}
-                    <label>
-                        <input name={"group" + index} type="radio" onClick={() => { console.log(answer) }} />
-                        <span style={{ color: "rgba(0,0,0,0.87)" }}>
-                            {i == 0 && "A:"}
-                            {answer.content && answer.content.map(
-                                obj => obj.insert.formula ? (<InlineMath math={obj.insert.formula} />) : (<span> {obj.insert} </span>))}
-                        </span>
-                    </label>
-                    <button onClick={(e) => { this.editAnswerOption(e, index, i) }}>edit</button>
+                    {answer.content &&
+                        <div className="flex-row" style={{ justifyContent: "space-between" }}>
+                            <div style={{ maxWidth: "50vw", wordBreak: "break-all" }}>
+                                <label>
+                                    <input name={"group" + index} type="radio" onClick={() => { this.chooseRightAnswer(index, i); console.log(answer) }} />
+
+                                    <span style={{ color: "rgba(0,0,0,0.87)" }}>
+                                        {i == 0 && "A: "}
+                                        {i == 1 && "B: "}
+                                        {i == 2 && "C: "}
+                                        {i == 3 && "D: "}
+                                        {answer.content && answer.content.map(
+                                            obj => obj.insert.formula ? (<InlineMath math={obj.insert.formula} />) : (obj.insert.image ? (<img src={obj.insert.image} alt="image" width={obj.attributes && obj.attributes.width} />) : (<span> {obj.insert} </span>)))}
+                                    </span>
+                                </label>
+                            </div>
+
+                            <div>
+                                <span style={{ cursor: "pointer" }} className="red-text lighten-1" onClick={(e) => { this.deleteAnswerOption(e, index, i) }}>Xóa</span>
+                                <span style={{ margin: "0 5px" }}></span>
+                                <span style={{ cursor: "pointer" }} className="blue-text lighten-1" onClick={(e) => { this.editAnswerOption(e, index, i) }}>Sửa</span>
+                                {/* <button onClick={(e) => { this.editAnswerOption(e, index, i) }}>edit</button>
+                                <button onClick={(e) => { this.deleteAnswerOption(e, index, i) }}>delete</button> */}
+                            </div>
+                        </div>
+                    }
                 </div>
             )
         });
@@ -276,6 +382,7 @@ class ModalQuestion extends Component {
                     questionCode: "",
                     content: "",
                     specialKnowledge: null,
+                    formIdentifier: null,
                     explanation: null,
                     difficultyId: null,
                     description: null,
@@ -292,21 +399,46 @@ class ModalQuestion extends Component {
         }))
     }
 
+    deleteQuestionFromSeries = (e, index) => {
+        e.preventDefault();
+        const questionList = this.state.questionList.filter((questionDetail, i) => index != i);
+        this.setState(prevState => ({
+            ...prevState,
+            questionDetail: {
+                ...prevState.questionDetail,
+            },
+            questionList
+        }))
+    }
+
+    waitUpdate = false;
+
     componentDidUpdate() {
         let folderId = this.props.match.params.folderId;
-        axios.get(serverUrl + "api/folder/" + folderId).then(res => {
-            let currentFolder = res.data;
-            if (currentFolder.folderId !== this.state.currentFolder.folderId) {
-                this.setState(prevState => ({
-                    ...prevState,
-                    currentFolder,
-                    questionDetail: {
-                        ...prevState.questionDetail,
-                        folderId: res.data.folderId,
+        if (this.state.currentFolder && folderId !== this.state.currentFolder.folderId && !this.waitUpdate) {
+            if (this.props.folder.folders) {
+                this.waitUpdate = true;
+                this.props.folder.folders.map((folder, index) => {
+                    if (folder.folderId == folderId) {
+                        let currentFolder = folder;
+                        if (currentFolder !== this.state.currentFolder) {
+                            this.setState(prevState => ({
+                                ...prevState,
+                                currentFolder,
+                                questionDetail: {
+                                    ...prevState.questionDetail,
+                                    folderId: currentFolder.folderId,
+                                }
+                            }), () => {
+                                this.waitUpdate = false;
+                            })
+                        } else {
+                            this.waitUpdate = false;
+                        }
                     }
-                }))
+                })
             }
-        })
+        }
     }
 
     componentDidMount() {
@@ -321,14 +453,40 @@ class ModalQuestion extends Component {
                 }
             }))
         })
+        axios.get(serverUrl + "api/question/getFormIdentifiers/" + this.props.user.uid).then(res => {
+            const formIdentifiers = res.data.map(el => {
+                return { value: el, text: el }
+            })
+            this.setState(prevState => ({
+                ...prevState,
+                formIdentifiers,
+                questionDetail: {
+                    ...prevState.questionDetail,
+                    folderId: res.data.folderId,
+                }
+            }))
+        })
+        axios.get(serverUrl + "api/question/getAllSpecialKnowledge/" + this.props.user.uid).then(res => {
+            const allSpecialKnowledge = res.data.map(el => {
+                return { value: el, text: el }
+            })
+            this.setState(prevState => ({
+                ...prevState,
+                allSpecialKnowledge,
+                questionDetail: {
+                    ...prevState.questionDetail,
+                    folderId: res.data.folderId,
+                }
+            }))
+        })
     }
 
-    testSend = () =>{
+    testSend = () => {
         let data = [this.state.questionDetail, ...this.state.questionList];
-        axios.post(serverUrl+'api/question/addQuestion', data).then(res => {
+        axios.post(serverUrl + 'api/question/addQuestion', data).then(res => {
             console.log(res);
         })
-        axios.post(serverUrl+'api/question/wew').then(res => {
+        axios.post(serverUrl + 'api/question/wew').then(res => {
             console.log(res);
         })
     }
@@ -350,30 +508,45 @@ class ModalQuestion extends Component {
                                 <div className="col s12">
                                     Mã câu hỏi<span className='red-text'>*</span>:
                                     <div className="input-field inline" style={{ width: '30vw', marginLeft: '7vw' }}>
-                                        <input id='questionCode' type="text" className="validate" value={this.state.questionDetail.questionCode} onChange={this.handleInputChange("questionCode")} />
+                                        <input type="text" className="validate" value={this.state.questionList[i].question.questionCode} onChange={this.handleListInputChange("questionCode", i)} />
                                     </div>
                                 </div>
                                 <div className="col s2">Câu hỏi<span className='red-text'>*</span>:</div>
                                 <div className="col s10">
-                                    <ContentEditor customStyle={{ height: "150px", paddingBottom: "30px" }} handleQuillChange={this.handleQuillChange} content={this.state.questionList[i].question.content} quillSource="question" toolbarModules={[['image'],
-                                    ['formula'],]} />
+                                    <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionList[i].question.content} updateContent={this.handleQuillChange} quillSource="question" index={i} toolbarModules={[['image'],
+                                    ['formula'],]} setResetAll={resetForm => {
+                                        this.setState(prevState => ({
+                                            resetAll: [...prevState.resetAll, resetForm],
+                                        }))
+                                    }} />
                                 </div>
                                 <div className="col s2" style={lineSpacing}>Đáp án<span className='red-text'>*</span>:</div>
                                 <div className="col s10" style={lineSpacing}>
-                                    <ContentEditor customStyle={{ height: "150px", paddingBottom: "30px" }} handleQuillChange={this.handleQuillChange} quillSource="question" toolbarModules={[['image'],
-                                    ['formula'],]} />
+                                    <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionList[i].tempAnswer.content} updateContent={this.handleQuillChange} quillSource="answer" index={i} toolbarModules={[['image'],
+                                    ['formula'],]} setClick={click => this.state.questionList[i].resetContentEditor = click} setResetAll={resetForm => {
+                                        this.setState(prevState => ({
+                                            resetAll: [...prevState.resetAll, resetForm],
+                                        }))
+                                    }} />
+                                    {(this.state.questionList[i].answers.length < 4 ||
+                                        !this.state.questionList[i].answers[0].content ||
+                                        !this.state.questionList[i].answers[1].content ||
+                                        !this.state.questionList[i].answers[2].content ||
+                                        !this.state.questionList[i].answers[3].content) &&
+                                        <div>
+                                            <span onClick={() => { this.addAnswerOption(i) }} style={{ cursor: "pointer" }}>Thêm câu trả lời</span>
+                                        </div>
+                                    }
+                                    {this.state.questionList[i].answers.length > 0 &&
+                                        <form>
+                                            {this.renderAnswerOptions(i)}
+                                        </form>}
                                 </div>
                                 <div className="col s2" style={lineSpacing}>Mức khó<span className='red-text'>*</span>:</div>
                                 <div className="col s4" style={selectSpacing}>
-                                    {/* <Select value="0">
-                                        <option value="0" disabled selected>Choose your option</option>
-                                        <option value="1">Nhận biết</option>
-                                        <option value="2">Thông hiểu</option>
-                                        <option value="3">Vận dụng</option>
-                                        <option value="4">Vận dụng cao</option>
-                                    </Select> */}
                                     <CustomizedSelect
-                                        source="difficulty"
+                                        defaultValue={this.state.questionList[i].question.difficultyId}
+                                        source={{ name: "difficultyId", index: i }}
                                         handleParentSelect={this.handleSelectChange}
                                         items={[
                                             { value: 1, text: "Nhận biết", },
@@ -382,20 +555,21 @@ class ModalQuestion extends Component {
                                             { value: 4, text: "Vận dụng cao", },
                                         ]} />
                                 </div>
-
                                 <div className="col s3" style={lineSpacing}>Câu hỏi cùng form:</div>
                                 <div className="col s3" style={selectSpacing}>
-                                    <CustomizedSelect
-                                        // source="difficulty"
-                                        // handleParentSelect={this.handleSelectChange}
-                                        items={[{ value: 1, text: "TBD", },
-                                        ]} />
+                                    <CustomizedEditableSelect
+                                        defaultValue={this.state.questionList[i].question.formIdentifier}
+                                        items={this.state.formIdentifiers}
+                                        handleParentSelect={this.handleSelectChange}
+                                        source={{ name: "formIdentifier", index: i }}
+                                    />
                                 </div>
                                 <div className="col s2" style={lineSpacing}>Trình độ<span className='red-text'>*</span>:</div>
                                 <div className="col s4" style={selectSpacing}>
                                     <CustomizedSelect
-                                        // source="difficulty"
-                                        // handleParentSelect={this.handleSelectChange}
+                                        defaultValue={this.state.questionList[i].question.gradeLevelId}
+                                        source={{ name: "gradeLevelId", index: i }}
+                                        handleParentSelect={this.handleSelectChange}
                                         items={[
                                             { value: 1, text: "Lớp 1", },
                                             { value: 2, text: "Lớp 2", },
@@ -413,14 +587,15 @@ class ModalQuestion extends Component {
                                         ]} />
                                 </div>
                                 <div className="col s3" style={lineSpacing}>Mô tả:</div>
-                                <div className="col s3" style={selectSpacing}>
-                                    <input id='description' type="text" className="validate" />
+                                <div className="col s3 input-field" style={selectSpacing}>
+                                    <input id='description' type="text" className="validate" value={this.state.questionList[i].question.description} onChange={this.handleListInputChange("description", i)} />
                                 </div>
                                 <div className="col s2" style={lineSpacing}>Thuộc tính<span className='red-text'>*</span>:</div>
                                 <div className="col s4" style={selectSpacing}>
                                     <CustomizedSelect
-                                        // source="difficulty"
-                                        // handleParentSelect={this.handleSelectChange}
+                                        defaultValue={this.state.questionList[i].question.questionTypeId}
+                                        source={{ name: "questionTypeId", index: i }}
+                                        handleParentSelect={this.handleSelectChange}
                                         items={[
                                             { value: 1, text: "Lý thuyết", },
                                             { value: 2, text: "Bài tập", },
@@ -428,19 +603,27 @@ class ModalQuestion extends Component {
                                 </div>
                                 <div className="col s3" style={lineSpacing}>Kiến thức đặc thù:</div>
                                 <div className="col s3" style={selectSpacing}>
-                                    <CustomizedEditableSelect items={[
-                                        { value: 1, text: "Lý thuyết", },
-                                        { value: 2, text: "Bài tập", },
-                                    ]}
+                                    <CustomizedEditableSelect
+                                        defaultValue={this.state.questionList[0].question.specialKnowledge}
+                                        items={this.state.allSpecialKnowledge}
                                         handleParentSelect={this.handleSelectChange}
-                                        source="specialKnowledge"
+                                        source={{ name: "specialKnowledge", index: i }}
                                     />
                                 </div>
                                 <div className="col s2" style={lineSpacing}>Hướng dẫn giải<span className='red-text'>*</span>:</div>
                                 <div className="col s10" style={lineSpacing}>
-                                    <ContentEditor customStyle={{ height: "150px", paddingBottom: "30px" }} handleQuillChange={this.handleQuillChange} quillSource="question" toolbarModules={[['image'],
-                                    ['formula'],]} />
+                                    <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionList[i].question.explanation} updateContent={this.handleQuillChange} quillSource="explanation" index={i} toolbarModules={[['image'],
+                                    ['formula'],]} setResetAll={resetForm => {
+                                        this.setState(prevState => ({
+                                            resetAll: [...prevState.resetAll, resetForm],
+                                        }))
+                                    }} />
                                 </div>
+                                {i != 0 &&
+                                    <div className="col s12">
+                                        <span style={{ cursor: "pointer" }} className="red-text lighten-1" onClick={(e) => { this.deleteQuestionFromSeries(e, i) }}>Xóa</span>
+                                    </div>
+                                }
                             </div>
                         </CollapsibleItem>
                     </Collapsible>
@@ -451,11 +634,11 @@ class ModalQuestion extends Component {
         return (
             <div>
                 <a href="#addQuestion" style={{ position: "fixed" }} className="btn-floating btn-large my-floating-btn blue modal-trigger">
-                    <i className="material-icons" onClick={() => { console.log(this.state) }}>add</i>
+                    <i className="material-icons">add</i>
                 </a>
                 <button onClick={() => { console.log(this.state) }}>Click me yo</button>
                 <button onClick={() => { this.testSend() }}>test axios</button>
-                <Modal id="addQuestion" options={{ preventScrolling: true }} style={{ width: "80vw", height: "80vh", overflow: "hidden", borderRadius: "25px" }} actions={[]}>
+                <Modal id="addQuestion" options={{ preventScrolling: true }} style={{ width: "70vw", maxHeight: "80vh", height: "80vh", overflow: "hidden", borderRadius: "25px" }} actions={[]}>
                     <div style={{ paddingTop: "52.5vh" }}></div>
                     <div className="modal-content" style={{
                         position: "absolute",
@@ -473,36 +656,57 @@ class ModalQuestion extends Component {
                             <form className="row col s12">
 
                                 {this.state.questionDetail.questionSeries ? (
-                                    <div className="col s12">
-                                        Mã chùm câu hỏi<span className='red-text'>*</span>:
+                                    <div>
+                                        <div className="col s12">
+                                            Mã chùm câu hỏi<span className='red-text'>*</span>:
                                         <div className="input-field inline" style={{ width: '30vw', marginLeft: '4vw' }}>
-                                            <input id='questionCode' type="text" className="validate" value={this.state.questionDetail.questionCode} onChange={this.handleInputChange("questionCode")} />
+                                                <input type="text" className="validate" value={this.state.questionDetail.questionCode} onChange={(e) => { this.handleQuestionSeriesCode(e) }} />
+                                            </div>
+                                        </div>
+                                        <div className="col s2">Câu hỏi chùm<span className='red-text'>*</span>:</div>
+                                        <div className="col s10">
+                                            <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionDetail.content} updateContent={this.handleQuestionSeriesContent} quillSource="questionSeries" index={0} toolbarModules={[['image'],
+                                            ['formula'],]} setResetAll={resetForm => {
+                                                this.setState(prevState => ({
+                                                    resetAll: [...prevState.resetAll, resetForm],
+                                                }))
+                                            }} />
                                         </div>
                                     </div>
                                 ) : (
-                                        <div className="col s12">
-                                            Mã câu hỏi<span className='red-text'>*</span>:
+                                        <div>
+                                            <div className="col s12">
+                                                Mã câu hỏi<span className='red-text'>*</span>:
                                     <div className="input-field inline" style={{ width: '30vw', marginLeft: '7vw' }}>
-                                                <input id='questionCode' type="text" className="validate" value={this.state.questionDetail.questionCode} onChange={this.handleInputChange("questionCode")} />
+                                                    <input type="text" className="validate" value={this.state.questionList[0].question.questionCode} onChange={this.handleListInputChange("questionCode", 0)} />
+                                                </div>
+                                            </div>
+                                            <div className="col s2">Câu hỏi<span className='red-text'>*</span>:</div>
+                                            <div className="col s10">
+                                                <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionList[0].question.content} updateContent={this.handleQuillChange} quillSource="question" index={0} toolbarModules={[['image'],
+                                                ['formula'],]} setResetAll={resetForm => {
+                                                    this.setState(prevState => ({
+                                                        resetAll: [...prevState.resetAll, resetForm],
+                                                    }))
+                                                }} />
                                             </div>
                                         </div>
                                     )}
 
-                                {/* <div className="col s2">Câu hỏi<span className='red-text'>*</span>:</div>
-                                <div className="col s10" style={{ height: "150px" }}>
-                                    <ContentEditor customStyle={{ height: "150px", marginBottom: "50px"  }}
-                                        updateContent={this.handleQuillChange} ref={this.contentEditor} quillSource="question" toolbarModules={[['image'],
-                                        ['formula'],]} />
-                                </div> */}
                                 <div className="col s12" style={lineSpacing}>
                                     <Toggle label="Chế độ câu hỏi chùm" handleToggleChange={this.handleToggleChange} />
                                 </div>
+
                                 {!this.state.questionDetail.questionSeries ? (
                                     <div>
                                         <div className="col s2" style={lineSpacing}>Đáp án<span className='red-text'>*</span>:</div>
                                         <div className="col s10" style={lineSpacing}>
-                                            <ContentEditor ref={this.contentEditor} customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionList[0].tempAnswer.content} updateContent={this.handleQuillChange} quillSource="answer" toolbarModules={[['image'],
-                                            ['formula'],]} setClick={click => this.state.questionList[0].resetContentEditor = click} />
+                                            <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionList[0].tempAnswer.content} updateContent={this.handleQuillChange} quillSource="answer" index={0} toolbarModules={[['image'],
+                                            ['formula'],]} setClick={click => this.state.questionList[0].resetContentEditor = click} setResetAll={resetForm => {
+                                                this.setState(prevState => ({
+                                                    resetAll: [...prevState.resetAll, resetForm],
+                                                }))
+                                            }} />
                                             {(this.state.questionList[0].answers.length < 4 ||
                                                 !this.state.questionList[0].answers[0].content ||
                                                 !this.state.questionList[0].answers[1].content ||
@@ -512,28 +716,15 @@ class ModalQuestion extends Component {
                                                     <span onClick={() => { this.addAnswerOption(0) }} style={{ cursor: "pointer" }}>Thêm câu trả lời</span>
                                                 </div>
                                             }
-                                            {/* {
-                                                this.state.questionList[0].answers.map((answer,i) =>{
-                                                    return (
-                                                        <div>{i}</div>
-                                                    )
-                                                })
-                                            } */}
                                             {this.state.questionList[0].answers.length > 0 &&
-                                                <form action="#">
+                                                <form>
                                                     {this.renderAnswerOptions(0)}
                                                 </form>}
                                         </div>
                                         <div className="col s2" style={lineSpacing}>Mức khó<span className='red-text'>*</span>:</div>
                                         <div className="col s4" style={selectSpacing}>
-                                            {/* <Select value="0">
-                                        <option value="0" disabled selected>Choose your option</option>
-                                        <option value="1">Nhận biết</option>
-                                        <option value="2">Thông hiểu</option>
-                                        <option value="3">Vận dụng</option>
-                                        <option value="4">Vận dụng cao</option>
-                                    </Select> */}
                                             <CustomizedSelect
+                                                defaultValue={this.state.questionList[0].question.difficultyId}
                                                 source={{ name: "difficultyId", index: 0 }}
                                                 handleParentSelect={this.handleSelectChange}
                                                 items={[
@@ -543,20 +734,21 @@ class ModalQuestion extends Component {
                                                     { value: 4, text: "Vận dụng cao", },
                                                 ]} />
                                         </div>
-
                                         <div className="col s3" style={lineSpacing}>Câu hỏi cùng form:</div>
                                         <div className="col s3" style={selectSpacing}>
-                                            <CustomizedSelect
-                                                // source="difficulty"
-                                                // handleParentSelect={this.handleSelectChange}
-                                                items={[{ value: 1, text: "TBD", },
-                                                ]} />
+                                            <CustomizedEditableSelect
+                                                defaultValue={this.state.questionList[0].question.formIdentifier}
+                                                items={this.state.formIdentifiers}
+                                                handleParentSelect={this.handleSelectChange}
+                                                source={{ name: "formIdentifier", index: 0 }}
+                                            />
                                         </div>
                                         <div className="col s2" style={lineSpacing}>Trình độ<span className='red-text'>*</span>:</div>
                                         <div className="col s4" style={selectSpacing}>
                                             <CustomizedSelect
-                                                // source="difficulty"
-                                                // handleParentSelect={this.handleSelectChange}
+                                                defaultValue={this.state.questionList[0].question.gradeLevelId}
+                                                source={{ name: "gradeLevelId", index: 0 }}
+                                                handleParentSelect={this.handleSelectChange}
                                                 items={[
                                                     { value: 1, text: "Lớp 1", },
                                                     { value: 2, text: "Lớp 2", },
@@ -580,8 +772,9 @@ class ModalQuestion extends Component {
                                         <div className="col s2" style={lineSpacing}>Thuộc tính<span className='red-text'>*</span>:</div>
                                         <div className="col s4" style={selectSpacing}>
                                             <CustomizedSelect
-                                                // source="difficulty"
-                                                // handleParentSelect={this.handleSelectChange}
+                                                defaultValue={this.state.questionList[0].question.questionTypeId}
+                                                source={{ name: "questionTypeId", index: 0 }}
+                                                handleParentSelect={this.handleSelectChange}
                                                 items={[
                                                     { value: 1, text: "Lý thuyết", },
                                                     { value: 2, text: "Bài tập", },
@@ -589,19 +782,22 @@ class ModalQuestion extends Component {
                                         </div>
                                         <div className="col s3" style={lineSpacing}>Kiến thức đặc thù:</div>
                                         <div className="col s3" style={selectSpacing}>
-                                            <CustomizedEditableSelect items={[
-                                                { value: 1, text: "Lý thuyết", },
-                                                { value: 2, text: "Bài tập", },
-                                            ]}
+                                            <CustomizedEditableSelect
+                                                defaultValue={this.state.questionList[0].question.specialKnowledge}
+                                                items={this.state.allSpecialKnowledge}
                                                 handleParentSelect={this.handleSelectChange}
-                                                source="specialKnowledge"
+                                                source={{ name: "specialKnowledge", index: 0 }}
                                             />
                                         </div>
-                                        {/* <div className="col s2" style={lineSpacing}>Hướng dẫn giải<span className='red-text'>*</span>:</div>
+                                        <div className="col s2" style={lineSpacing}>Hướng dẫn giải<span className='red-text'>*</span>:</div>
                                         <div className="col s10" style={lineSpacing}>
-                                            <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} updateContent={this.handleQuillChange} ref={this.contentEditor} quillSource="explanation" toolbarModules={[['image'],
-                                            ['formula'],]} />
-                                        </div> */}
+                                            <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionList[0].question.explanation} updateContent={this.handleQuillChange} quillSource="explanation" index={0} toolbarModules={[['image'],
+                                            ['formula'],]} setResetAll={resetForm => {
+                                                this.setState(prevState => ({
+                                                    resetAll: [...prevState.resetAll, resetForm],
+                                                }))
+                                            }} />
+                                        </div>
                                     </div>) : (
                                         <div>
                                             {questionList}
@@ -627,6 +823,7 @@ class ModalQuestion extends Component {
 
 const mapStateToProps = state => ({
     user: state.user,
+    folder: state.folder,
 })
 
 export default connect(mapStateToProps)(withRouter(ModalQuestion));

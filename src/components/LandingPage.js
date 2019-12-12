@@ -70,6 +70,7 @@ class LandingPage extends Component {
     render() {
         const responseGoogle = (res) => {
             var token = res.tokenObj.id_token;
+            console.log(token);
             // let googleToken = this.decodeToken(token);
             axios.post(serverUrl + 'api/authen', {
                 token
@@ -124,6 +125,20 @@ class LandingPage extends Component {
                             }
                         });
                         this.props.dispatch({ type: "UPDATE_JWT", payload: jwt });
+                        axios.defaults.headers.common['Authorization'] = "Bearer " + jwt;
+                        // axios.interceptors.response.use(function (response) {
+                        //     if (response.headers.renewtoken) {
+                        //         axios.defaults.headers.common['Authorization'] = "Bearer " + response.headers.renewtoken;
+                        //         this.props.dispatch({
+                        //             type: "UPDATE_USER", payload: {
+                        //                 jwt: response.headers.renewtoken,
+                        //             }
+                        //         });
+                        //     }
+                        //     return response;
+                        // }, function (error) {
+                        //     return Promise.reject(error);
+                        // });
                         if (user.roleId === 3) {
                             this.props.history.push('/signin');
                         } else {

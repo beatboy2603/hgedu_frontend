@@ -18,8 +18,10 @@ const useStyles = makeStyles(theme => ({
 
 export default function CustomizedSelect(props) {
     const classes = useStyles();
-    const [item, setItem] = React.useState('default');
-    let { items, handleParentSelect, source } = props;
+    
+    let { items, handleParentSelect, source, defaultValue } = props;
+
+    const [item, setItem] = React.useState(defaultValue?defaultValue:"default");
 
     const handleChange = event => {
         setItem(event.target.value);

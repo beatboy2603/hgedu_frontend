@@ -100,6 +100,7 @@ class ContentEditor extends Component {
         this.handleQuillChange = props.handleQuillChange;
         //this.handleQuillBlur = this.handleQuillBlur.bind(this)
         this.quillSource = props.quillSource;
+        this.index = props.index;
         this.reactEditor = React.createRef();
         this.uploadImage = this.uploadImage.bind(this);
         this.imageHandler = this.imageHandler.bind(this);
@@ -280,7 +281,6 @@ class ContentEditor extends Component {
      * and set the state of current states to original
      */
     resetForm = () => {
-        console.log("ab");
         this.editor.setContents([]);
         this.setState({
             comments: '',
@@ -288,8 +288,6 @@ class ContentEditor extends Component {
             //images: [],
             imageData: [],
             imageFileMap: {}
-        }, () => {
-            console.log(this.state);
         });
     }
 
@@ -329,7 +327,7 @@ class ContentEditor extends Component {
             //console.log("data: ", imageData)
 
             //console.log("current-delta: ", this.editor.getContents())
-            this.props.updateContent(this.editor.getContents(), this.quillSource, 0);
+            this.props.updateContent(this.editor.getContents(), this.quillSource, this.index);
             // var imageFileMap
 
             //Handle image change when delete
@@ -391,6 +389,9 @@ class ContentEditor extends Component {
         this.editor = this.reactEditor.current.getEditor();
         if (this.props.setClick) {
             this.props.setClick(this.resetForm);
+        }
+        if (this.props.setResetAll) {
+            this.props.setResetAll(this.resetForm);
         }
         this.textMap["abc"] = "một cái đéo gì đó";
         this.katexMap["e=mc2"]= "e=mc^2";

@@ -5,6 +5,7 @@ import SmallLogo from '../../resources/logo.svg';
 import { connect } from 'react-redux';
 import { gapi } from "gapi-script";
 import { serverUrl, getCookie, setCookie, getAuthenCookie } from './common';
+import axios from 'axios';
 
 const Sidenav = (props) => {
     const style = {
@@ -93,6 +94,7 @@ const Sidenav = (props) => {
                 var auth2 = gapi.auth2.getAuthInstance();
                 if (auth2) {
                     setCookie("authenticated", "false", -1);
+                    axios.defaults.headers.common['Authorization'] = null;
                     auth2.signOut().then(() => {
                         props.dispatch({ type: "SIGN_OUT", payload: null });
                         props.history.push('/');
@@ -101,6 +103,7 @@ const Sidenav = (props) => {
             });
         } else {
             setCookie("authenticated", "false", -1);
+            axios.defaults.headers.common['Authorization'] = null;
             auth2.signOut().then(() => {
                 props.dispatch({ type: "SIGN_OUT", payload: null });
                 props.history.push('/');
@@ -305,7 +308,7 @@ const Sidenav = (props) => {
                         </div>
                     </Link>
                     <div className="flex-column">
-                        <Link className="sidenav-trigger" data-target='sidenav'>
+                        <Link className="sidenav-trigger" data-target='sidenavUserTeacher'>
                             <i className="material-icons blue-text text-darken-2 padding-vertical-10">menu</i>
                         </Link>
                         <NavLink to="/home" className='flex-row' activeClassName="side-nav-active">
@@ -343,7 +346,7 @@ const Sidenav = (props) => {
                         </div>
                     </Link>
                     <div className="flex-column">
-                        <Link className="sidenav-trigger" data-target='sidenav'>
+                        <Link className="sidenav-trigger" data-target='sidenavUserStudent'>
                             <i className="material-icons blue-text text-darken-2 padding-vertical-10">menu</i>
                         </Link>
                         <NavLink to="/home" className='flex-row' activeClassName="side-nav-active">
@@ -365,7 +368,7 @@ const Sidenav = (props) => {
                         </div>
                     </Link>
                     <div className="flex-column">
-                        <Link className="sidenav-trigger" data-target='sidenav'>
+                        <Link className="sidenav-trigger" data-target='sidenavUserParent'>
                             <i className="material-icons blue-text text-darken-2 padding-vertical-10">menu</i>
                         </Link>
                         <NavLink to="/home" className='flex-row' activeClassName="side-nav-active">
@@ -387,7 +390,7 @@ const Sidenav = (props) => {
                         </div>
                     </Link>
                     <div className="flex-column">
-                        <Link className="sidenav-trigger" data-target='sidenav'>
+                        <Link className="sidenav-trigger" data-target='sidenavMod'>
                             <i className="material-icons blue-text text-darken-2 padding-vertical-10">menu</i>
                         </Link>
                         <NavLink to="/home" className='flex-row' activeClassName="side-nav-active">
@@ -413,7 +416,7 @@ const Sidenav = (props) => {
                         </div>
                     </Link>
                     <div className="flex-column">
-                        <Link className="sidenav-trigger" data-target='sidenav'>
+                        <Link className="sidenav-trigger" data-target='sidenavAdmin'>
                             <i className="material-icons blue-text text-darken-2 padding-vertical-10">menu</i>
                         </Link>
                         <NavLink to="/home" className='flex-row' activeClassName="side-nav-active">

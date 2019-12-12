@@ -8,11 +8,12 @@ import errorReducer from '../../reducers/errorReducer';
 import classReducer from '../../reducers/classReducer';
 import examReducer from '../../reducers/examReducer';
 import examTestReducer from '../../reducers/examTestReducer';
+import folderReducer from '../../reducers/folderReducer';
 
 const persistConfig = {
     key: 'root',
     storage: storage,
-    blacklist: ['error', 'class', 'exam', 'examTest']
+    blacklist: ['error', 'class', 'exam', 'examTest',"folder"],
 };
 
 const reducers = combineReducers({
@@ -21,7 +22,8 @@ const reducers = combineReducers({
     error: errorReducer,
     class: classReducer,
     exam: examReducer,
-    examTest: examTestReducer
+    examTest: examTestReducer,
+    folder: folderReducer,
 })
 
 const rootReducer = (state, action) => {

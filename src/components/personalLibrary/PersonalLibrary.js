@@ -138,6 +138,7 @@ class PersonalLibrary extends Component {
                         folders: folders,
                         addFolderName: "",
                     })
+                    this.props.dispatch({ type: "UPDATE_FOLDERS", payload: folders });
                 }).catch(function (error) {
                     // handle error
                     console.log(error);
@@ -195,6 +196,7 @@ class PersonalLibrary extends Component {
                         folders: folders,
                         addFolderName: "",
                     })
+                    this.props.dispatch({ type: "UPDATE_FOLDERS", payload: folders })
                 }).catch(function (error) {
                     // handle error
                     console.log(error);
@@ -219,6 +221,7 @@ class PersonalLibrary extends Component {
                 this.setState({
                     folders: folders,
                 })
+                this.props.dispatch({ type: "UPDATE_FOLDERS", payload: folders })
             }).catch(function (error) {
                 // handle error
                 console.log(error);
@@ -258,6 +261,7 @@ class PersonalLibrary extends Component {
             this.setState({
                 folders: folders,
             })
+            this.props.dispatch({ type: "UPDATE_FOLDERS", payload: folders })
             // //why folderId = 0 or "0" error??
             // let folderTemp = {
             //     folderId: "temp",
@@ -269,7 +273,8 @@ class PersonalLibrary extends Component {
 
             // folders.push(folderTemp);
 
-            console.log(this.state.folders);
+            // console.log(this.state.folders);
+            // console.log(res);
             // console.log(folderTemp);
         }).catch(function (error) {
             // handle error
@@ -433,6 +438,7 @@ class PersonalLibrary extends Component {
 
 const mapStateToProps = state => ({
     user: state.user,
+    folder: state.folder,
 })
 
 export default connect(mapStateToProps)(withRouter(PersonalLibrary));
