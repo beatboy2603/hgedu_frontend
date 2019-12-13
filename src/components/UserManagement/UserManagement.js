@@ -112,6 +112,7 @@ class UserManagemnt extends Component {
     })
     if(check.length!==0){
       alert("Email này đã được sử dụng");
+      return;
     }
     axios
       .post("http://localhost:8084/api/user/addMod", {
