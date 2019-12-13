@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TreeView from '@material-ui/lab/TreeView';
 import TreeItem from '@material-ui/lab/TreeItem';
 import Typography from '@material-ui/core/Typography';
-import MailIcon from '@material-ui/icons/Mail';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import DescriptionIcon from '@material-ui/icons/Description';
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -114,7 +114,8 @@ function StyledTreeItem(props) {
                     </div>
                     <div className="deleteFolderBtn" style={{ display: "none", color: "red" }} onClick={() => { props.deleteFolder(props.id) }}>
                         {/* De */}
-                        <i className="material-icons md-18">delete_forever</i>
+                        <DeleteOutlineIcon style={{fontSize:"24px"}}/>
+                        {/* <i className="material-icons md-18">delete_outline</i> */}
                     </div>
                 </div>
             }

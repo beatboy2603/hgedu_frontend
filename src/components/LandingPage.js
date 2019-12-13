@@ -144,6 +144,9 @@ class LandingPage extends Component {
                         } else {
                             console.log("alo?");
                             setCookie("authenticated", "true", 1);
+                            if (this.props.checkAuthen) {
+                                this.props.checkAuthen();
+                            }
                             this.props.history.push('/home');
                         }
                     }
@@ -186,18 +189,19 @@ class LandingPage extends Component {
                 {this.state.isLoading && <Loading type={"spokes"} color={"#999999"} />}
                 <button onClick={() => { console.log(auth.getAuth()) }}>test</button>
                 <button onClick={() => { this.token() }}>test Token</button> */}
-                <div id="news" className="container row">
-                    <div className="col s11 offset-s1 container row">
-                        <h5 className="blue-text text-darken-2 bold font-montserrat">Tin tức</h5>
+                <div id="news" className="container row" style={{ minHeight: "100vh" }}>
+                    <div className="col s12 container row">
+                        <h5 className="blue-text text-darken-2 bold font-montserrat" style={{ margin: "50px 0 30px 0" }}>Tin tức</h5>
                         {
                             this.state.newsList.length !== 0 &&
                             <Carousel options={{ dist: 0, padding: 0 }} className="white-text center">
-                                {this.state.newsList.map((post) =>
+                                {this.state.newsList.slice(1).map((post) =>
                                     <div className="col s4 carousel-item">
                                         <SubPost imgSrc={'http://localhost:8084/' + post.thumbnail}
                                             post={post}
                                             title={post.title}
-                                            body={post.description} />
+                                            body={post.description}
+                                            view='FULL' />
                                     </div>
                                 )}
                             </Carousel>

@@ -98,11 +98,11 @@ class App extends Component {
               <BrowserRouter>
                 <div className="App" onClick={() => { this.checkAuthen() }}>
                   <div style={{ zIndex: "1" }}>
-                    <Sidenav isAuthenticated={this.state.isAuthenticated} />
+                    <Sidenav isAuthenticated={this.state.isAuthenticated} checkAuthen={this.checkAuthen}/>
                   </div>
                   <Switch>
                     <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={false} exact path='/'>
-                      <LandingPage />
+                      <LandingPage checkAuthen={this.checkAuthen} />
                     </ProtectedRoute>
                     <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/home'>
                       <Home />

@@ -33,7 +33,7 @@ import ViewExam from './ViewExam';
 const useStyles = makeStyles(theme => ({
     root: {
         //display: 'flex',
-        d: '100%',
+        width: '100%',
         marginTop: theme.spacing(3),
         //overflowX: 'auto',
     },

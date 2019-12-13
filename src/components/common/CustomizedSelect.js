@@ -18,10 +18,10 @@ const useStyles = makeStyles(theme => ({
 
 export default function CustomizedSelect(props) {
     const classes = useStyles();
-    
-    let { items, handleParentSelect, source, defaultValue } = props;
 
-    const [item, setItem] = React.useState(defaultValue?defaultValue:"default");
+    let { items, handleParentSelect, source, defaultValue, disabled } = props;
+
+    const [item, setItem] = React.useState(defaultValue ? defaultValue : "default");
 
     const handleChange = event => {
         setItem(event.target.value);
@@ -38,6 +38,7 @@ export default function CustomizedSelect(props) {
         <div>
             <FormControl className={classes.formControl}>
                 <Select
+                    disabled={disabled}
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={item}
@@ -59,7 +60,7 @@ export default function CustomizedSelect(props) {
 //         console.log("yeah");
 //         setItem("default");
 //     }
-    
+
 //     render(){
 //         return(
 //             // <MenuItem value={"default"} disabled={true}>Chọn</MenuItem>

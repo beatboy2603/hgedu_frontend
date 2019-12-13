@@ -212,7 +212,7 @@ const ExpansionPanelDetails = withStyles(theme => ({
   },
 }))(MuiExpansionPanelDetails);
 
-export default function EnhancedTable({ headCells, rows }) {
+export default function EnhancedTable({ headCells, rows, setCurrentQuestion }) {
   const classes = useStyles();
   const [order, setOrder] = React.useState('desc');
   const [orderBy, setOrderBy] = React.useState('dateCreated');
@@ -314,18 +314,19 @@ export default function EnhancedTable({ headCells, rows }) {
                         }}>nani</div> */}
                         <TableCell colSpan={5} style={{ padding: "0" }}>
                           <ExpansionPanel square className="row-hover" >
-                            <ExpansionPanelSummary style={{ backgroundColor: "#EEEEEE", padding: "0" }} aria-controls="panel1d-content" id="panel1d-header">
-
+                            <ExpansionPanelSummary onClick={()=>{setCurrentQuestion(row)}} style={{ padding: "0" }} aria-controls="panel1d-content" id="panel1d-header">
                               <TableCell className="table-col-width-15" component="th" id={labelId} scope="row">
                                 <span className="font-effra font-size-18 grey-text text-darken-3">{row.questionCode}</span>
                               </TableCell>
                               <TableCell className="table-col-width-40"><span className="font-effra font-size-18 grey-text text-darken-3">{row.content.map(
                                 obj => obj.insert.formula ? (<InlineMath math={obj.insert.formula} />) : (obj.insert.image ? (<img src={obj.insert.image} alt="image" width={obj.attributes && obj.attributes.width} />) : (<span> {obj.insert} </span>)))
                               }</span></TableCell>
-                              <TableCell className="table-col-width-15"><span className="-effra font-size-18 grey-text text-darken-3">{row.difficultyId == 1 && "Nhận biết"}
+                              <TableCell className="table-col-width-15">
+                                <span className="-effra font-size-18 grey-text text-darken-3">{row.difficultyId == 1 && "Nhận biết"}
                                 {row.difficultyId == 2 && "Thông hiểu"}
                                 {row.difficultyId == 3 && "Vận dụng"}
-                                {row.difficultyId == 4 && "Vận dụng cao"}</span></TableCell>
+                                {row.difficultyId == 4 && "Vận dụng cao"}</span>
+                              </TableCell>
                               <TableCell className="table-col-width-15"><span className="font-effra font-size-18 grey-text text-darken-3">{row.gradeLevelId != 0 ? ("Lớp " + row.gradeLevelId) : ("Khác")}</span></TableCell>
                               <TableCell className="table-col-width-15" onClick={(e) => {
                                 e.stopPropagation();
@@ -339,7 +340,7 @@ export default function EnhancedTable({ headCells, rows }) {
                             <ExpansionPanelDetails className={classes.details} style={{ paddingBottom: 0 }}>
 
                               {row.childQuestions && row.childQuestions.map((item, index) => (
-                                <TableRow key={item.questionId}>
+                                <TableRow key={item.questionId} style={{backgroundColor:"#EEEEEE", cursor: "pointer"}} href="#editQuestion" className="modal-trigger">
                                   <TableCell className="table-col-width-15" id={labelId} scope="row">
                                     <span className="font-effra font-size-18 grey-text text-darken-3">{item.questionCode}</span>
                                   </TableCell>
@@ -364,12 +365,14 @@ export default function EnhancedTable({ headCells, rows }) {
                     ) : (
                         <TableRow
                           hover
-                          onClick={event => handleClick(event, row.questionCode)}
+                          onClick={()=>{setCurrentQuestion(row)}}
                           role="checkbox"
                           aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.questionCode}
                           selected={isItemSelected}
+                          href="#editQuestion" className="modal-trigger"
+                          style={{cursor: "pointer"}}
                         >
                           <TableCell component="th" id={labelId} scope="row">
                             <span className="font-effra font-size-18 grey-text text-darken-3">{row.questionCode}</span>

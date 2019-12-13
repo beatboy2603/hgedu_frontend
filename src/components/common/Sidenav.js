@@ -95,6 +95,9 @@ const Sidenav = (props) => {
                 if (auth2) {
                     setCookie("authenticated", "false", -1);
                     axios.defaults.headers.common['Authorization'] = null;
+                    if(props.checkAuthen){
+                        props.checkAuthen();
+                    }
                     auth2.signOut().then(() => {
                         props.dispatch({ type: "SIGN_OUT", payload: null });
                         props.history.push('/');
@@ -104,6 +107,9 @@ const Sidenav = (props) => {
         } else {
             setCookie("authenticated", "false", -1);
             axios.defaults.headers.common['Authorization'] = null;
+            if(props.checkAuthen){
+                props.checkAuthen();
+            }
             auth2.signOut().then(() => {
                 props.dispatch({ type: "SIGN_OUT", payload: null });
                 props.history.push('/');
@@ -256,12 +262,12 @@ const Sidenav = (props) => {
                             {/* <a href="#" onClick={() => signOut()}> */}
                             <i onClick={() => signOut()} className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor, ...style.firstIcon, cursor: "pointer" }} >exit_to_app</i>
                             {/* </a> */}
-                            <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person_pin</i></Link>
+                            {/* <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person_pin</i></Link>
 
                             <div class="role-changer" style={{ display: 'flex', flexDirection: 'row' }}>
                                 <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >person</i></Link>
                                 <Link to="/home/logout"><i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...iconColor }} >people_alt</i></Link>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>
@@ -282,9 +288,6 @@ const Sidenav = (props) => {
 
                         {link("/userManagement", "group")}
                     </div>
-                    <NavLink to="/user">
-                        <i className="material-icons padding-vertical-10" style={iconColor}>account_circle</i>
-                    </NavLink>
                     <div className="user-option" style={style.userOption} onMouseLeave={hideObj} >
                         <NavLink to="/user" >
                             <i onMouseOver={showObj} className="material-icons padding-vertical-10" style={iconColor} >account_circle</i>

@@ -201,7 +201,7 @@ class ContentEditor extends Component {
      */
     getImageData = (delta) => {
         var imageData = []
-        if (delta !== undefined) {
+        if (delta&&delta.ops) {
             delta.ops.map((deltaPart) => {
                 if (deltaPart.insert !== undefined && deltaPart.insert.image) {
                     imageData.push(deltaPart.insert.image)
@@ -405,7 +405,6 @@ class ContentEditor extends Component {
         if (this.state.content === '' && this.state.originalContent === '' && this.props.content) {
             const html = this.convertDeltaToHtml(this.props.content);
             //document.getElementsByClassName("ql-editor")[0].innerHTML = html;
-            console.log(html)
             this.editor.setContents([]);
             this.setState({ originalContent: this.props.content });
             this.editor.clipboard.dangerouslyPasteHTML(0, html);

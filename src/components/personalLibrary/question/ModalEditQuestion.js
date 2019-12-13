@@ -20,6 +20,7 @@ class ModalQuestion extends Component {
         resetAll: [],
         formIdentifiers: [],
         allSpecialKnowledge: [],
+        currentQuestion: null,
         questionDetail: {
             questionCode: "",
             content: "",
@@ -50,6 +51,7 @@ class ModalQuestion extends Component {
             }
         ],
         valid: false,
+        isOpen: false,
     }
 
     checkValid = () => {
@@ -93,6 +95,9 @@ class ModalQuestion extends Component {
                 reset();
             })
         }
+        this.setState({
+            isOpen: false
+        })
     }
 
     handleQuillChange = (value, source, index) => {
@@ -428,6 +433,78 @@ class ModalQuestion extends Component {
         }))
     }
 
+
+    setCurrentQuestion = () => {
+
+        if (this.props.currentQuestion) {
+            let currentQuestion = this.props.currentQuestion;
+            axios.get(serverUrl + "api/question/getFullQuestionAndAnswers/" + currentQuestion.questionId).then(res => {
+                let questionList = res.data;
+                let questionDetail = {
+                    questionCode: "",
+                    content: null,
+                    questionSeries: false,
+                    folderId: null,
+                    knowledgeGroup: null,
+                };
+                if (questionList.length > 1) {
+                    questionDetail = questionList[0].question;
+                    questionList = questionList.filter((el,i)=>i!=0);
+                    questionDetail.content = questionDetail.content.slice(0, questionDetail.content.length - 2) + "]";
+                    questionDetail.content = JSON.parse(questionDetail.content);
+                    questionDetail.questionSeries = true;
+                    
+                }
+                questionList.map((el, i) => {
+                    el.question.content = el.question.content.slice(0, el.question.content.length - 2) + "]";
+                    el.question.content = JSON.parse(el.question.content);
+                    el.tempAnswer = {
+                        content: "",
+                        isCorrect: false,
+                        linkedAnswers: null
+                    }
+                    el.answers.map((answer,i)=>{
+                        answer.content = answer.content.slice(0, answer.content.length - 2) + "]";
+                        answer.content = JSON.parse(answer.content);
+                        return answer;
+                    })
+                    return el;
+                })
+                this.setState(prevState => ({
+                    ...prevState,
+                    questionDetail,
+                    currentQuestion,
+                    questionList: questionList,
+                    isOpen: true,
+                }), () => {
+                    console.log(this.state);
+                    setTimeout(() => {
+                        this.modalTop.scrollIntoView(false);
+                    }, 1);
+                })
+                console.log(res.data);
+            })
+            // axios.get(serverUrl + "api/question/getFullQuestionAndAnswers/" + currentQuestion.questionId).then(res => {
+            //     console.log(res.data);
+            // })
+            // let a = this.state.questionList;
+            // a[0].question = currentQuestion
+            // this.setState(prevState => ({
+            //     ...prevState,
+            //     questionDetail: {
+            //         ...prevState.questionDetail,
+            //     },
+            //     currentQuestion,
+            //     questionList: a,
+            //     isOpen: true,
+            // }), () => {
+            //     setTimeout(() => {
+            //         this.modalTop.scrollIntoView(false);
+            //     }, 1);
+            // })
+        }
+    }
+
     waitUpdate = false;
 
     componentDidUpdate() {
@@ -497,6 +574,8 @@ class ModalQuestion extends Component {
             }))
         })
     }
+
+    modalTop = null;
 
     testSend = () => {
         let data = [this.state.questionDetail, ...this.state.questionList];
@@ -659,7 +738,7 @@ class ModalQuestion extends Component {
                                         }))
                                     }} />
                                 </div>
-                                {this.state.questionList.length>1 &&
+                                {this.state.questionList.length>1 != 0 &&
                                     <div className="col s12">
                                         <span style={{ cursor: "pointer" }} className="red-text lighten-1" onClick={(e) => { this.deleteQuestionFromSeries(e, i) }}>Xóa</span>
                                     </div>
@@ -673,12 +752,8 @@ class ModalQuestion extends Component {
 
         return (
             <div>
-                <a href="#addQuestion" style={{ position: "fixed" }} className="btn-floating btn-large my-floating-btn blue modal-trigger">
-                    <i className="material-icons">add</i>
-                </a>
-                <button onClick={() => { console.log(this.state) }}>Click me yo</button>
-                <button onClick={() => { this.testSend() }}>test axios</button>
-                <Modal id="addQuestion" options={{ preventScrolling: true }} style={{ width: "70vw", maxHeight: "80vh", height: "80vh", overflow: "hidden", borderRadius: "25px", border: "4px solid #086bd1" }} actions={[]}>
+                <button onClick={() => { console.log(this.state) }}>Click me edit</button>
+                <Modal id="editQuestion" options={{ preventScrolling: true, onOpenEnd: this.setCurrentQuestion, onCloseEnd: this.resetAllEditors }} style={{ width: "70vw", maxHeight: "80vh", height: "80vh", overflow: "hidden", borderRadius: "25px", border: "4px solid #086bd1" }} actions={[]}>
                     <div style={{ paddingTop: "52.5vh" }}></div>
                     <div className="modal-content" style={{
                         position: "absolute",
@@ -688,171 +763,169 @@ class ModalQuestion extends Component {
                         right: "-17px", /* Increase/Decrease this value for cross-browser compatibility */
                         overflowY: "scroll"
                     }}>
+                        {this.state.isOpen &&
+                            <div>
+                                <h5 ref={node => { this.modalTop = node }} className="center">Sửa câu hỏi {this.state.currentQuestion && this.state.currentQuestion.questionCode}</h5>
+                                <div className="line" style={{ width: "96%", marginLeft: "2%", marginTop: "30px" }}></div>
 
-                        <h5 className="center">Thêm câu hỏi</h5>
-                        <div className="line" style={{ width: "96%", marginLeft: "2%", marginTop: "30px" }}></div>
+                                <div className="row">
+                                    <form className="row col s12">
 
-                        <div className="row">
-                            <form className="row col s12">
-
-                                {this.state.questionDetail.questionSeries ? (
-                                    <div>
-                                        <div className="col s12">
-                                            Mã chùm câu hỏi<span className='red-text'>*</span>:
+                                        {this.state.questionDetail.questionSeries ? (
+                                            <div>
+                                                <div className="col s12">
+                                                    Mã chùm câu hỏi<span className='red-text'>*</span>:
                                         <div className="input-field inline" style={{ width: '30vw', marginLeft: '4vw' }}>
-                                                <input type="text" className="validate" value={this.state.questionDetail.questionCode} onChange={(e) => { this.handleQuestionSeriesCode(e) }} />
-                                            </div>
-                                        </div>
-                                        <div className="col s2">Câu hỏi chùm<span className='red-text'>*</span>:</div>
-                                        <div className="col s10">
-                                            <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionDetail.content} updateContent={this.handleQuestionSeriesContent} quillSource="questionSeries" index={0} toolbarModules={[['image'],
-                                            ['formula'],]} setResetAll={resetForm => {
-                                                this.setState(prevState => ({
-                                                    resetAll: [...prevState.resetAll, resetForm],
-                                                }))
-                                            }} />
-                                        </div>
-                                    </div>
-                                ) : (
-                                        <div>
-                                            <div className="col s12">
-                                                Mã câu hỏi<span className='red-text'>*</span>:
-                                    <div className="input-field inline" style={{ width: '30vw', marginLeft: '7vw' }}>
-                                                    <input type="text" className="validate" value={this.state.questionList[0].question.questionCode} onChange={this.handleListInputChange("questionCode", 0)} />
+                                                        <input type="text" className="validate" value={this.state.questionDetail.questionCode} onChange={(e) => { this.handleQuestionSeriesCode(e) }} />
+                                                    </div>
+                                                </div>
+                                                <div className="col s2">Câu hỏi chùm<span className='red-text'>*</span>:</div>
+                                                <div className="col s10">
+                                                    <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionDetail.content} updateContent={this.handleQuestionSeriesContent} quillSource="questionSeries" index={0} toolbarModules={[['image'],
+                                                    ['formula'],]} setResetAll={resetForm => {
+                                                        this.setState(prevState => ({
+                                                            resetAll: [...prevState.resetAll, resetForm],
+                                                        }))
+                                                    }} />
                                                 </div>
                                             </div>
-                                            <div className="col s2">Câu hỏi<span className='red-text'>*</span>:</div>
-                                            <div className="col s10">
-                                                <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionList[0].question.content} updateContent={this.handleQuillChange} quillSource="question" index={0} toolbarModules={[['image'],
-                                                ['formula'],]} setResetAll={resetForm => {
-                                                    this.setState(prevState => ({
-                                                        resetAll: [...prevState.resetAll, resetForm],
-                                                    }))
-                                                }} />
-                                            </div>
-                                        </div>
-                                    )}
-
-                                <div className="col s12" style={lineSpacing}>
-                                    <Toggle label="Chế độ câu hỏi chùm" handleToggleChange={this.handleToggleChange} />
-                                </div>
-
-                                {!this.state.questionDetail.questionSeries ? (
-                                    <div>
-                                        <div className="col s2" style={lineSpacing}>Đáp án<span className='red-text'>*</span>:</div>
-                                        <div className="col s10" style={lineSpacing}>
-                                            <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionList[0].tempAnswer.content} updateContent={this.handleQuillChange} quillSource="answer" index={0} toolbarModules={[['image'],
-                                            ['formula'],]} setClick={click => this.state.questionList[0].resetContentEditor = click} setResetAll={resetForm => {
-                                                this.setState(prevState => ({
-                                                    resetAll: [...prevState.resetAll, resetForm],
-                                                }))
-                                            }} />
-                                            {(this.state.questionList[0].answers.length < 4 ||
-                                                !this.state.questionList[0].answers[0].content ||
-                                                !this.state.questionList[0].answers[1].content ||
-                                                !this.state.questionList[0].answers[2].content ||
-                                                !this.state.questionList[0].answers[3].content) &&
+                                        ) : (
                                                 <div>
-                                                    <span onClick={() => { this.addAnswerOption(0) }} style={{ cursor: "pointer" }}>Thêm câu trả lời</span>
+                                                    <div className="col s12">
+                                                        Mã câu hỏi<span className='red-text'>*</span>:
+                                    <div className="input-field inline" style={{ width: '30vw', marginLeft: '7vw' }}>
+                                                            <input type="text" className="validate" value={this.state.questionList[0].question.questionCode} onChange={this.handleListInputChange("questionCode", 0)} />
+                                                        </div>
+                                                    </div>
+                                                    <div className="col s2">Câu hỏi<span className='red-text'>*</span>:</div>
+                                                    <div className="col s10">
+                                                        <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionList[0].question.content} updateContent={this.handleQuillChange} quillSource="question" index={0} toolbarModules={[['image'],
+                                                        ['formula'],]} setResetAll={resetForm => {
+                                                            this.setState(prevState => ({
+                                                                resetAll: [...prevState.resetAll, resetForm],
+                                                            }))
+                                                        }} />
+                                                    </div>
                                                 </div>
-                                            }
-                                            {this.state.questionList[0].answers.length > 0 &&
-                                                <form>
-                                                    {this.renderAnswerOptions(0)}
-                                                </form>}
-                                        </div>
-                                        <div className="col s2" style={lineSpacing}>Mức khó<span className='red-text'>*</span>:</div>
-                                        <div className="col s4" style={selectSpacing}>
-                                            <CustomizedSelect
-                                                defaultValue={this.state.questionList[0].question.difficultyId}
-                                                source={{ name: "difficultyId", index: 0 }}
-                                                handleParentSelect={this.handleSelectChange}
-                                                items={[
-                                                    { value: 1, text: "Nhận biết", },
-                                                    { value: 2, text: "Thông hiểu", },
-                                                    { value: 3, text: "Vận dụng", },
-                                                    { value: 4, text: "Vận dụng cao", },
-                                                ]} />
-                                        </div>
-                                        <div className="col s3" style={lineSpacing}>Câu hỏi cùng form:</div>
-                                        <div className="col s3" style={selectSpacing}>
-                                            <CustomizedEditableSelect
-                                                defaultValue={this.state.questionList[0].question.formIdentifier}
-                                                items={this.state.formIdentifiers}
-                                                handleParentSelect={this.handleSelectChange}
-                                                source={{ name: "formIdentifier", index: 0 }}
-                                            />
-                                        </div>
-                                        <div className="col s2" style={lineSpacing}>Trình độ<span className='red-text'>*</span>:</div>
-                                        <div className="col s4" style={selectSpacing}>
-                                            <CustomizedSelect
-                                                defaultValue={this.state.questionList[0].question.gradeLevelId}
-                                                source={{ name: "gradeLevelId", index: 0 }}
-                                                handleParentSelect={this.handleSelectChange}
-                                                items={[
-                                                    { value: 1, text: "Lớp 1", },
-                                                    { value: 2, text: "Lớp 2", },
-                                                    { value: 3, text: "Lớp 3", },
-                                                    { value: 4, text: "Lớp 4", },
-                                                    { value: 5, text: "Lớp 5", },
-                                                    { value: 6, text: "Lớp 6", },
-                                                    { value: 7, text: "Lớp 7", },
-                                                    { value: 8, text: "Lớp 8", },
-                                                    { value: 9, text: "Lớp 9", },
-                                                    { value: 10, text: "Lớp 10", },
-                                                    { value: 11, text: "Lớp 11", },
-                                                    { value: 12, text: "Lớp 12", },
-                                                    { value: 0, text: "Khác", },
-                                                ]} />
-                                        </div>
-                                        <div className="col s3" style={lineSpacing}>Mô tả:</div>
-                                        <div className="col s3 input-field" style={selectSpacing}>
-                                            <input id='description' type="text" className="validate" value={this.state.questionList[0].question.description} onChange={this.handleListInputChange("description", 0)} />
-                                        </div>
-                                        <div className="col s2" style={lineSpacing}>Thuộc tính<span className='red-text'>*</span>:</div>
-                                        <div className="col s4" style={selectSpacing}>
-                                            <CustomizedSelect
-                                                defaultValue={this.state.questionList[0].question.questionTypeId}
-                                                source={{ name: "questionTypeId", index: 0 }}
-                                                handleParentSelect={this.handleSelectChange}
-                                                items={[
-                                                    { value: 1, text: "Lý thuyết", },
-                                                    { value: 2, text: "Bài tập", },
-                                                ]} />
-                                        </div>
-                                        <div className="col s3" style={lineSpacing}>Kiến thức đặc thù:</div>
-                                        <div className="col s3" style={selectSpacing}>
-                                            <CustomizedEditableSelect
-                                                defaultValue={this.state.questionList[0].question.specialKnowledge}
-                                                items={this.state.allSpecialKnowledge}
-                                                handleParentSelect={this.handleSelectChange}
-                                                source={{ name: "specialKnowledge", index: 0 }}
-                                            />
-                                        </div>
-                                        <div className="col s2" style={lineSpacing}>Hướng dẫn giải<span className='red-text'>*</span>:</div>
-                                        <div className="col s10" style={lineSpacing}>
-                                            <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionList[0].question.explanation} updateContent={this.handleQuillChange} quillSource="explanation" index={0} toolbarModules={[['image'],
-                                            ['formula'],]} setResetAll={resetForm => {
-                                                this.setState(prevState => ({
-                                                    resetAll: [...prevState.resetAll, resetForm],
-                                                }))
-                                            }} />
-                                        </div>
-                                    </div>) : (
-                                        <div>
-                                            {questionList}
-                                            <div className="flex-row" >
-                                                <i className="material-icons" style={{ fontSize: "15px" }}>add</i>
-                                                <span style={{ cursor: "pointer", fontSize: "25px" }} onClick={(e) => { this.addQuestionToSeries(e) }}>Thêm câu hỏi</span>
-                                            </div>
-                                        </div>
-                                    )}
+                                            )}
 
-                            </form>
-                        </div>
-                        <div className="line" style={{ width: "96%", marginLeft: "2%", marginBottom: "30px" }}></div>
-                        <a className="modal-action modal-close black-text lighten-1" style={{ margin: "0 1.5vw", float: "left" }}>Hủy thao tác</a>
-                        <a className="modal-action modal-close blue-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }} onClick={this.addQuestion}>Hoàn tất</a>
+                                        {!this.state.questionDetail.questionSeries ? (
+                                            <div>
+                                                <div className="col s2" style={lineSpacing}>Đáp án<span className='red-text'>*</span>:</div>
+                                                <div className="col s10" style={lineSpacing}>
+                                                    <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionList[0].tempAnswer.content} updateContent={this.handleQuillChange} quillSource="answer" index={0} toolbarModules={[['image'],
+                                                    ['formula'],]} setClick={click => this.state.questionList[0].resetContentEditor = click} setResetAll={resetForm => {
+                                                        this.setState(prevState => ({
+                                                            resetAll: [...prevState.resetAll, resetForm],
+                                                        }))
+                                                    }} />
+                                                    {(this.state.questionList[0].answers.length < 4 ||
+                                                        !this.state.questionList[0].answers[0].content ||
+                                                        !this.state.questionList[0].answers[1].content ||
+                                                        !this.state.questionList[0].answers[2].content ||
+                                                        !this.state.questionList[0].answers[3].content) &&
+                                                        <div>
+                                                            <span onClick={() => { this.addAnswerOption(0) }} style={{ cursor: "pointer" }}>Thêm câu trả lời</span>
+                                                        </div>
+                                                    }
+                                                    {this.state.questionList[0].answers.length > 0 &&
+                                                        <form>
+                                                            {this.renderAnswerOptions(0)}
+                                                        </form>}
+                                                </div>
+                                                <div className="col s2" style={lineSpacing}>Mức khó<span className='red-text'>*</span>:</div>
+                                                <div className="col s4" style={selectSpacing}>
+                                                    <CustomizedSelect
+                                                        defaultValue={this.state.questionList[0].question.difficultyId}
+                                                        source={{ name: "difficultyId", index: 0 }}
+                                                        handleParentSelect={this.handleSelectChange}
+                                                        items={[
+                                                            { value: 1, text: "Nhận biết", },
+                                                            { value: 2, text: "Thông hiểu", },
+                                                            { value: 3, text: "Vận dụng", },
+                                                            { value: 4, text: "Vận dụng cao", },
+                                                        ]} />
+                                                </div>
+                                                <div className="col s3" style={lineSpacing}>Câu hỏi cùng form:</div>
+                                                <div className="col s3" style={selectSpacing}>
+                                                    <CustomizedEditableSelect
+                                                        defaultValue={this.state.questionList[0].question.formIdentifier}
+                                                        items={this.state.formIdentifiers}
+                                                        handleParentSelect={this.handleSelectChange}
+                                                        source={{ name: "formIdentifier", index: 0 }}
+                                                    />
+                                                </div>
+                                                <div className="col s2" style={lineSpacing}>Trình độ<span className='red-text'>*</span>:</div>
+                                                <div className="col s4" style={selectSpacing}>
+                                                    <CustomizedSelect
+                                                        defaultValue={this.state.questionList[0].question.gradeLevelId}
+                                                        source={{ name: "gradeLevelId", index: 0 }}
+                                                        handleParentSelect={this.handleSelectChange}
+                                                        items={[
+                                                            { value: 1, text: "Lớp 1", },
+                                                            { value: 2, text: "Lớp 2", },
+                                                            { value: 3, text: "Lớp 3", },
+                                                            { value: 4, text: "Lớp 4", },
+                                                            { value: 5, text: "Lớp 5", },
+                                                            { value: 6, text: "Lớp 6", },
+                                                            { value: 7, text: "Lớp 7", },
+                                                            { value: 8, text: "Lớp 8", },
+                                                            { value: 9, text: "Lớp 9", },
+                                                            { value: 10, text: "Lớp 10", },
+                                                            { value: 11, text: "Lớp 11", },
+                                                            { value: 12, text: "Lớp 12", },
+                                                            { value: 0, text: "Khác", },
+                                                        ]} />
+                                                </div>
+                                                <div className="col s3" style={lineSpacing}>Mô tả:</div>
+                                                <div className="col s3 input-field" style={selectSpacing}>
+                                                    <input id='description' type="text" className="validate" value={this.state.questionList[0].question.description} onChange={this.handleListInputChange("description", 0)} />
+                                                </div>
+                                                <div className="col s2" style={lineSpacing}>Thuộc tính<span className='red-text'>*</span>:</div>
+                                                <div className="col s4" style={selectSpacing}>
+                                                    <CustomizedSelect
+                                                        defaultValue={this.state.questionList[0].question.questionTypeId}
+                                                        source={{ name: "questionTypeId", index: 0 }}
+                                                        handleParentSelect={this.handleSelectChange}
+                                                        items={[
+                                                            { value: 1, text: "Lý thuyết", },
+                                                            { value: 2, text: "Bài tập", },
+                                                        ]} />
+                                                </div>
+                                                <div className="col s3" style={lineSpacing}>Kiến thức đặc thù:</div>
+                                                <div className="col s3" style={selectSpacing}>
+                                                    <CustomizedEditableSelect
+                                                        defaultValue={this.state.questionList[0].question.specialKnowledge}
+                                                        items={this.state.allSpecialKnowledge}
+                                                        handleParentSelect={this.handleSelectChange}
+                                                        source={{ name: "specialKnowledge", index: 0 }}
+                                                    />
+                                                </div>
+                                                <div className="col s2" style={lineSpacing}>Hướng dẫn giải<span className='red-text'>*</span>:</div>
+                                                <div className="col s10" style={lineSpacing}>
+                                                    <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionList[0].question.explanation} updateContent={this.handleQuillChange} quillSource="explanation" index={0} toolbarModules={[['image'],
+                                                    ['formula'],]} setResetAll={resetForm => {
+                                                        this.setState(prevState => ({
+                                                            resetAll: [...prevState.resetAll, resetForm],
+                                                        }))
+                                                    }} />
+                                                </div>
+                                            </div>) : (
+                                                <div>
+                                                    {questionList}
+                                                    <div className="flex-row" >
+                                                        <i className="material-icons" style={{ fontSize: "15px" }}>add</i>
+                                                        <span style={{ cursor: "pointer", fontSize: "25px" }} onClick={(e) => { this.addQuestionToSeries(e) }}>Thêm câu hỏi</span>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                    </form>
+                                </div>
+                                <div className="line" style={{ width: "96%", marginLeft: "2%", marginBottom: "30px" }}></div>
+                                <a className="modal-action modal-close black-text lighten-1" style={{ margin: "0 1.5vw", float: "left" }}>Hủy thao tác</a>
+                                <a className="modal-action modal-close blue-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }} onClick={this.addQuestion}>Hoàn tất</a>
+                            </div>}
                     </div>
                 </Modal>
             </div >
