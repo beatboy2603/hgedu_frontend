@@ -5,6 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import SelectInput from '@material-ui/core/Select/SelectInput';
 
 const useStyles = makeStyles(theme => ({
     formControl: {
@@ -16,12 +17,15 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function CustomizedSelect({ items }) {
+export default function CustomizedSelect({handleParentSelect, items}) {
     const classes = useStyles();
     const [item, setItem] = React.useState('');
 
     const handleChange = event => {
         setItem(event.target.value);
+        if(handleParentSelect){
+            handleParentSelect(event.target.value);
+        }
     };
 
     const menuItems = items.map(item => {
@@ -37,8 +41,10 @@ export default function CustomizedSelect({ items }) {
                     value={item}
                     onChange={handleChange}
                 >
+                
                     {menuItems}
                 </Select>
+                
             </FormControl>
         </div>
     );
