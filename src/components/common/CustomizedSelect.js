@@ -5,6 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import SelectInput from '@material-ui/core/Select/SelectInput';
 
 const useStyles = makeStyles(theme => ({
     formControl: {
@@ -49,6 +50,7 @@ export default function CustomizedSelect(props) {
                     <MenuItem value={"default"} disabled={true}>Chọn</MenuItem> */}
                     {menuItems}
                 </Select>
+                
             </FormControl>
         </div>
     );

@@ -84,29 +84,15 @@ class UserManagemnt extends Component {
         total: res.data
       });
     });
-
-    axios.get("http://localhost:8084/api/user/banUsers").then(res => {
-      console.log(res.data + "as");
-      this.setState({
-        ...this.state,
-        ban: res.data
-      });
-    });
-
-    // axios.post("http://localhost:8084/api/user/addMod").then(res => {
-    //   console.log(res.data + "as");
-    //   this.setState({
-    //     ...this.state,
-    //     ban: res.data
-    //   });
-    // });
   }
 
   handleFormSubmit = e => {
+    let users = new Set(this.state.users);
     e.preventDefault();
     if (this.state.addModEmail !== null && this.state.addModEmail !== "") {
       document.getElementById("buttonAddMod").click();
     }
+    
   };
 
   handleInputChange = source => e => {
@@ -118,7 +104,15 @@ class UserManagemnt extends Component {
   };
 
   addMod = type => {
-    // if (this.state.addModEmail) {
+    if (this.state.addModEmail) {
+    let users = this.state.users;
+    const check = users.filter(user =>{
+      return user.email === this.state.addModEmail;
+    })
+    if(check.length!==0){
+      alert("Email này đã được sử dụng");
+      return;
+    }
     axios
       .post("http://localhost:8084/api/user/addMod", {
         email: this.state.addModEmail,
@@ -126,35 +120,15 @@ class UserManagemnt extends Component {
       })
       .then(res => {
         axios.get("http://localhost:8084/api/user/allUsers").then(res => {
-          console.log("all");
-          console.log(res.data);
+          
           this.setState({
             users: res.data
           });
         });
       });
-    // }
+    }
   };
 
-  upPremium = (user_subcription) => {
-    axios.post("http://localhost:8084/api/user/upPremium", {
-      subcriptionId: 1,
-      userId: user_subcription.userId,
-      status: true,
-      expired_date: moment(this.state.currentDate)
-        .add(this.state.selectedDatePremium, "d")
-        .format("YYYY-MM-DD HH:MM:SS"),
-      userRoleId: 1
-    }).then(res =>{
-      axios.get("http://localhost:8084/api/user/allUsers").then(res => {
-          console.log("all");
-          console.log(res.data);
-          this.setState({
-            users: res.data
-          });
-        });
-    });
-  };
 
   banUser = user => {
     // const {users} = this.state;
@@ -162,6 +136,12 @@ class UserManagemnt extends Component {
     //   return user.userId==id;
     // })
 
+    // user.isBan = true;
+    // user.isBanForever = false;
+    // user.bannedUntil = moment(this.state.currentDate)
+    //       .add(this.state.selectedDateBan, "d")
+    //       .format("YYYY-MM-DD HH:MM:SS");
+    
     axios
       .post("http://localhost:8084/api/user/banUsers", {
         userId: user.userId,
@@ -175,15 +155,13 @@ class UserManagemnt extends Component {
         school: user.school,
         isBan: true,
         isBanForever: false,
-        // bannedUntil: this.state.currentDate
         bannedUntil: moment(this.state.currentDate)
           .add(this.state.selectedDateBan, "d")
           .format("YYYY-MM-DD HH:MM:SS")
+        
       })
       .then(res => {
         axios.get("http://localhost:8084/api/user/allUsers").then(res => {
-          console.log("all");
-          console.log(res.data);
           this.setState({
             users: res.data
           });
@@ -191,7 +169,7 @@ class UserManagemnt extends Component {
       });
   };
 
-  banForever = (user) => {
+  banForever = user => {
     // const {users} = this.state;
     // const user = users.filter((user, id)=>{
     //   return user.userId==id;
@@ -215,8 +193,6 @@ class UserManagemnt extends Component {
       })
       .then(res => {
         axios.get("http://localhost:8084/api/user/allUsers").then(res => {
-          console.log("all");
-          console.log(res.data);
           this.setState({
             users: res.data
           });
@@ -225,7 +201,6 @@ class UserManagemnt extends Component {
   };
 
   unBanUser = user => {
-    console.log(user);
     axios
       .post("http://localhost:8084/api/user/unBanUsers", {
         userId: user.userId,
@@ -243,8 +218,6 @@ class UserManagemnt extends Component {
       })
       .then(res => {
         axios.get("http://localhost:8084/api/user/allUsers").then(res => {
-          console.log("all");
-          console.log(res.data);
           this.setState({
             users: res.data
           });
@@ -300,6 +273,7 @@ class UserManagemnt extends Component {
                     >
                       Thời gian ban:
                     </td>
+                    
                     <td>
                       <CustomizedSelect
                         handleParentSelect={this.handleSelectChange}
@@ -314,13 +288,7 @@ class UserManagemnt extends Component {
                     </td>
                   </tr>
                 </table>
-                {/* <div className="row" style={{
-                  marginLeft: "200px"
-                }}>
-                  
-                  
-                  
-                </div> */}
+                
                 <div className="line"></div>
                 <a
                   className="modal-action modal-close black-text lighten-1"
@@ -546,8 +514,7 @@ class UserManagemnt extends Component {
     }
   }
 
-
-  checkRoleId(user,user_subcription) {
+  checkRoleId(user) {
     if (user.roleId === 1) {
       return <td></td>;
     } else if (user.roleId === 2) {
@@ -564,469 +531,34 @@ class UserManagemnt extends Component {
         </td>
       );
     } else {
-      if(user_subcription.userRoleId === 1 && user_subcription.status === true)
-      {
-        return (
-          <td>
-            <a href="#upTeacher" className="modal-trigger icon">
-              <i title={"Người dùng này còn Premium đến ngày " +
-                    moment(user_subcription.expired_date).format("DD/MM/YYYY")} className="material-icons blue-text ">
-                import_contacts
-              </i>
-            </a>
-            <Modal
-              id="upTeacher"
-              options={{ preventScrolling: true }}
-              style={{
-                width: "40vw",
-                height: "45vh",
-                overflow: "hidden"
-              }}
-              actions={[]}
-            >
-              <div
-                className="modal-content"
-                style={{
-                  position: "absolute",
-                  top: "0",
-                  bottom: "0",
-                  left: "0",
-                  right:
-                    "-17px" /* Increase/Decrease this value for cross-browser compatibility */,
-                  overflowY: "scroll"
-                }}
-              >
-                <h5 className="center">Nâng Cấp Premium Giáo Viên</h5>
-                <div className="line" style={{ marginTop: "20px" }}></div>
-                {/* <div className="row">
-                  <Select value="0">
-                    <option value="0" disabled selected>
-                      Thời gian
-                    </option>
-                    <option value="15">15</option>
-                    <option value="30">30</option>
-                    <option value="60">60</option>
-                    <option value="90">90</option>
-                  </Select>
-                </div> */}
-                <table
-                  style={{
-                    borderCollapse: "collapse",
-                    border: "none"
-                  }}
-                >
-                  <tr>
-                    <td
-                      style={{
-                        marginLeft: "50px"
-                      }}
-                    >
-                      Thời gian nâng cấp Premium:
-                    </td>
-                    <td>
-                      <CustomizedSelect
-                        handleParentSelect={this.handleSelectChangePremium}
-                        items={[
-                          { value: 15, text: "15 ngày" },
-                          { value: 30, text: "30 ngày" },
-                          { value: 60, text: "60 ngày" },
-                          { value: 90, text: "90 ngày" }
-                        ]}
-                      />
-                    </td>
-                  </tr>
-                </table>
-                <div className="line"></div>
-                <a
-                  className="modal-action modal-close black-text lighten-1"
-                  style={{ margin: "0 1.5vw", float: "left" }}
-                >
-                  Hủy thao tác
-                </a>
-                <a
-                  id="buttonAddFolder"
-                  className="modal-action modal-close blue-text lighten-1"
-                  style={{ margin: "0 1.5vw", float: "right" }}
-                  onClick={() => this.upPremium(user_subcription)}
-                >
-                  Hoàn tất
-                </a>
-              </div>
-            </Modal>
-            <a href="#upStudent" className="modal-trigger icon">
-              <i className="material-icons grey-text text-darken-3">school</i>
-            </a>
-            <Modal
-              id="upStudent"
-              options={{ preventScrolling: true }}
-              style={{
-                width: "40vw",
-                height: "45vh",
-                overflow: "hidden"
-              }}
-              actions={[]}
-            >
-              <div
-                className="modal-content"
-                style={{
-                  position: "absolute",
-                  top: "0",
-                  bottom: "0",
-                  left: "0",
-                  right:
-                    "-17px" /* Increase/Decrease this value for cross-browser compatibility */,
-                  overflowY: "scroll"
-                }}
-              >
-                <h5 className="center">Nâng Cấp Premium Học Sinh</h5>
-                <div className="line" style={{ marginTop: "20px" }}></div>
-                <table
-                  style={{
-                    borderCollapse: "collapse",
-                    border: "none"
-                  }}
-                >
-                  <tr>
-                    <td
-                      style={{
-                        marginLeft: "50px"
-                      }}
-                    >
-                      Thời gian nâng cấp Premium:
-                    </td>
-                    <td>
-                      <CustomizedSelect
-                        handleParentSelect={this.handleSelectChange}
-                        items={[
-                          { value: 15, text: "15 ngày" },
-                          { value: 30, text: "30 ngày" },
-                          { value: 60, text: "60 ngày" },
-                          { value: 90, text: "90 ngày" }
-                        ]}
-                      />
-                    </td>
-                  </tr>
-                </table>
-                <div className="line"></div>
-                <a
-                  className="modal-action modal-close black-text lighten-1"
-                  style={{ margin: "0 1.5vw", float: "left" }}
-                >
-                  Hủy thao tác
-                </a>
-                <a
-                  id="buttonAddFolder"
-                  className="modal-action modal-close blue-text lighten-1"
-                  style={{ margin: "0 1.5vw", float: "right" }}
-                >
-                  Hoàn tất
-                </a>
-              </div>
-            </Modal>
-            <a href="#upParents" className="modal-trigger icon">
-              <i className="material-icons grey-text text-darken-3">people_alt</i>
-            </a>
-            <Modal
-              id="upParents"
-              options={{ preventScrolling: true }}
-              style={{
-                width: "40vw",
-                height: "45vh",
-                overflow: "hidden"
-              }}
-              actions={[]}
-            >
-              <div
-                className="modal-content"
-                style={{
-                  position: "absolute",
-                  top: "0",
-                  bottom: "0",
-                  left: "0",
-                  right:
-                    "-17px" /* Increase/Decrease this value for cross-browser compatibility */,
-                  overflowY: "scroll"
-                }}
-              >
-                <h5 className="center">Nâng Cấp Premium Phụ Huynh</h5>
-                <div className="line" style={{ marginTop: "20px" }}></div>
-                <table
-                  style={{
-                    borderCollapse: "collapse",
-                    border: "none"
-                  }}
-                >
-                  <tr>
-                    <td
-                      style={{
-                        marginLeft: "50px"
-                      }}
-                    >
-                      Thời gian nâng cấp Premium:
-                    </td>
-                    <td>
-                      <CustomizedSelect
-                        handleParentSelect={this.handleSelectChange}
-                        items={[
-                          { value: 15, text: "15 ngày" },
-                          { value: 30, text: "30 ngày" },
-                          { value: 60, text: "60 ngày" },
-                          { value: 90, text: "90 ngày" }
-                        ]}
-                      />
-                    </td>
-                  </tr>
-                </table>
-                <div className="line"></div>
-                <a
-                  className="modal-action modal-close black-text lighten-1"
-                  style={{ margin: "0 1.5vw", float: "left" }}
-                >
-                  Hủy thao tác
-                </a>
-                <a
-                  id="buttonAddFolder"
-                  className="modal-action modal-close blue-text lighten-1"
-                  style={{ margin: "0 1.5vw", float: "right" }}
-                >
-                  Hoàn tất
-                </a>
-              </div>
-            </Modal>
-          </td>
-        );
-      }
-      else{
-        return (
-          <td>
-            <a href="#upTeacher" className="modal-trigger icon">
-              <i className="material-icons grey-text text-darken-3">
-                import_contacts
-              </i>
-            </a>
-            <Modal
-              id="upTeacher"
-              options={{ preventScrolling: true }}
-              style={{
-                width: "40vw",
-                height: "45vh",
-                overflow: "hidden"
-              }}
-              actions={[]}
-            >
-              <div
-                className="modal-content"
-                style={{
-                  position: "absolute",
-                  top: "0",
-                  bottom: "0",
-                  left: "0",
-                  right:
-                    "-17px" /* Increase/Decrease this value for cross-browser compatibility */,
-                  overflowY: "scroll"
-                }}
-              >
-                <h5 className="center">Nâng Cấp Premium Giáo Viên</h5>
-                <div className="line" style={{ marginTop: "20px" }}></div>
-                {/* <div className="row">
-                  <Select value="0">
-                    <option value="0" disabled selected>
-                      Thời gian
-                    </option>
-                    <option value="15">15</option>
-                    <option value="30">30</option>
-                    <option value="60">60</option>
-                    <option value="90">90</option>
-                  </Select>
-                </div> */}
-                <table
-                  style={{
-                    borderCollapse: "collapse",
-                    border: "none"
-                  }}
-                >
-                  <tr>
-                    <td
-                      style={{
-                        marginLeft: "50px"
-                      }}
-                    >
-                      Thời gian nâng cấp Premium:
-                    </td>
-                    <td>
-                      <CustomizedSelect
-                        handleParentSelect={this.handleSelectChangePremium}
-                        items={[
-                          { value: 15, text: "15 ngày" },
-                          { value: 30, text: "30 ngày" },
-                          { value: 60, text: "60 ngày" },
-                          { value: 90, text: "90 ngày" }
-                        ]}
-                      />
-                    </td>
-                  </tr>
-                </table>
-                <div className="line"></div>
-                <a
-                  className="modal-action modal-close black-text lighten-1"
-                  style={{ margin: "0 1.5vw", float: "left" }}
-                >
-                  Hủy thao tác
-                </a>
-                <a
-                  id="buttonAddFolder"
-                  className="modal-action modal-close blue-text lighten-1"
-                  style={{ margin: "0 1.5vw", float: "right" }}
-                  onClick={() => this.upPremium(user,user_subcription)}
-                >
-                  Hoàn tất
-                </a>
-              </div>
-            </Modal>
-            <a href="#upStudent" className="modal-trigger icon">
-              <i className="material-icons grey-text text-darken-3">school</i>
-            </a>
-            <Modal
-              id="upStudent"
-              options={{ preventScrolling: true }}
-              style={{
-                width: "40vw",
-                height: "45vh",
-                overflow: "hidden"
-              }}
-              actions={[]}
-            >
-              <div
-                className="modal-content"
-                style={{
-                  position: "absolute",
-                  top: "0",
-                  bottom: "0",
-                  left: "0",
-                  right:
-                    "-17px" /* Increase/Decrease this value for cross-browser compatibility */,
-                  overflowY: "scroll"
-                }}
-              >
-                <h5 className="center">Nâng Cấp Premium Học Sinh</h5>
-                <div className="line" style={{ marginTop: "20px" }}></div>
-                <table
-                  style={{
-                    borderCollapse: "collapse",
-                    border: "none"
-                  }}
-                >
-                  <tr>
-                    <td
-                      style={{
-                        marginLeft: "50px"
-                      }}
-                    >
-                      Thời gian nâng cấp Premium:
-                    </td>
-                    <td>
-                      <CustomizedSelect
-                        handleParentSelect={this.handleSelectChange}
-                        items={[
-                          { value: 15, text: "15 ngày" },
-                          { value: 30, text: "30 ngày" },
-                          { value: 60, text: "60 ngày" },
-                          { value: 90, text: "90 ngày" }
-                        ]}
-                      />
-                    </td>
-                  </tr>
-                </table>
-                <div className="line"></div>
-                <a
-                  className="modal-action modal-close black-text lighten-1"
-                  style={{ margin: "0 1.5vw", float: "left" }}
-                >
-                  Hủy thao tác
-                </a>
-                <a
-                  id="buttonAddFolder"
-                  className="modal-action modal-close blue-text lighten-1"
-                  style={{ margin: "0 1.5vw", float: "right" }}
-                >
-                  Hoàn tất
-                </a>
-              </div>
-            </Modal>
-            <a href="#upParents" className="modal-trigger icon">
-              <i className="material-icons grey-text text-darken-3">people_alt</i>
-            </a>
-            <Modal
-              id="upParents"
-              options={{ preventScrolling: true }}
-              style={{
-                width: "40vw",
-                height: "45vh",
-                overflow: "hidden"
-              }}
-              actions={[]}
-            >
-              <div
-                className="modal-content"
-                style={{
-                  position: "absolute",
-                  top: "0",
-                  bottom: "0",
-                  left: "0",
-                  right:
-                    "-17px" /* Increase/Decrease this value for cross-browser compatibility */,
-                  overflowY: "scroll"
-                }}
-              >
-                <h5 className="center">Nâng Cấp Premium Phụ Huynh</h5>
-                <div className="line" style={{ marginTop: "20px" }}></div>
-                <table
-                  style={{
-                    borderCollapse: "collapse",
-                    border: "none"
-                  }}
-                >
-                  <tr>
-                    <td
-                      style={{
-                        marginLeft: "50px"
-                      }}
-                    >
-                      Thời gian nâng cấp Premium:
-                    </td>
-                    <td>
-                      <CustomizedSelect
-                        handleParentSelect={this.handleSelectChange}
-                        items={[
-                          { value: 15, text: "15 ngày" },
-                          { value: 30, text: "30 ngày" },
-                          { value: 60, text: "60 ngày" },
-                          { value: 90, text: "90 ngày" }
-                        ]}
-                      />
-                    </td>
-                  </tr>
-                </table>
-                <div className="line"></div>
-                <a
-                  className="modal-action modal-close black-text lighten-1"
-                  style={{ margin: "0 1.5vw", float: "left" }}
-                >
-                  Hủy thao tác
-                </a>
-                <a
-                  id="buttonAddFolder"
-                  className="modal-action modal-close blue-text lighten-1"
-                  style={{ margin: "0 1.5vw", float: "right" }}
-                >
-                  Hoàn tất
-                </a>
-              </div>
-            </Modal>
-          </td>
-        );
-      }
-      
+      return (
+        <td>
+          <i
+            className="material-icons grey-text text-darken-3 "
+            style={{
+              marginRight: "10px"
+            }}
+          >
+            import_contacts
+          </i>
+          <i
+            className="material-icons grey-text text-darken-3"
+            style={{
+              marginRight: "10px"
+            }}
+          >
+            school
+          </i>
+          <i
+            className="material-icons grey-text text-darken-3 "
+            style={{
+              marginRight: "10px"
+            }}
+          >
+            people_alt
+          </i>
+        </td>
+      );
     }
   }
 
@@ -1035,12 +567,7 @@ class UserManagemnt extends Component {
     const { total } = this.state;
     
 
-    const iconColor = {
-      color: "#3A3A3A"
-    };
-    const lineSpacing = {
-      marginTop: "25px"
-    };
+    
     return (
       <div className="containerFluid">
         <div className="row s12">
@@ -1132,17 +659,6 @@ class UserManagemnt extends Component {
                     Loại người dùng
                   </th>
                   <th>
-                    {/* <div className="col s3">
-                      <Select value="0">
-                        <option value="0" disabled selected>
-                          Tất cả
-                        </option>
-                        <option value="1">Giáo Viên</option>
-                        <option value="2">Học Sinh</option>
-                        <option value="3">Phụ Huynh</option>
-                        <option value="4">Moderator</option>
-                      </Select>
-                    </div> */}
                     <CustomizedSelect
                       items={[
                         { value: 1, text: "Giáo Viên" },
@@ -1173,26 +689,20 @@ class UserManagemnt extends Component {
                 <th>Tên hiển thị</th>
                 <th></th>
               </tr>
-              {users.map((user,user_subcription) => {
+              {users.map((user  ) => {
                 return (
-                  <tr key={user.id} >
+                  <tr key={user.id}>
                     <td>
                       <Checkbox></Checkbox>
                     </td>
                     <td>{user.email}</td>
-                    {this.checkRoleId(user,user_subcription)}
+                    {this.checkRoleId(user)}
                     <td>{user.fullName}</td>
                     {this.checkBan(user)}
+                    
                   </tr>
                 );
               })
-              /* {<tr>
-                                <td><Checkbox checked="check"></Checkbox></td>
-                                <td>abc@gmail.com</td>
-                                <td>Teacher</td>
-                                <td className="setBlue">VIP</td>
-                                <td>Phan Hữu Đức</td>
-                            </tr>} */
               }
             </table>
           </div>
