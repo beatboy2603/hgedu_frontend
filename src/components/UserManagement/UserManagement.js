@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from "react";
 import SwitchUI from "@material-ui/core/Switch";
 import { Checkbox, TextField } from "@material-ui/core";
@@ -52,7 +51,7 @@ class UserManagemnt extends Component {
     this.checkBan = this.checkBan.bind(this);
   }
 
-  handleSelectChange = value => {
+  handleSelectChange = (source, value) => {
     this.setState({
       selectedDateBan: value
     });
