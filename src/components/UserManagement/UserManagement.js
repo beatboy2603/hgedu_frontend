@@ -47,10 +47,19 @@ class UserManagemnt extends Component {
       addModEmail: null,
       selectedDateBan: null,
       selectedDatePremium: null,
-      currentDate: date
+      currentDate: date,
+      
+      error: 'Email không được để trống!',
+      valid: false,
+      responseMessage:'',
+      
     };
     this.checkRoleId = this.checkRoleId.bind(this);
     this.checkBan = this.checkBan.bind(this);
+    // this.unBanUser = this.unBanUser.bind(this);
+    // this.banUser = this.banUser.bind(this);
+    // this.banForever = this.banForever.bind(this);
+    // this.addMod = this.addMod.bind(this);
   }
 
   handleSelectChange = value => {
@@ -88,7 +97,6 @@ class UserManagemnt extends Component {
   }
 
   handleFormSubmit = e => {
-    let users = new Set(this.state.users);
     e.preventDefault();
     if (this.state.addModEmail !== null && this.state.addModEmail !== "") {
       document.getElementById("buttonAddMod").click();
@@ -105,33 +113,55 @@ class UserManagemnt extends Component {
   };
 
   addMod = type => {
+    var vnf_regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    var email = this.state.addModEmail;
     if (this.state.addModEmail) {
-    let users = this.state.users;
-    const check = users.filter(user =>{
-      return user.email === this.state.addModEmail;
-    })
-    if(check.length!==0){
-      alert("Email này đã được sử dụng");
-      return;
-    }
-    axios
-      .post("http://localhost:8084/api/user/addMod", {
-        email: this.state.addModEmail,
-        roleId: 2
+      let users = this.state.users;
+      const check = users.filter(user =>{
+        return user.email === this.state.addModEmail;
       })
-      .then(res => {
-        axios.get("http://localhost:8084/api/user/allUsers").then(res => {
-          
-          this.setState({
-            users: res.data
+      if(check.length!==0){
+        alert("Email này đã được sử dụng!!!");
+        return;
+      }
+      if (vnf_regex.test(email) === false) {
+        this.setState({
+            valid: false
+        });
+        alert("Email không đúng định dạng!!!")
+        return;
+      }
+      
+      axios
+        .post("http://localhost:8084/api/user/addMod", {
+          email: this.state.addModEmail,
+          roleId: 2
+        })
+        .then(res => {
+          axios.get("http://localhost:8084/api/user/allUsers").then(res => {
+            
+            this.setState({
+              users: res.data
+            });
           });
         });
-      });
+      }
+      else {
+        this.setState({
+            valid: false
+        })
+        alert("Email không được để trống1!!")
+        return;
     }
+    this.setState({
+      valid: true
+    })
   };
 
+  
 
-  banUser = user => {
+
+  banUser = (user,index) => {
     // const {users} = this.state;
     // const user = users.filter((user, id)=>{
     //   return user.userId==id;
@@ -142,6 +172,10 @@ class UserManagemnt extends Component {
     // user.bannedUntil = moment(this.state.currentDate)
     //       .add(this.state.selectedDateBan, "d")
     //       .format("YYYY-MM-DD HH:MM:SS");
+    
+    // user = this.state.users.map(user,index);
+    console.log(user);
+    console.log(index);
     
     axios
       .post("http://localhost:8084/api/user/banUsers", {
@@ -226,7 +260,7 @@ class UserManagemnt extends Component {
       });
   };
 
-  checkBan(user) {
+  checkBan(user,index) {
     if (user.isBan === false) {
       if (this.state.selectedDateBan === 100) {
         return (
@@ -388,7 +422,8 @@ class UserManagemnt extends Component {
                   id="buttonBanUser"
                   className="modal-action modal-close blue-text lighten-1"
                   style={{ margin: "0 1.5vw", float: "right" }}
-                  onClick={() => this.banUser(user)}
+                  key ={index}
+                  onClick={() => this.banUser(user,index)}
                 >
                   Hoàn tất
                 </a>
@@ -519,18 +554,34 @@ class UserManagemnt extends Component {
     if (user.roleId === 1) {
       return <td></td>;
     } else if (user.roleId === 2) {
-      return (
-        <td>
-          <i
-            className="material-icons blue-text text-darken-3"
-            style={{
-              marginLeft: "35px"
-            }}
-          >
-            create
-          </i>
-        </td>
-      );
+      if(user.userSub){
+        return (
+          <td>
+            <i
+              className="material-icons blue-text text-darken-3"
+              style={{
+                marginLeft: "35px"
+              }}
+            >
+              create
+            </i>
+          </td>
+        );
+      }
+      else{
+        return (
+          <td>
+            <i
+              className="material-icons grey-text text-darken-3"
+              style={{
+                marginLeft: "35px"
+              }}
+            >
+              create
+            </i>
+          </td>
+        );
+      }
     } else {
       return (
         <td>
@@ -566,6 +617,7 @@ class UserManagemnt extends Component {
   render() {
     const { users } = this.state;
     const { total } = this.state;
+    const isBan = this.state.users.map;
 
     
     return (
@@ -619,12 +671,14 @@ class UserManagemnt extends Component {
                         >
                           <div className="input-field inline col s12">
                             <input
+                              pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
                               id="modEmailInput"
                               type="text"
                               className="validate"
                               onChange={this.handleInputChange("email")}
                               value={this.state.addModEmail}
                             />
+                            
                             <label
                               htmlFor="modEmailInput"
                               style={{ userSelect: "none" }}
@@ -689,7 +743,7 @@ class UserManagemnt extends Component {
                 <th>Tên hiển thị</th>
                 <th></th>
               </tr>
-              {users.map((user  ) => {
+              {users.map((user,index ) => {
                 return (
                   <tr key={user.id}>
                     <td>
@@ -698,7 +752,7 @@ class UserManagemnt extends Component {
                     <td>{user.email}</td>
                     {this.checkRoleId(user)}
                     <td>{user.fullName}</td>
-                    {this.checkBan(user)}
+                    {this.checkBan(user,index)}
                     
                   </tr>
                 );
