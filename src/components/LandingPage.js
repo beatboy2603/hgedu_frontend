@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import { gapi } from "gapi-script";
 import axios from "axios";
 import { GoogleLogin } from 'react-google-login';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { serverUrl, setCookie } from './common/common';
-import auth from './common/Auth';
-import { Loading } from './common/Loading';
 import Logo from '../resources/logo_transparent.png';
 import BackGroundIMG from '../resources/landing_page.jpg';
 import SubPost from './SubPost';

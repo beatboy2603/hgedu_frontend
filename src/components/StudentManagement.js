@@ -1,18 +1,7 @@
 import React, { Component } from 'react';
-import { Link, Route, Switch } from 'react-router-dom';
-import { connect } from 'react-redux';
-import CustomizedTreeView from './common/CustomizedTreeView';
+import { Link } from 'react-router-dom';
 import SimpleTable from './common/TempTable2';
-import axios from 'axios';
 import { Modal } from 'react-materialize';
-import KnowledgeGroup from './personalLibrary/question/KnowledgeGroup';
-import PersonalLibraryFiller from './personalLibrary/PersonalLibraryFiller';
-import Quill from 'quill';
-import ReactQuill from 'react-quill';
-import SwitchUI from '@material-ui/core/Switch';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Select from '@material-ui/core/Select';
 
 class StudentManagement extends Component {
 

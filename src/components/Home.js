@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import MainPost from './MainPost';
 import SubPost from './SubPost';
 import Advertisement from './common/Advertisement';
 import { Carousel } from 'react-materialize';
-import { serverUrl } from "./common/common";
-import { axiosPost } from "../common/common";
-import { Modal } from 'react-materialize';
 import axios from 'axios';
+import SquareAd1 from '../resources/squareAd1.png';
+import SquareAd2 from '../resources/squareAd2.png';
 
 class Home extends Component {
 
@@ -33,8 +32,6 @@ class Home extends Component {
             <div className="home row">
                 <div className="col s1"></div>
                 <div className="col s7 container row">
-                    <button onClick={()=>{console.log(this.props.user);
-                    }}>click me</button>
                     <h5 className="blue-text text-darken-2 bold font-montserrat">Tin tức</h5>
                     {this.state.newsList.length !== 0 && 
     
@@ -61,8 +58,8 @@ class Home extends Component {
                     }
                 </div>
                 <div className="col s3 flex-column">
-                    <Advertisement />
-                    <Advertisement />
+                    <Advertisement imgSrc={SquareAd1} customStyle={{margin:"50px auto"}}/>
+                    <Advertisement imgSrc={SquareAd2} customStyle={{margin:"50px auto"}}/>
                 </div>
             </div >
         )

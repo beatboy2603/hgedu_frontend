@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
 import { Modal } from 'react-materialize';
-import ReactQuill, { Quill } from 'react-quill';
+import { Quill } from 'react-quill';
 
 class SubPost extends Component {
     constructor(props) {

@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import TreeView from '@material-ui/lab/TreeView';
 import TreeItem from '@material-ui/lab/TreeItem';
 import Typography from '@material-ui/core/Typography';
-import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import DescriptionIcon from '@material-ui/icons/Description';
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -12,7 +11,7 @@ import Folder from '@material-ui/icons/Folder';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import { withRouter } from 'react-router-dom';
-import { Modal } from 'react-materialize';
+
 
 const useTreeItemStyles = makeStyles(theme => ({
     root: {
@@ -69,31 +68,8 @@ function StyledTreeItem(props) {
     const classes = useTreeItemStyles();
     const { labelText, labelIcon: LabelIcon, labelInfo, color, bgColor, ...other } = props;
 
-    const over = e => {
-        if (props.renderEditDelete) {
-            e.stopPropagation();
-            if (props.parentFolderId !== 0 && !props.hasChildren && props.id !== 4) {
-                document.getElementById(props.id).querySelector(".deleteFolderBtn").style.display = "block";
-            }
-            if (props.parentFolderId !== 0) {
-                document.getElementById(props.id).querySelector(".editFolderBtn").style.display = "block";
-            }
-        }
-    };
-    const out = e => {
-        if (props.renderEditDelete) {
-            e.stopPropagation();
-            if (props.parentFolderId !== 0 && !props.hasChildren && props.id !== 4) {
-                document.getElementById(props.id).querySelector(".deleteFolderBtn").style.display = "none";
-            }
-            if (props.parentFolderId !== 0) {
-                document.getElementById(props.id).querySelector(".editFolderBtn").style.display = "none";
-            }
-        }
-    };
-
     return (
-        <TreeItem onMouseOver={over} onMouseOut={out}
+        <TreeItem
             label={
                 <div className={classes.labelRoot}>
                     <LabelIcon color="inherit" className={classes.labelIcon} />
@@ -103,15 +79,6 @@ function StyledTreeItem(props) {
                     <Typography variant="caption" color="inherit">
                         {labelInfo}
                     </Typography>
-
-                    <div className="deleteFolderBtn" style={{ display: "none", color: "red" }} onClick={() => { props.deleteFolder(props.id) }}>
-                        <DeleteOutlineIcon style={{ fontSize: "24px" }} />
-                    </div>
-                    <div className="editFolderBtn" style={{ display: "none" }}>
-                        <a href="#editFolderName" className="modal-trigger" onClick={() => { props.setCurrentFolder(props.folder) }}>
-                            <i className="material-icons md-18 grey-text text-darken-3">edit</i>
-                        </a>
-                    </div>
                 </div>
             }
             style={{
@@ -140,7 +107,7 @@ StyledTreeItem.propTypes = {
 
 const useStyles = makeStyles({
     root: {
-        minHeight: 264,
+        minHeight: 50,
         flexGrow: 1,
         maxWidth: 400,
     },
@@ -149,10 +116,10 @@ const useStyles = makeStyles({
 function CustomizedTreeView(props) {
     const classes = useStyles();
 
-    const { folders, setCurrentFolder, handleFormSubmit, addFolderName, addFolder, handleInputChange, updateFolder, renderEditDelete } = props;
+    const { folders, setCurrentFolder } = props;
 
     const handleClick = (folder, path) => {
-        props.history.push('/personalLibrary/' + path + "/" + folder.folderId);
+        // props.history.push('/personalLibrary/' + path + "/" + folder.folderId);
         // setCurrentFolder(folder.folderId, folder.folderTypeId, folder.subTypeId);
         setCurrentFolder(folder);
     }
@@ -180,23 +147,23 @@ function CustomizedTreeView(props) {
             })
             if (subfolders.length > 0) {
                 return (
-                    <StyledTreeItem renderEditDelete={renderEditDelete} setCurrentFolder={setCurrentFolder} folder={folder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={Folder} color="#1a73e8"
+                    <StyledTreeItem setCurrentFolder={setCurrentFolder} folder={folder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={Folder} color="#1a73e8"
                         bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={true} onClick={() => setCurrentFolder(folder)}>
                         <div style={{ paddingLeft: "10px" }}>{recursiveTree(folders, subfolders)}</div>
                     </StyledTreeItem>
                 )
             } else {
                 if (folder.folderTypeId == 1) {
-                    return <StyledTreeItem renderEditDelete={renderEditDelete} setCurrentFolder={setCurrentFolder} folder={folder} deleteFolder={props.deleteFolder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={FolderOpenIcon} color="#1a73e8"
+                    return <StyledTreeItem setCurrentFolder={setCurrentFolder} folder={folder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={FolderOpenIcon} color="#1a73e8"
                         bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={() => setCurrentFolder(folder)} />
                 } else if (folder.folderTypeId == 2) {
-                    return <StyledTreeItem renderEditDelete={renderEditDelete} setCurrentFolder={setCurrentFolder} folder={folder} deleteFolder={props.deleteFolder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={DescriptionIcon} color="#1a73e8"
+                    return <StyledTreeItem setCurrentFolder={setCurrentFolder} folder={folder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={DescriptionIcon} color="#1a73e8"
                         bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={() => handleClick(folder, "knowledgeGroup")} />
                 } else if (folder.folderTypeId == 3) {
-                    return <StyledTreeItem renderEditDelete={renderEditDelete} setCurrentFolder={setCurrentFolder} folder={folder} deleteFolder={props.deleteFolder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={DescriptionIcon} color="#1a73e8"
+                    return <StyledTreeItem setCurrentFolder={setCurrentFolder} folder={folder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={DescriptionIcon} color="#1a73e8"
                         bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={() => handleClick(folder, "test")} />
                 } else {
-                    return <StyledTreeItem renderEditDelete={renderEditDelete} setCurrentFolder={setCurrentFolder} folder={folder} deleteFolder={props.deleteFolder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={FolderOpenIcon} color="#1a73e8"
+                    return <StyledTreeItem setCurrentFolder={setCurrentFolder} folder={folder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={FolderOpenIcon} color="#1a73e8"
                         bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={() => setCurrentFolder(folder)} />
                 }
             }
@@ -255,30 +222,6 @@ function CustomizedTreeView(props) {
             </StyledTreeItem>
             <StyledTreeItem nodeId="4" labelText="History" labelIcon={Label} /> */}
             {folderNav}
-            <Modal id="editFolderName" options={{ preventScrolling: true }} style={{ width: "40vw", height: "45vh", overflow: "hidden", borderRadius: "25px" }} actions={[]}>
-                <div className="modal-content" style={{
-                    position: "absolute",
-                    top: "0",
-                    bottom: "0",
-                    left: "0",
-                    right: "-17px", /* Increase/Decrease this value for cross-browser compatibility */
-                    overflowY: "scroll"
-                }}>
-                    <h5 className="center">Sửa tên thư mục</h5>
-                    <div className="line" style={{ marginTop: "30px" }}></div>
-                    <div className="row">
-                        <form className="row col s12" onSubmit={handleFormSubmit}>
-                            <div className="input-field inline col s12">
-                                <input id='folderNameInput' type="text" className="validate" onChange={(e) => { handleInputChange(e.target.value) }} value={addFolderName} />
-                                <label htmlFor="folderNameInput" style={{ userSelect: "none" }}>Tên thư mục</label>
-                            </div>
-                        </form>
-                    </div>
-                    {/* <div className="line"></div> */}
-                    <a className="modal-action modal-close black-text lighten-1" style={{ margin: "0 1.5vw", float: "left" }}>Hủy thao tác</a>
-                    <a id="buttonAddFolder" className="modal-action modal-close blue-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }} onClick={() => updateFolder()}>Hoàn tất</a>
-                </div>
-            </Modal>
         </TreeView>
     );
 }

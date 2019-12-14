@@ -1,12 +1,45 @@
 import React, { Component } from 'react';
-import { Modal, Button, Collapsible, CollapsibleItem } from 'react-materialize';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Modal, Collapsible, CollapsibleItem } from 'react-materialize';
 import CustomizedSlider from '../../common/CustomizedSlider';
+import Divider from '@material-ui/core/Divider';
+import CustomizedTreeView from './CustomizedTreeView';
+import CustomizedTable from './CustomizedTable';
 
-export default class ModalTest extends Component {
+class ModalTest extends Component {
+
+    state = {
+        folders: [],
+        questionFolders: [],
+        testFolders: [],
+        currentFolder: null,
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+            if (this.props.folder.folders) {
+                console.log("nani")
+                let questionFolders = this.props.folder.folders.filter((el, i) => {
+                    return el.subGroupId == 1;
+                })
+                let testFolders = this.props.folder.folders.filter((el, i) => {
+                    return el.subGroupId == 2;
+                })
+                this.setState({
+                    folders: this.props.folder.folders,
+                    questionFolders,
+                    testFolders,
+                })
+            }
+        }, 1000);
+    }
+
     render() {
         return (
             <div>
                 <div style={{ zIndex: "100" }}>
+                    <button onClick={()=>{console.log(this.state)}}>click me</button>
                     <a href="#addTest" className="btn-floating btn-large blue modal-trigger">
                         <i className="material-icons" onClick={() => { console.log(this.state) }}>add</i>
                     </a>
@@ -46,8 +79,6 @@ export default class ModalTest extends Component {
                                     </div>
                                 </div>
                             </div>
-
-
                             <div className="line" style={{ width: "96%", marginLeft: "2%", marginBottom: "30px" }}></div>
                             <a className="modal-action modal-close black-text lighten-1" style={{ margin: "0 1.5vw", float: "left" }}>Hủy thao tác</a>
                         </div>
@@ -72,7 +103,7 @@ export default class ModalTest extends Component {
                                     </div>
                                     <div className="col s12">
                                         Mã đề thi<span className='red-text'>*</span>:
-                                        <div className="input-field inline" style={{ width: '5vw', marginLeft: '5vw' }}>
+                                        <div className="input-field inline" style={{ width: '10vw', marginLeft: '5vw' }}>
                                             <input id='testCode' type="text" className="validate" />
                                         </div>
                                     </div>
@@ -174,7 +205,7 @@ export default class ModalTest extends Component {
                             <a href="#addTest" className="modal-action modal-close black-text lighten-1 modal-trigger" style={{ margin: "0 1.5vw", float: "right" }}>Quay lại</a>
                         </div>
                     </Modal>
-                    <Modal id="customGen" options={{ preventScrolling: true }} style={{ width: "60vw", height: "80vh", overflow: "hidden" }} actions={[]}>
+                    <Modal id="customGen" options={{ preventScrolling: true }} style={{ width: "60vw", height: "80vh", maxHeight: "80vh", overflow: "hidden" }} actions={[]}>
                         <div style={{ paddingTop: "52.5vh" }}></div>
                         <div className="modal-content" style={{
                             position: "absolute",
@@ -194,20 +225,19 @@ export default class ModalTest extends Component {
                                     </div>
                                     <div className="col s12">
                                         Mã đề thi<span className='red-text'>*</span>:
-                                        <div className="input-field inline" style={{ width: '5vw', marginLeft: '5vw' }}>
+                                        <div className="input-field inline" style={{ width: '10vw', margin: '0 0 0 5vw' }}>
                                             <input id='testCode' type="text" className="validate" />
                                         </div>
                                     </div>
                                     <div className="col s12">
                                         Tên đề thi<span className='red-text'>*</span>:
-                                        <div className="input-field inline" style={{ width: '30vw', marginLeft: '5vw' }}>
+                                        <div className="input-field inline" style={{ width: '30vw', margin: '0 0 0 5vw' }}>
                                             <input id='testName' type="text" className="validate" />
                                         </div>
                                     </div>
                                 </form>
                             </div>
                             <div className="line" style={{ width: "96%", marginLeft: "2%", marginBottom: "30px" }}></div>
-
                             <div className="row">
                                 <div className='col s12'>
                                     <p className="blue-text lighten-3">Chất lượng đề</p>
@@ -246,7 +276,7 @@ export default class ModalTest extends Component {
                                 </div>
                                 <Collapsible className="z-depth-0" style={{ border: "none" }}>
                                     <CollapsibleItem header="Danh sách câu hỏi" icon={<i className="material-icons">code</i>}>
-                                        <div className="row">
+                                        {/* <div className="row">
                                             <div className="col s12">
                                                 <p className="blue-text lighten-3">Bộ lọc</p>
                                             </div>
@@ -264,11 +294,13 @@ export default class ModalTest extends Component {
                                             <div className="col s12">
                                                 <p className="blue-text lighten-3">Chọn câu hỏi</p>
                                             </div>
-                                        </div>
+                                        </div> */}
                                         <div className="row" style={{ marginBottom: "0" }}>
-                                            <div className="row col s4" style={{ height: "100%", borderRight: "2px solid #BDBDBD" }}>
+                                            <div className="row col s4">
                                                 <p className="blue-text lighten-3">Thư viện câu hỏi</p>
+                                                <CustomizedTreeView folders={this.state.questionFolders} setCurrentFolder={()=>{}} deleteFolder={()=>{}} handleFormSubmit={()=>{}} addFolderName={""} addFolder={()=>{}} handleInputChange={()=>{}} updateFolder={()=>{}} renderEditDelete={false} />
                                             </div>
+
                                             <div className="row col s8" style={{ height: "100%", borderLeft: "2px solid #BDBDBD" }}>
                                                 <div className='col s12'>
                                                     <h5 className="blue-text text-darken-3 font-montserrat">Phản ứng hóa học</h5>
@@ -475,3 +507,10 @@ export default class ModalTest extends Component {
         )
     }
 }
+
+const mapStateToProps = state => ({
+    user: state.user,
+    folder: state.folder,
+})
+
+export default connect(mapStateToProps)(withRouter(ModalTest));

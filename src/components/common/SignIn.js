@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import Logo from '../../resources/logo.png';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
-import { serverUrl, setCookie } from './common';
-import axios from 'axios';
+import { setCookie } from './common';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 import { compose } from 'redux'

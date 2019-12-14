@@ -9,6 +9,8 @@ import classReducer from '../../reducers/classReducer';
 import examReducer from '../../reducers/examReducer';
 import examTestReducer from '../../reducers/examTestReducer';
 import folderReducer from '../../reducers/folderReducer';
+import abbreviationReducer from '../../reducers/abbreviationReducer';
+import questionReducer from '../../reducers/questionReducer';
 
 const persistConfig = {
     key: 'root',
@@ -24,6 +26,8 @@ const reducers = combineReducers({
     exam: examReducer,
     examTest: examTestReducer,
     folder: folderReducer,
+    abbreviation: abbreviationReducer,
+    question: questionReducer,
 })
 
 const rootReducer = (state, action) => {

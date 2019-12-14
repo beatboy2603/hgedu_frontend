@@ -112,12 +112,6 @@ i{
   border-radius: 20px;
 }
 
-.advertisement{
-  margin: 10px;
-  min-height: 300px;
-  min-width: 100px;
-}
-
 .carousel{
   position: relative;
   top: -80px;
@@ -621,4 +615,9 @@ i{
 
 .exam-tabs .PrivateTabIndicator-colorSecondary-300 {
   background-color: #086bd1
+}
+
+.abbreviationLibrary .materialize-textarea{
+  min-height: 20vh;
+  max-height: 20vh;
 }

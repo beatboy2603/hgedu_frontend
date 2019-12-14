@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
-import { Modal, Button, Collapsible, CollapsibleItem } from 'react-materialize';
+import { Modal, Collapsible, CollapsibleItem } from 'react-materialize';
 import CustomizedSelect from '../../common/CustomizedSelect';
 import ContentEditor from "./ContentEditor";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import Toggle from "../../common/Toggle";
 import CustomizedEditableSelect from '../../common/CustomizedEditableSelect';
-import { InlineMath, BlockMath } from 'react-katex';
+import { InlineMath } from 'react-katex';
 import axios from 'axios';
 import FormControl from '@material-ui/core/FormControl';
 import { serverUrl } from '../../common/common';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 class ModalQuestion extends Component {
@@ -55,7 +55,9 @@ class ModalQuestion extends Component {
     checkValid = () => {
         let valid = true;
         if (this.state.questionDetail.questionSeries) {
-
+            if(!this.state.questionDetail.questionCode||this.isQuillEmpty(this.state.questionDetail.content)){
+                valid=false;
+            }
         }
         this.state.questionList.map((el, i) => {
             if (this.isQuillEmpty(el.question.content)) {
@@ -672,7 +674,7 @@ class ModalQuestion extends Component {
         })
 
         return (
-            <div>
+            <div onClick={()=>{this.checkValid()}}>
                 <a href="#addQuestion" style={{ position: "fixed" }} className="btn-floating btn-large my-floating-btn blue modal-trigger">
                     <i className="material-icons">add</i>
                 </a>
@@ -734,7 +736,7 @@ class ModalQuestion extends Component {
                                     )}
 
                                 <div className="col s12" style={lineSpacing}>
-                                    <Toggle label="Chế độ câu hỏi chùm" handleToggleChange={this.handleToggleChange} />
+                                    <Toggle label="Chế độ câu hỏi chùm" handleToggleChange={this.handleToggleChange} customStyle={{ position: "relative", left: "-20px" }}/>
                                 </div>
 
                                 {!this.state.questionDetail.questionSeries ? (
@@ -864,6 +866,7 @@ class ModalQuestion extends Component {
 const mapStateToProps = state => ({
     user: state.user,
     folder: state.folder,
+    question: state.question,
 })
 
 export default connect(mapStateToProps)(withRouter(ModalQuestion));

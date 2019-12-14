@@ -5,7 +5,6 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import CustomizedDatePicker from '../common/CustomizedDatePicker';
-import { DatePicker } from "react-materialize";
 import { Link, withRouter } from 'react-router-dom';
 import { serverUrl, setCookie } from './common';
 import axios from 'axios';

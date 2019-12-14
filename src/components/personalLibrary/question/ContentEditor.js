@@ -3,10 +3,8 @@ import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css';
 import ImageResize from '@capaj/quill-image-resize-module-react';
-import axios, { post } from 'axios';
+import axios from 'axios';
 // import { throwStatement } from '@babel/types';
-import { debounce } from 'lodash';
-import { throwStatement } from '@babel/types';
 import { connect } from 'react-redux';
 
 // BEGIN allow image alignment styles
@@ -201,7 +199,7 @@ class ContentEditor extends Component {
      */
     getImageData = (delta) => {
         var imageData = []
-        if (delta&&delta.ops) {
+        if (delta && delta.ops) {
             delta.ops.map((deltaPart) => {
                 if (deltaPart.insert !== undefined && deltaPart.insert.image) {
                     imageData.push(deltaPart.insert.image)
@@ -383,8 +381,8 @@ class ContentEditor extends Component {
 
     katexMap = Object.create(null);
     textMap = Object.create(null);
-    mapLongestWord = 5;
-    
+    mapLongestWord = -1;
+
     componentDidMount() {
         this.editor = this.reactEditor.current.getEditor();
         if (this.props.setClick) {
@@ -393,8 +391,19 @@ class ContentEditor extends Component {
         if (this.props.setResetAll) {
             this.props.setResetAll(this.resetForm);
         }
-        this.textMap["abc"] = "một cái đéo gì đó";
-        this.katexMap["e=mc2"]= "e=mc^2";
+        if (this.props.abbreviation && this.props.abbreviation.abbreviations) {
+            this.props.abbreviation.abbreviations.map((el, i) => {
+                if (el.isKatex) {
+                    this.katexMap[el.shortenForm] = el.originalForm;
+                } else {
+                    this.textMap[el.shortenForm] = el.originalForm;
+                }
+                if (el.shortenForm.length > this.mapLongestWord) {
+                    this.mapLongestWord = el.shortenForm.length
+                }
+            })
+            console.log()
+        }
         //console.log("user:", this.props.user.role)
     }
 
@@ -435,6 +444,7 @@ class ContentEditor extends Component {
                     }
                     var splitedText = text.split(" ");
                     var wordAtCaret = splitedText[splitedText.length - 1];
+                    console.log(this.katexMap[wordAtCaret]);
                     if (this.katexMap[wordAtCaret] != null) {
                         this.editor.deleteText(range.index - wordAtCaret.length, wordAtCaret.length);
                         this.editor.insertEmbed(range.index - wordAtCaret.length, 'formula', this.katexMap[wordAtCaret]);
@@ -471,6 +481,7 @@ class ContentEditor extends Component {
 
 const mapStateToProps = state => ({
     user: state.user,
+    abbreviation: state.abbreviation,
 })
 
 export default connect(mapStateToProps)(ContentEditor);

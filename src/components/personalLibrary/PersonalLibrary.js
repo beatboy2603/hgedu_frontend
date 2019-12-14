@@ -2,28 +2,14 @@ import React, { Component } from 'react';
 import { Link, Route, Switch, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import CustomizedTreeView from '../common/CustomizedTreeView';
-import SimpleTable from '../common/TempTable';
 import { serverUrl } from "../common/common";
 import axios from 'axios';
-import { Modal, Button } from 'react-materialize';
+import { Modal } from 'react-materialize';
 import KnowledgeGroup from './question/KnowledgeGroup';
 import PersonalLibraryFiller from './PersonalLibraryFiller';
-import CustomizedSelect from '../common/CustomizedSelect';
-import Quill from 'quill';
-import ReactQuill from 'react-quill';
-import SwitchUI from '@material-ui/core/Switch';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Select from '@material-ui/core/Select';
-import { makeStyles } from '@material-ui/core/styles';
-import Toggle from "../common/Toggle";
-import katex from 'katex';
 import 'katex/dist/katex.min.css';
-import Editor from "../common/Editor";
-import { debounce } from 'lodash';
-import ModalTest from './test/ModalTest';
 import CustomizedTable from './question/CustomizedTable';
-window.katex = katex;
+import TestQuestions from './test/TestQuestions';
 
 
 // const useStyles = makeStyles(theme => ({
@@ -262,23 +248,17 @@ class PersonalLibrary extends Component {
                 folders: folders,
             })
             this.props.dispatch({ type: "UPDATE_FOLDERS", payload: folders })
-            // //why folderId = 0 or "0" error??
-            // let folderTemp = {
-            //     folderId: "temp",
-            //     teacherId: 13,
-            //     folderName: "dis cu luon",
-            //     folderTypeId: 3,
-            //     parentFolderId: 38,
-            // }
-
-            // folders.push(folderTemp);
-
-            // console.log(this.state.folders);
-            // console.log(res);
-            // console.log(folderTemp);
         }).catch(function (error) {
             // handle error
             console.log(error);
+        });
+        axios.get(serverUrl + "api/abbreviation/" + this.props.user.uid).then(res => {
+            let abbreviations = res.data;
+            this.props.dispatch({ type: "UPDATE_ABBREVIATIONS", payload: abbreviations })
+        })
+        axios.get(serverUrl + "api/question/" + this.props.user.uid).then(res => {
+            let questions = res.data;
+            this.props.dispatch({ type: "UPDATE_QUESTIONS", payload: questions })
         })
     }
 
@@ -290,7 +270,6 @@ class PersonalLibrary extends Component {
                     {/* filler */}
                     <div className="col s2"></div>
                     <div className="col s10">
-                        <button onClick={() => { console.log(this.state) }}>Click me</button>
                         <Link to='/personalLibrary'><h5 className="blue-text text-darken-3 bold font-montserrat">Thư viện</h5></Link>
                         {/* modals */}
                         <div>
@@ -408,7 +387,7 @@ class PersonalLibrary extends Component {
 
                         </div>
                         <div className="line"></div>
-                        <CustomizedTreeView folders={this.state.folders} setCurrentFolder={this.setCurrentFolder} deleteFolder={this.deleteFolder} handleFormSubmit={this.handleFormSubmit} addFolderName={this.state.addFolderName} addFolder={this.addFolder} handleInputChange={this.handleEditInputChange} updateFolder={this.updateFolder} />
+                        <CustomizedTreeView folders={this.state.folders} setCurrentFolder={this.setCurrentFolder} deleteFolder={this.deleteFolder} handleFormSubmit={this.handleFormSubmit} addFolderName={this.state.addFolderName} addFolder={this.addFolder} handleInputChange={this.handleEditInputChange} updateFolder={this.updateFolder} renderEditDelete={true} />
                     </div>
                 </div>
                 {/* filler for navigation bar */}
@@ -418,7 +397,7 @@ class PersonalLibrary extends Component {
                     <Switch>
                         <Route exact path={'/personalLibrary'} component={PersonalLibraryFiller} />
                         <Route path={'/personalLibrary/knowledgeGroup/:folderId'} render={(props) => <KnowledgeGroup {...props} setQuestionFolderId={this.setQuestionFolderId} />} />
-                        <Route path={'/personalLibrary/test/:folderId'} render={(props) => <ModalTest {...props} />} />
+                        <Route path={'/personalLibrary/test/:folderId'} render={(props) => <TestQuestions {...props} />} />
                         <Route path={'/personalLibrary/table'} render={(props) => <CustomizedTable {...props} headCells={[
                             { id: 'questionCode', numeric: false, disablePadding: false, label: 'Mã câu' },
                             { id: 'question', numeric: false, disablePadding: false, label: 'Câu hỏi' },
@@ -439,6 +418,7 @@ class PersonalLibrary extends Component {
 const mapStateToProps = state => ({
     user: state.user,
     folder: state.folder,
+    abbreviation: state.abbreviation,
 })
 
 export default connect(mapStateToProps)(withRouter(PersonalLibrary));

@@ -1,12 +1,9 @@
-import React, { Component, useRef } from 'react';
+import React, { Component } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'react-quill/dist/quill.bubble.css';
 import ImageResize from '@capaj/quill-image-resize-module-react';
-import axios, { post } from 'axios';
-// import { throwStatement } from '@babel/types';
-import { debounce } from 'lodash';
-import { throwStatement } from '@babel/types';
+import axios from 'axios';
 import { connect } from 'react-redux';
 
 // BEGIN allow image alignment styles

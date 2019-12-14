@@ -1,16 +1,15 @@
 import React, { Component } from 'react'
-import { Modal, Button, Collapsible, CollapsibleItem } from 'react-materialize';
+import { Modal, Collapsible, CollapsibleItem } from 'react-materialize';
 import CustomizedSelect from '../../common/CustomizedSelect';
 import ContentEditor from "./ContentEditor";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import Toggle from "../../common/Toggle";
 import CustomizedEditableSelect from '../../common/CustomizedEditableSelect';
-import { InlineMath, BlockMath } from 'react-katex';
+import { InlineMath } from 'react-katex';
 import axios from 'axios';
 import FormControl from '@material-ui/core/FormControl';
 import { serverUrl } from '../../common/common';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 class ModalQuestion extends Component {

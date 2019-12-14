@@ -3,15 +3,12 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import CustomizedTable from './CustomizedTable';
 import axios from 'axios';
-import { Dropdown } from 'react-materialize';
-import ModalQuestion from './ModalQuestion';
-import ModalEditQuestion from './ModalEditQuestion';
+import {  Dropdown } from 'react-materialize';
+import ModalTest from './ModalTest';
 import { serverUrl } from '../../common/common'
-import Advertisement from '../../common/Advertisement';
-import HorizontalAd1 from '../../../resources/horizontalAd1.png';
 
 
-class KnowledgeGroup extends Component {
+class TestQuestions extends Component {
 
     state = {
         currentFolder: null,
@@ -138,8 +135,7 @@ class KnowledgeGroup extends Component {
         return (
             <div id="knowledgeGroup" className="knowledgeGroup row">
                 <button onClick={() => { console.log(this.state) }}>Click me</button>
-                <ModalQuestion />
-                <ModalEditQuestion currentQuestion={this.state.currentQuestion} />
+                <ModalTest/>
                 <div className="col s3 container min-height-60 knowledgeGroup-header" >
                     <h5 className="blue-text text-darken-3 bold font-montserrat" style={{ paddingLeft: "10px" }}>{this.state.currentFolder && this.state.currentFolder.folderName}
                         <Dropdown
@@ -150,8 +146,34 @@ class KnowledgeGroup extends Component {
                     </h5>
                     <p className='grey-text text-darken-3' style={{ position: "relative", top: "-15px", paddingLeft: "10px" }}>{this.state.questionList.length} câu hỏi</p>
                 </div>
-                <div className="col s9 container ">
-                    <Advertisement imgSrc={HorizontalAd1}/> 
+                <div className="col s9 container z-depth-1">
+                    Quảng cáo
+                </div>
+                <div className="row col s12">
+                    <div className="col s3">
+                        <h3 className="blue-text text-darken-2 font-montserrat center">0</h3>
+                        <p className="center">Tổng số câu hỏi</p>
+                    </div>
+                    <div className="col s3">
+                        <h3 className="green-text text-darken-2 font-montserrat center">-:-</h3>
+                        <p className="center">Lý thuyết:Bài tập</p>
+                    </div>
+                    <div className="col s3">
+                        <h3 className="purple-text text-darken-2 font-montserrat center">-</h3>
+                        <p className="center">Độ khó trung bình</p>
+                    </div>
+                    <div className="col s3">
+                        <h3 className="orange-text text-darken-2 font-montserrat center">-</h3>
+                        <p className="center">Độ toàn diện</p>
+                    </div>
+                    <div className="col s6">
+                        <h3 className="pink-text text-darken-2 font-montserrat center">-:-:-:-</h3>
+                        <p className="center">Phân phối mức khó</p>
+                    </div>
+                    <div className="col s6">
+                        <h3 className="teal-text text-darken-2 font-montserrat center">-</h3>
+                        <p className="center">Kiến thức đặc thù</p>
+                    </div>
                 </div>
                 <div className="col s12 no-padding center">
                     {/* <SimpleTable /> */}
@@ -178,4 +200,4 @@ const mapStateToProps = state => ({
     folder: state.folder,
 })
 
-export default connect(mapStateToProps)(withRouter(KnowledgeGroup));
+export default connect(mapStateToProps)(withRouter(TestQuestions));

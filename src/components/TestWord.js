@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
-import axios, { post } from "axios";
+import axios from "axios";
 
 export default class TestWord extends Component {
   state = {

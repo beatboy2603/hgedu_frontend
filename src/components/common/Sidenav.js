@@ -4,7 +4,7 @@ import Logo from '../../resources/logo.png';
 import SmallLogo from '../../resources/logo.svg';
 import { connect } from 'react-redux';
 import { gapi } from "gapi-script";
-import { serverUrl, getCookie, setCookie, getAuthenCookie } from './common';
+import { setCookie } from './common';
 import axios from 'axios';
 
 const Sidenav = (props) => {

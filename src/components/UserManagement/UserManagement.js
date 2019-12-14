@@ -12,6 +12,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import CustomizedSelect from "../common/CustomizedSelect";
+import CustomizedTable from "./CustomizedTable";
 import moment from "moment";
 import common, { formatDate } from "../common/common";
 import { border } from "@material-ui/system";
@@ -91,7 +92,7 @@ class UserManagemnt extends Component {
     if (this.state.addModEmail !== null && this.state.addModEmail !== "") {
       document.getElementById("buttonAddMod").click();
     }
-    
+
   };
 
   handleInputChange = source => e => {
@@ -104,27 +105,27 @@ class UserManagemnt extends Component {
 
   addMod = type => {
     if (this.state.addModEmail) {
-    let users = this.state.users;
-    const check = users.filter(user =>{
-      return user.email === this.state.addModEmail;
-    })
-    if(check.length!==0){
-      alert("Email này đã được sử dụng");
-      return;
-    }
-    axios
-      .post("http://localhost:8084/api/user/addMod", {
-        email: this.state.addModEmail,
-        roleId: 2
+      let users = this.state.users;
+      const check = users.filter(user => {
+        return user.email === this.state.addModEmail;
       })
-      .then(res => {
-        axios.get("http://localhost:8084/api/user/allUsers").then(res => {
-          
-          this.setState({
-            users: res.data
+      if (check.length !== 0) {
+        alert("Email này đã được sử dụng");
+        return;
+      }
+      axios
+        .post("http://localhost:8084/api/user/addMod", {
+          email: this.state.addModEmail,
+          roleId: 2
+        })
+        .then(res => {
+          axios.get("http://localhost:8084/api/user/allUsers").then(res => {
+
+            this.setState({
+              users: res.data
+            });
           });
         });
-      });
     }
   };
 
@@ -140,7 +141,7 @@ class UserManagemnt extends Component {
     // user.bannedUntil = moment(this.state.currentDate)
     //       .add(this.state.selectedDateBan, "d")
     //       .format("YYYY-MM-DD HH:MM:SS");
-    
+
     axios
       .post("http://localhost:8084/api/user/banUsers", {
         userId: user.userId,
@@ -157,7 +158,7 @@ class UserManagemnt extends Component {
         bannedUntil: moment(this.state.currentDate)
           .add(this.state.selectedDateBan, "d")
           .format("YYYY-MM-DD HH:MM:SS")
-        
+
       })
       .then(res => {
         axios.get("http://localhost:8084/api/user/allUsers").then(res => {
@@ -272,7 +273,7 @@ class UserManagemnt extends Component {
                     >
                       Thời gian ban:
                     </td>
-                    
+
                     <td>
                       <CustomizedSelect
                         handleParentSelect={this.handleSelectChange}
@@ -287,7 +288,7 @@ class UserManagemnt extends Component {
                     </td>
                   </tr>
                 </table>
-                
+
                 <div className="line"></div>
                 <a
                   className="modal-action modal-close black-text lighten-1"
@@ -517,18 +518,33 @@ class UserManagemnt extends Component {
     if (user.roleId === 1) {
       return <td></td>;
     } else if (user.roleId === 2) {
-      return (
-        <td>
-          <i
-            className="material-icons blue-text text-darken-3"
-            style={{
-              marginLeft: "35px"
-            }}
-          >
-            create
-          </i>
-        </td>
-      );
+      if (user.userSub) {
+        return (
+          <td>
+            <i
+              className="material-icons blue-text text-darken-3"
+              style={{
+                marginLeft: "35px"
+              }}
+            >
+              create
+            </i>
+          </td>
+        );
+      } else {
+        return (
+          <td>
+            <i
+              className="material-icons grey-text text-darken-3"
+              style={{
+                marginLeft: "35px"
+              }}
+            >
+              create
+            </i>
+          </td>
+        );
+      }
     } else {
       return (
         <td>
@@ -564,22 +580,20 @@ class UserManagemnt extends Component {
   render() {
     const { users } = this.state;
     const { total } = this.state;
-    
 
-    
     return (
-      <div className="containerFluid">
+      <div className="containerFluid" style={{ marginLeft: "50px" }}>
         <div className="row s12">
           {/* <div className="col s1"></div> */}
           <div className="marginLeft">
             <div className="header">
-              <h5 className="blue-text text-darken-3 bold font-montserrat">
+              <h5 className="blue-text text-darken-3 bold font-montserrat" style={{ marginLeft: "25px" }}>
                 Tài khoản
               </h5>
 
-              <span>{total} Người dùng</span>
+              <span style={{ marginLeft: "25px" }}>{total} Người dùng</span>
               {/* <button className="float-right" required>Ủy Quyền</button> */}
-              <div className="floar-right">
+              <div className="floar-right"  style={{ marginLeft: "25px" }}>
                 <div className="inline-block">
                   <a href="#addMod" className="modal-trigger">
                     <i className="material-icons grey-text text-darken-3">
@@ -652,7 +666,7 @@ class UserManagemnt extends Component {
                   </Modal>
                 </div>
               </div>
-              <table className="menuTable">
+              {/* <table className="menuTable">
                 <tr>
                   <th className="blue-text text-darken-3 bold font-montserrat">
                     Loại người dùng
@@ -675,35 +689,21 @@ class UserManagemnt extends Component {
                     ></input>
                   </th>
                 </tr>
-              </table>
+              </table> */}
             </div>
 
-            <table className="table">
-              <tr className="setBlue">
-                <th>
-                  <Checkbox></Checkbox>
-                </th>
-                <th>E-mail</th>
-                <th>Chức năng</th>
-                <th>Tên hiển thị</th>
-                <th></th>
-              </tr>
-              {users.map((user  ) => {
-                return (
-                  <tr key={user.id}>
-                    <td>
-                      <Checkbox></Checkbox>
-                    </td>
-                    <td>{user.email}</td>
-                    {this.checkRoleId(user)}
-                    <td>{user.fullName}</td>
-                    {this.checkBan(user)}
-                    
-                  </tr>
-                );
-              })
-              }
-            </table>
+            <CustomizedTable
+              headCells={[
+                { id: 'email', numeric: false, disablePadding: false, label: 'Email' },
+                { id: 'roleId', numeric: false, disablePadding: false, label: 'Chức năng' },
+                { id: 'fullName', numeric: false, disablePadding: false, label: 'Tên hiển thị' },
+                { id: '', numeric: false, disablePadding: false, label: '' },
+              ]}
+              rows={users} 
+              checkRoleId={this.checkRoleId}
+              checkBan={this.checkBan}/>
+
+           
           </div>
         </div>
       </div>
