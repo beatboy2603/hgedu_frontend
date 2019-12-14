@@ -89,7 +89,6 @@ class PersonalInfo extends Component {
             this.validateEmail();
         })
         console.log(this.state.request.studentMail);
-        this.state.request.parentMail = this.props.user.email
     }
 
     acceptRequest = (e, text, index) => {

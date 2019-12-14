@@ -24,6 +24,7 @@ import UserManagement from './components/UserManagement/UserManagement';
 import { getAuthenCookie } from './components/common/common';
 import ViewNews from './components/News/ViewNews';
 import PersonalInfo from './components/UserInfo/PersonalInfo';
+import TeacherList from './components/StudentClassManagement/TeacherList';
 
 // const persistConfig = {
 //   key: 'root',
@@ -96,6 +97,7 @@ class App extends Component {
                 <Route path='/userManagement' component={UserManagement} />
                 <Route path='/news/view/:newsTitle' component={ViewNews} />
                 {/* <Route path='/userInfo' component={UserInfo}/> */}
+                <Route path='/teacherList' component={TeacherList}/>
               </Switch>
             </div>
           </BrowserRouter>
