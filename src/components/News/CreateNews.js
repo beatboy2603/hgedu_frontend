@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import ContentEditor from './ContentEditor';
 import PropTypes from 'prop-types';
 import axios, {post} from 'axios';
+import {serverUrl} from '../common/common'
 
 class CreateNews extends Component {
     constructor(props) {
@@ -34,7 +35,7 @@ class CreateNews extends Component {
           if(oldThumbnail !== '') {
             this.deleteThumbnail(oldThumbnail);
           }
-          const host = 'http://localhost:8084/'
+          const host = serverUrl
           const URL = host + 'file-upload'
           const form = new FormData()
           form.append('image', file)
@@ -61,7 +62,7 @@ class CreateNews extends Component {
     }
 
     deleteThumbnail = async (oldThumbnail) => {
-      const host = 'http://localhost:8084/'
+      const host = serverUrl
       await axios.delete(host + oldThumbnail)
           .then(res => {
             if(res != null){
@@ -77,7 +78,7 @@ class CreateNews extends Component {
 
     handleSubmit (e) {
         e.preventDefault();
-        const host = 'http://localhost:8084/'
+        const host = serverUrl
         const URL = host + 'create-news'
         const post = {title: this.state.title, 
             content: JSON.stringify(this.state.content), 
@@ -142,7 +143,7 @@ class CreateNews extends Component {
                     <div><input type="text" id="inputTitle" onChange={this.updateTitle.bind(this)} placeholder="Title"/></div>
                     <ContentEditor ref={this.contentEditor} updateContent={this.handlePost}/> 
                     <div><input type="file" id="thumbFile" onChange={this.uploadThumbnail.bind(this)} /></div>
-                    <div><img id="previewThumb" src={'http://localhost:8084/' + this.state.thumbnail} alt="Preview Thumbnail" /></div>
+                    <div><img id="previewThumb" src={serverUrl+ this.state.thumbnail} alt="Preview Thumbnail" /></div>
                     <div className="line"></div>
                     <a onClick={this.resetCreateNews.bind(this)} className=" modal-action modal-close black-text lighten-1" style={{ marginTop: "1vw", float: "left", fontSize: "1vw" }}>Hủy thao tác</a>
                     <button type="submit" className=" modal-action modal-close blue-text lighten-1" 

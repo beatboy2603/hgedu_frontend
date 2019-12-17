@@ -202,7 +202,7 @@ class LandingPage extends Component {
                             <Carousel options={{ dist: 0, padding: 0 }} className="white-text center">
                                 {this.state.newsList.slice(1).map((post) =>
                                     <div className="col s4 carousel-item">
-                                        <SubPost imgSrc={'http://localhost:8084/' + post.thumbnail}
+                                        <SubPost imgSrc={serverUrl + post.thumbnail}
                                             post={post}
                                             title={post.title}
                                             body={post.description}

@@ -8,6 +8,7 @@ import { Carousel } from 'react-materialize';
 import axios from 'axios';
 import SquareAd1 from '../resources/squareAd1.png';
 import SquareAd2 from '../resources/squareAd2.png';
+import {serverUrl} from './common/common'
 
 class Home extends Component {
 
@@ -19,7 +20,7 @@ class Home extends Component {
     }
 
     componentWillMount() {
-        axios.get('http://localhost:8084/news')
+        axios.get(serverUrl+'news')
             .then(res => {
                 console.log(res);
                 this.setState({newsList: res.data})
@@ -35,7 +36,7 @@ class Home extends Component {
                     <h5 className="blue-text text-darken-2 bold font-montserrat">Tin tức</h5>
                     {this.state.newsList.length !== 0 && 
     
-                        <MainPost imgSrc={'http://localhost:8084/' + this.state.newsList[0].thumbnail} 
+                        <MainPost imgSrc={serverUrl + this.state.newsList[0].thumbnail} 
                         title={this.state.newsList[0].title} 
                         body={this.state.newsList[0].description}
                         post={this.state.newsList[0]}
@@ -47,7 +48,7 @@ class Home extends Component {
                         <Carousel options={{ dist: 0, padding: 0 }} className="white-text center">
                             {this.state.newsList.slice(1).map((post) => 
                                 <div className="col s4 carousel-item">
-                                    <SubPost imgSrc={'http://localhost:8084/' + post.thumbnail} 
+                                    <SubPost imgSrc={serverUrl + post.thumbnail} 
                                         post={post}
                                         title={post.title}
                                         body={post.description}

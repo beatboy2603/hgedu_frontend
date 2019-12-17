@@ -11,6 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import Search from './Search'
+import {serverUrl} from '../common/common'
 
 class NewsList extends Component {
 
@@ -47,7 +48,7 @@ class NewsList extends Component {
     }
 
     componentWillMount() {
-        axios.get('http://localhost:8084/news/' + this.props.user.uid + "/all")
+        axios.get(serverUrl + this.props.user.uid + "/all")
             .then(res => {
                 console.log(res);
                 this.setState({ newsList: res.data })
@@ -86,7 +87,7 @@ class NewsList extends Component {
                                         post={post}
                                         title={post.title}
                                         updateList={this.handleUpdateList}
-                                        imgSrc={'http://localhost:8084/' + post.thumbnail} />
+                                        imgSrc={serverUrl + post.thumbnail} />
                                 </div>
                             )}
                     </div>

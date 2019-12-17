@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
+import {serverUrl} from './common/common'
 
 export default class TestWord extends Component {
   state = {
@@ -33,7 +34,7 @@ export default class TestWord extends Component {
     data.append("file", this.state.file);
     data.append("name", this.state.file.name);
 
-    fetch("http://localhost:8080/testimportexport/upload", {
+    fetch(serverUrl+"testimportexport/upload", {
       method: "POST",
       body: data
     })
@@ -47,7 +48,7 @@ export default class TestWord extends Component {
   };
 
   importFile = event => {
-    axios.get("http://localhost:8080/testimportexport/import").then(res => {
+    axios.get(serverUrl+"testimportexport/import").then(res => {
       console.log("import OK");
     });
   };
@@ -65,7 +66,7 @@ export default class TestWord extends Component {
           Import
         </Button>
         <Button
-          href="http://localhost:8080/testimportexport/download"
+          href={serverUrl+"testimportexport/download"}
           variant="outlined"
           color="primary"
           download

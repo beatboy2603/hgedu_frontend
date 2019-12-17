@@ -7,12 +7,13 @@ import axios from 'axios'
 import PersonalInfoEdit from './PersonalInfoEdit'
 import PersonalInfo from './PersonalInfo'
 class UserInfo extends Component {
-    renderSwitch(url) {
-        switch (url) {
-            case 'http://localhost/home':
-                console.log("home");
-        }
-    }
+    // renderSwitch(url) {
+    //     switch (url) {
+    //         //url????
+    //         case 'http://localhost/home':
+    //             console.log("home");
+    //     }
+    // }
 
     state = {
         user: []

@@ -8,6 +8,7 @@ import axios, {post} from 'axios';
 import { debounce } from 'lodash';
 import { throwStatement } from '@babel/types';
 import { connect } from 'react-redux';
+import {serverUrl} from '../common/common'
 
 // BEGIN allow image alignment styles
 const ImageFormatAttributesList = [
@@ -150,7 +151,7 @@ class ContentEditor extends Component {
     }
 
     saveImageToServer = (file) => {
-        const host = 'http://localhost:8084/'
+        const host = serverUrl
         const URL = host + 'file-upload'
         const form = new FormData()
         form.append('image', file)

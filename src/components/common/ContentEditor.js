@@ -5,6 +5,7 @@ import 'react-quill/dist/quill.bubble.css';
 import ImageResize from '@capaj/quill-image-resize-module-react';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import {serverUrl} from './common';
 
 // BEGIN allow image alignment styles
 const ImageFormatAttributesList = [
@@ -139,7 +140,7 @@ class ContentEditor extends Component {
     }
 
     saveImageToServer = (file) => {
-        const host = 'http://localhost:8084/'
+        const host = serverUrl;
         const URL = host + 'file-upload'
         const form = new FormData()
         form.append('image', file)

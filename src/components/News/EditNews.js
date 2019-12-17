@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import NewsEditor from './ContentEditor';
 import axios, {post} from 'axios';
 import { throwStatement } from '@babel/types';
+import {serverUrl} from '../common/common'
 
 class EditNews extends Component {
     constructor(props) {
@@ -33,7 +34,7 @@ class EditNews extends Component {
     uploadThumbnail(e) {
         const file = e.target.files[0];
         if (/^image\//.test(file.type)) {
-            const host = 'http://localhost:8084/'
+            const host = serverUrl
             const URL = host + 'file-upload'
             const form = new FormData()
             form.append('image', file)
@@ -59,7 +60,7 @@ class EditNews extends Component {
 
     handleSubmit (e) {
         e.preventDefault();
-        const host = 'http://localhost:8084/'
+        const host = serverUrl
         const URL = host + 'update-news'
         const post = {title: this.state.title, 
             content: JSON.stringify(this.state.content), 
@@ -142,7 +143,7 @@ class EditNews extends Component {
                     <div><input type="text" value={this.state.title} id="inputTitle" onChange={this.updateTitle.bind(this)} placeholder="Title"/></div>
                     <NewsEditor ref={this.newsEditor} updateContent={this.handlePost} content={this.state.content} /> 
                     <div><input type="file" id="thumbFile" onChange={this.uploadThumbnail.bind(this)} /></div>
-                    <div><img id="previewThumb" src={'http://localhost:8084/' + this.state.thumbnail} alt="Preview Thumbnail" /></div>
+                    <div><img id="previewThumb" src={serverUrl + this.state.thumbnail} alt="Preview Thumbnail" /></div>
                     <div className="line"></div>
                     <a onClick={this.resetCreateNews.bind(this)} className=" modal-action modal-close black-text lighten-1" style={{ marginTop: "1vw", float: "left", fontSize: "1vw" }}>Hủy thao tác</a>
                     <button type="submit" className=" modal-action modal-close blue-text lighten-1" 

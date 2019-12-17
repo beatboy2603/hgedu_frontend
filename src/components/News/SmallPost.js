@@ -10,6 +10,7 @@ import axios, {post} from 'axios';
 import ContentEditor from './ContentEditor'
 import Button from 'react-materialize/lib/Button';
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html'; 
+import {serverUrl} from '../common/common'
 
 class SmallPost extends Component {
     constructor(props) {
@@ -41,7 +42,7 @@ class SmallPost extends Component {
     handleEditButton = (e) => {
         e.preventDefault();
  //       if(this.state.post) {
-             axios.get('http://localhost:8084/news/' + this.state.id)
+             axios.get(serverUrl+'news/' + this.state.id)
             .then(res => {
                 this.setState({id: res.data.id,
                     content: res.data.content,
@@ -63,7 +64,7 @@ class SmallPost extends Component {
 
     componentDidMount() {
         //this.state.id = this.props.id
-        axios.get('http://localhost:8084/news/' + this.props.id)
+        axios.get(serverUrl+'news/' + this.props.id)
             .then(res => {
                 this.setState({id: res.data.id,
                     content: JSON.parse(res.data.content.replace(/\n/g, "\\n")),
@@ -105,7 +106,7 @@ class SmallPost extends Component {
             if(oldThumbnail !== this.state.originalThumbnail) {
                 this.deleteThumbnail(oldThumbnail);
             }
-            const host = 'http://localhost:8084/'
+            const host = serverUrl
             const URL = host + 'file-upload'
             const form = new FormData()
             form.append('image', file);
@@ -132,7 +133,7 @@ class SmallPost extends Component {
     }
 
     deleteThumbnail = async (oldThumbnail) => {
-        const host = 'http://localhost:8084/'
+        const host = serverUrl
         await axios.delete(host + oldThumbnail)
             .then(res => {
               if(res != null){
@@ -149,7 +150,7 @@ class SmallPost extends Component {
     handleSubmit (e) {
         e.preventDefault();
         console.log("here content", this.state.content)
-        const host = 'http://localhost:8084/'
+        const host = serverUrl
         const URL = host + 'news/' + this.state.id
         const post = {
             id: this.state.id,
@@ -178,7 +179,7 @@ class SmallPost extends Component {
     async handleDelete (e) {
         e.preventDefault();
         console.log("id", this.state.id)
-        const host = 'http://localhost:8084/'
+        const host = serverUrl
         const URL = host + 'news/' + this.state.id
 
         this.updateOnDelete();
@@ -341,7 +342,7 @@ class SmallPost extends Component {
                                             <div><input type="text" value={this.state.title} id="inputTitle" onChange={this.updateTitle.bind(this)} placeholder="Title"/></div>
                                             <ContentEditor ref={this.contentEditor} updateContent={this.handlePost} content={this.state.content} id={this.state.id} /> 
                                             <div><input type="file" id="thumbFile" onChange={this.uploadThumbnail.bind(this)} /></div>
-                                            <div className="thumbnail-preview"><img id="previewThumb" src={'http://localhost:8084/' + this.state.thumbnail} alt="Preview Thumbnail" /></div>
+                                            <div className="thumbnail-preview"><img id="previewThumb" src={serverUrl + this.state.thumbnail} alt="Preview Thumbnail" /></div>
                                             <div className="line"></div>
                                             <a onClick={this.resetEditNews.bind(this)} className=" modal-action modal-close black-text lighten-1" style={{ marginTop: "1vw", float: "left", fontSize: "1vw" }}>Hủy thao tác</a>
                                             <button type="submit" className=" modal-action modal-close blue-text lighten-1" 

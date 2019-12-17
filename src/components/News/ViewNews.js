@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Divider from '@material-ui/core/Divider';
 import Quill from 'quill';
+import {serverUrl} from '../common/common'
 
 export default class ViewNews extends Component {
 
@@ -21,7 +22,7 @@ export default class ViewNews extends Component {
 
     componentDidMount() {
         let newsId = this.props.location.state.id;
-        axios.get('http://localhost:8084/news/' + newsId)
+        axios.get(serverUrl+'news/' + newsId)
         .then(res => {
             if(res.data) {
                 this.setState({news: res.data})
