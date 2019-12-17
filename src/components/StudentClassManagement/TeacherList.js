@@ -21,15 +21,40 @@ class StudentManagement extends Component {
         teacherEmail: '',
         teacherList: [],
         note: '',
-        valid: false
+        // valid: false,
+        // requestTeacher: [],
+        // 
     }
+
+    // style = {
+    //     countBadge: {
+    //         backgroundColor: '#ff3838',
+    //         borderRadius: '50%',
+    //         top: '0%',
+    //         left: '86%',
+    //         transform: 'translate(-75%,-50%)',
+    //         height: '16px',
+    //         width: '16px',
+    //         lineHeight: '18px',
+    //         position: 'absolute',
+    //         textAlign: 'center',
+    //         verticalAlign: 'middle',
+    //         color: '#fff',
+    //         textAlign: 'center',
+    //     },
+    //     column: {
+    //         padding: 'unset',
+    //         marginBottom: '10px'
+    //     }
+    // }
 
     componentDidMount() {
         axios.get(serverUrl + "api/enrollment/student/getRequest/" + this.props.user.uid)
             .then(res => {
                 this.setState({
-                    teacher: res.data
+                    requestTeacher: res.data,
                 })
+                console.log(this.state.requestTeacher)
             })
 
         axios.get(serverUrl + "api/enrollment/student/teacherList/" + this.props.user.uid)
@@ -55,6 +80,42 @@ class StudentManagement extends Component {
                 console.log(this.state.teacherList)
             })
     }
+
+
+    // acceptRequest = (teacherId, studentId, studentName, index) => {
+    //     if (this.state.displayName["student" + studentId]) {
+    //         axios.post(serverUrl + "api/enrollment/student/requestHandle", {
+    //             status: "accept",
+    //             teacherId: teacherId,
+    //             studentId: studentId,
+    //             displayName: this.state.displayName["student" + studentId]
+    //         }, () => {
+    //             this.loadData();
+    //         })
+    //         this.state.student.splice(index, 1)
+    //     }
+    //     else {
+    //         axios.post(serverUrl + "api/enrollment/student/requestHandle", {
+    //             status: "accept",
+    //             teacherId: teacherId,
+    //             studentId: studentId,
+    //             displayName: studentName
+    //         }, () => {
+    //             this.loadData();
+    //         })
+    //         this.state.student.splice(index, 1)
+    //     }
+    // }
+
+    // refuseRequest = (teacherId, studentId, index) => {
+    //     axios.post(serverUrl + "api/enrollment/teacher/studentInfo/requestHandle",
+    //         {
+    //             status: "refuse",
+    //             teacherId: teacherId,
+    //             studentId: studentId
+    //         })
+    //     this.state.student.splice(index, 1)
+    // }
 
     fillInput = (e) => {
         if (e.target.name === "email") {
@@ -106,14 +167,63 @@ class StudentManagement extends Component {
     }
 
     render() {
+        // const loadTeacherInfo = () => {
+        //     if (this.state.requestTeacher.length > 0) {
+        //         let teacher = this.state.requestTeacher;
+        //         const load = teacher.map((teacherInfo, index) => {
+        //             return (
+        //                 <div>
+        //                     <div className="line" style={{ marginBottom: '20px' }}></div>
+        //                     <div className='col s12 row'>
+        //                         <div className='col s12' style={this.style.column}>
+        //                             <div className="col s5">Tên học sinh: </div>
+        //                             <div className="col s7">{teacherInfo.fullName}</div>
+        //                         </div>
+        //                         <div className='col s12' style={this.style.column}>
+        //                             <div className="col s5">Email: </div>
+        //                             <div className="col s7">{teacherInfo.email}</div>
+        //                         </div>
+        //                         <div className='col s12' style={this.style.column}>
+        //                             <div className="col s5">Ngày sinh: </div>
+        //                             <div className="col s7">{teacherInfo.dob}</div>
+        //                         </div>
+        //                         <div className='col s12' style={this.style.column}>
+        //                             <div className="col s5">Giới tính: </div>
+        //                             <div className="col s7">{teacherInfo.gender ? "Nam" : "Nữ"}</div>
+        //                         </div>
+        //                         <div className='col s12' style={this.style.column}>
+        //                             <div className="col s5">Ghi chú: </div>
+        //                             <div className="col s7">{teacherInfo.note}</div>
+        //                         </div>
+        //                         <div className='col s12' style={this.style.column}>
+        //                             <Link style={{ alignSelf: 'flex-end', color: '#f44336', fontSize: '18px', paddingLeft: '11.25px' }} onClick={(e) => { this.refuseRequest(teacherInfo.userId, this.props.user.uid, this.state.student.indexOf(teacherInfo)) }}>Từ chối</Link>
+        //                             <Link style={{ float: "right", fontSize: '18px', paddingRight: '11.25px' }} onClick={(e) => { this.acceptRequest(teacherInfo.userId, this.props.user.uid, teacherInfo.fullName, this.state.student.indexOf(teacherInfo)) }}>Xác nhận</Link>
+        //                         </div>
+        //                     </div>
+        //                 </div>
 
-        const countTeacher = () => {
-            if (this.state.student.length > 0) {
-                return (
-                    <span style={this.style.countBadge}>{this.state.student.length}</span>
-                )
-            }
-        }
+        //             )
+        //         })
+        //         return (
+        //             <div>
+        //                 {load}
+        //             </div>
+        //         );
+        //     }
+        //     else {
+        //         return (
+        //             <p>Bạn không có yêu cầu nào</p>
+        //         )
+        //     }
+        // }
+
+        // const countTeacher = () => {
+        //     if (this.state.requestTeacher.length > 0) {
+        //         return (
+        //             <span style={this.style.countBadge}>{this.state.requestTeacher.length}</span>
+        //         )
+        //     }
+        // }
         const showResponseMsg = () => {
             if (this.state.responseMessage) {
                 if (this.state.responseMessage.error) {
