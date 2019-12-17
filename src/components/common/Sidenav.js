@@ -214,11 +214,11 @@ const Sidenav = (props) => {
                             <i className="material-icons padding-vertical-10" style={iconColor}>check_box</i>
                         </NavLink>
                     </div>
-                    <div className="user-option" style={style.userOption} onMouseLeave={hideObj} >
+                    {/* <div className="user-option" style={style.userOption} onMouseLeave={hideObj} >
                         <NavLink to="/user" >
                             <i onMouseOver={showObj} className="material-icons padding-vertical-10" style={iconColor} >account_circle</i>
                         </NavLink>
-                    </div>
+                    </div> */}
                     {changeRole(props.user.role, props.user.userRoleId)}
                 </div>
             }

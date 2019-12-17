@@ -205,6 +205,7 @@ class TestSelector extends Component {
         } 
     }
 
+    // isUpdate
     componentDidUpdate() {
         console.log("reset test")
         if(!this.isEmpty(this.state.testRoot) 
