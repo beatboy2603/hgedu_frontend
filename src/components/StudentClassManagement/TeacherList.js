@@ -19,15 +19,48 @@ class StudentManagement extends Component {
     state = {
         error: 'Bạn chưa nhập email hay định dạng gì đó',
         teacherEmail: '',
+        teacherList: [],
         note: '',
         valid: false
+    }
+
+    componentDidMount() {
+        axios.get(serverUrl + "api/enrollment/student/getRequest/" + this.props.user.uid)
+            .then(res => {
+                this.setState({
+                    teacher: res.data
+                })
+            })
+
+        axios.get(serverUrl + "api/enrollment/student/teacherList/" + this.props.user.uid)
+            .then(res => {
+                console.log(res.data);
+                let teacherList = [];
+                res.data.map((el, i) => {
+                    let teacher = {
+                        index: i + 1,
+                        teacherId: el[0],
+                        fullName: el[1],
+                        email: el[2],
+                        phoneNumber: el[3],
+                        gender: el[4],
+                        dob: el[5],
+                    }
+                    teacherList.push(teacher);
+                })
+                console.log(teacherList);
+                this.setState({
+                    teacherList
+                })
+                console.log(this.state.teacherList)
+            })
     }
 
     fillInput = (e) => {
         if (e.target.name === "email") {
             this.setState({
                 teacherEmail: e.target.value
-            }, () => { this.validateEmail() });
+            }, () => { this.validateEmail(this.state.teacherEmail) });
         }
         else {
             this.setState({
@@ -36,9 +69,8 @@ class StudentManagement extends Component {
         }
     }
 
-    validateEmail = () => {
+    validateEmail = (email) => {
         var vnf_regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        var email = this.state.email;
         if (email) {
             if (vnf_regex.test(email) == false) {
                 this.setState({
@@ -60,7 +92,7 @@ class StudentManagement extends Component {
     }
 
     submitRequest = () => {
-        axios.post(serverUrl + "api/enrollment/request",
+        axios.post(serverUrl + "api/enrollment/student/request",
             {
                 teacherEmail: this.state.teacherEmail,
                 note: this.state.note,
@@ -74,24 +106,32 @@ class StudentManagement extends Component {
     }
 
     render() {
+
+        const countTeacher = () => {
+            if (this.state.student.length > 0) {
+                return (
+                    <span style={this.style.countBadge}>{this.state.student.length}</span>
+                )
+            }
+        }
         const showResponseMsg = () => {
             if (this.state.responseMessage) {
                 if (this.state.responseMessage.error) {
                     return (
-                        <div className="col 12" style = {{borderRadius:'12px', border:'1px solid #FE3433', backgroundColor:'#FFEEEE', padding:'10px 0 10px 10px'}}>
-                        <span style={{ color: '#f44336'}}>{this.state.responseMessage.error}</span>
+                        <div className="col 12" style={{ borderRadius: '12px', border: '1px solid #FE3433', backgroundColor: '#FFEEEE', padding: '10px 0 10px 10px' }}>
+                            <span style={{ color: '#f44336' }}>{this.state.responseMessage.error}</span>
                         </div>
                     )
                 }
-                if(this.state.responseMessage.success){
+                if (this.state.responseMessage.success) {
                     return (
-                        <div className="col 12" style = {{borderRadius:'12px', border:'1px solid #6ABF5A', backgroundColor:'#CCEBC9', padding:'10px 0 10px 10px'}}>
-                        <span style={{ color: '#2F7211'}}>{this.state.responseMessage.success}</span>
+                        <div className="col 12" style={{ borderRadius: '12px', border: '1px solid #6ABF5A', backgroundColor: '#CCEBC9', padding: '10px 0 10px 10px' }}>
+                            <span style={{ color: '#2F7211' }}>{this.state.responseMessage.success}</span>
                         </div>
                     )
                 }
             }
-            
+
         }
 
         const confirmationButton = () => {
@@ -138,8 +178,8 @@ class StudentManagement extends Component {
                 {/* main content */}
                 <div className="row col s9 no-padding">
                     <div className="col s3 container min-height-60 knowledgeGroup-header">
-                        <h5 className="blue-text text-darken-3 bold font-montserrat">D.S. học sinh</h5>
-                        <p className='grey-text text-darken-1'>08 học sinh</p>
+                        <h5 className="blue-text text-darken-3 bold font-montserrat modal-trigger" style={{ cursor: "pointer" }} href='#student-request-modal'>D.S. giáo viên</h5>
+                        <p className='grey-text text-darken-1'>{this.state.teacherList.length > 0 ? this.state.teacherList.length + " giáo viên" : "0 giáo viên"} </p>
                     </div>
                     <div className="col s9 container z-depth-1">
                         Quảng cáo
@@ -147,17 +187,15 @@ class StudentManagement extends Component {
                     <div className="col s12 no-padding center">
                         <StudentCustomizedTable
                             headCells={[
-                                { id: 'name', numeric: false, disablePadding: false, label: 'Dessert (100g serving)' },
-                                { id: 'calories', numeric: true, disablePadding: false, label: 'Calories' },
-                                { id: 'fat', numeric: true, disablePadding: false, label: 'Fat (g)' },
-                                { id: 'carbs', numeric: true, disablePadding: false, label: 'Carbs (g)' },
-                                { id: 'protein', numeric: true, disablePadding: false, label: 'Protein (g)' },
+                                { id: 'index', numeric: true, disablePadding: false, label: '' },
+                                { id: 'name', numeric: false, disablePadding: false, label: 'Họ và tên' },
+                                { id: 'email', numeric: false, disablePadding: false, label: 'Email' },
+                                { id: 'phoneNumber', numeric: false, disablePadding: false, label: 'Số điện thoại' },
+                                { id: 'gender', numeric: false, disablePadding: false, label: 'Giới tính' },
+                                { id: 'dob', numeric: false, disablePadding: false, label: 'Ngày sinh' },
                             ]}
-                            rows={[
-                                { name: 'Carbon', calories: 111, fat: 123, carbs: 544, protein: 789 },
-                                { name: 'Calcium', calories: 111, fat: 145, carbs: 341, protein: 576 },
-                                { name: 'Calories', calories: 121, fat: 193, carbs: 654, protein: 467 },
-                            ]} />
+                            rows={this.state.teacherList}
+                        />
 
                     </div>
 
@@ -187,8 +225,8 @@ class StudentManagement extends Component {
                             </div>
                             <div style={{ marginBottom: '40px' }}>
                             </div>
-                                <span style={{ float: 'left' }} className="modal-action modal-close">Hủy thao tác</span>
-                                {confirmationButton()}
+                            <span style={{ float: 'left' }} className="modal-action modal-close">Hủy thao tác</span>
+                            {confirmationButton()}
                         </div>
                     </Modal>
                 </div>

@@ -19,7 +19,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
-
+import { Modal } from 'react-materialize';
+import { serverUrl } from '../common/common'
 // function createData(name, calories, fat, carbs, protein) {
 //   return { name, calories, fat, carbs, protein };
 // }
@@ -169,7 +170,7 @@ const useStyles = makeStyles(theme => ({
 export default function EnhancedTable({ headCells, rows }) {
   const classes = useStyles();
   const [order, setOrder] = React.useState('asc');
-  const [orderBy, setOrderBy] = React.useState('calories');
+  const [orderBy, setOrderBy] = React.useState('index');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -225,6 +226,19 @@ export default function EnhancedTable({ headCells, rows }) {
 
   const isSelected = name => selected.indexOf(name) !== -1;
 
+  const convertDate = time => {
+    const addZeroBefore = number => {
+      if (number.toString().length <= 1) {
+        return "0" + number
+      }
+      else return number
+    }
+    if (time) {
+      let modDate = new Date(time)
+      return addZeroBefore(modDate.getDate()) + "/" + addZeroBefore(modDate.getMonth()) + "/" + addZeroBefore(modDate.getFullYear())
+    } else
+      return "Chưa đặt"
+  }
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
   return (
@@ -253,24 +267,77 @@ export default function EnhancedTable({ headCells, rows }) {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
-
                   return (
                     <TableRow
+                      className="modal-trigger"
+                      href={"#information-modal"+index}
                       hover
-                      onClick={event => handleClick(event, row.name)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.name}
                       selected={isItemSelected}
                     >
-                      <TableCell component="th" id={labelId} scope="row">
-                        {row.name}
+                      <TableCell style={{ fontFamily: "iCiel Effra", fontSize: "17px" }} align="right" component="th" id={labelId} scope="row">
+                        {rows.indexOf(row) + 1}
                       </TableCell>
-                      <TableCell align="right">{row.calories}</TableCell>
-                      <TableCell align="right">{row.fat}</TableCell>
-                      <TableCell align="right">{row.carbs}</TableCell>
-                      <TableCell align="right">{row.protein}</TableCell>
+                      <TableCell style={{ fontFamily: "iCiel Effra", fontSize: "17px" }}>{row.fullName}</TableCell>
+                      <TableCell style={{ fontFamily: "iCiel Effra", fontSize: "17px" }}>{row.email}</TableCell>
+                      <TableCell style={{ fontFamily: "iCiel Effra", fontSize: "17px" }}>{row.phoneNumber}</TableCell>
+                      <TableCell style={{ fontFamily: "iCiel Effra", fontSize: "17px" }}>{row.gender ? "Nam" : "Nữ"}</TableCell>
+                      <TableCell style={{ fontFamily: "iCiel Effra", fontSize: "17px" }}>{convertDate(row.dob)}</TableCell>
+                      <Modal id={"information-modal"+index} options={{ preventScrolling: true }} style={{ height: "50vh", width: '37vw', overflow: "hidden", borderRadius: "25px"}} actions={[]}>
+                        <div className="modal-content" style={{
+                          position: "absolute",
+                          top: "0",
+                          bottom: "0",
+                          left: "0",
+                          right: "-17px", /* Increase/Decrease this value for cross-browser compatibility */
+                          overflowY: "scroll"
+                        }}>
+                          <div>
+                          <h5 className="center" style={{ marginBottom: "30px" }}>Thông tin giáo viên</h5>
+                            <div className="line" style={{ marginBottom: '20px' }}></div>
+                            <div className='col s12 row'>
+                              <div className='col s12' style={{
+                                padding: 'unset',
+                                marginBottom: '10px'
+                              }}>
+                                <div className="col s5">Tên đầy đủ: </div>
+                                <div className="col s7">{row.fullName}</div>
+                              </div>
+                              <div className='col s12' style={{
+                                padding: 'unset',
+                                marginBottom: '10px'
+                              }}>
+                                <div className="col s5">Email: </div>
+                                <div className="col s7">{row.email}</div>
+                              </div>
+                              <div className='col s12' style={{
+                                padding: 'unset',
+                                marginBottom: '10px'
+                              }}>
+                                <div className="col s5">Ngày sinh: </div>
+                                <div className="col s7">{convertDate(row.dob) ? convertDate(row.dob) : "Chưa đặt"}</div>
+                              </div>
+                              <div className='col s12' style={{
+                                padding: 'unset',
+                                marginBottom: '10px'
+                              }}>
+                                <div className="col s5">Số điện thoại: </div>
+                                <div className="col s7">{row.phoneNumber ? row.phoneNumber : "Chưa đặt"}</div>
+                              </div>
+                              <div className='col s12' style={{
+                                padding: 'unset',
+                                marginBottom: '10px'
+                              }}>
+                                <div className="col s5">Giới tính: </div>
+                                <div className="col s7">{row.gender ? "Nam" : "Nữ"}</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Modal>
                     </TableRow>
                   );
                 })}

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import CustomizedTreeView from './common/CustomizedTreeView';
-import SimpleTable from './common/TempTable2';
+import SimpleTable from './StudentClassManagement/TeacherCustomizedTable';
 import axios from 'axios';
 import { Modal } from 'react-materialize';
 import { Button } from '@material-ui/core'
@@ -17,9 +17,15 @@ import Select from '@material-ui/core/Select';
 import { serverUrl } from './common/common'
 class StudentManagement extends Component {
     state = {
+        studentList: [],
         student: [],
         sss: [],
-        displayName: {}
+        displayName: {},
+        error: "Email không được để trống",
+        studentEmail: '',
+        setDisplay: '',
+        valid: false
+
     }
 
     style = {
@@ -61,48 +67,78 @@ class StudentManagement extends Component {
         // }
     }
 
-    componentDidMount() {
-        axios.get(serverUrl + 'api/enrollment/request/studentInfo/' + this.props.user.uid)
+    loadData = () => {
+        axios.get(serverUrl + 'api/enrollment/teacher/studentInfo/' + this.props.user.uid)
             .then(res => {
                 this.setState({
                     student: res.data,
                 })
             });
-        axios.get(serverUrl + "api/enrollment/request/studentInfo/note/" + this.props.user.uid)
+        axios.get(serverUrl + "api/enrollment/teacher/studentInfo/note/" + this.props.user.uid)
             .then(res => {
                 this.setState({
                     note: res.data,
                     sss: res.data
                 })
-
+            })
+        axios.get(serverUrl + "api/enrollment/teacher/studentList/" + this.props.user.uid)
+            .then(res => {
+                let studentList = [];
+                res.data.map((el, i) => {
+                    let students = {
+                        index: i + 1,
+                        studentId: el[0],
+                        displayedName: el[1],
+                        email: el[2],
+                        phoneNumber: el[3],
+                        gender: el[4],
+                        dob: el[5],
+                    }
+                    studentList.push(students)
+                })
+                this.setState({
+                    studentList
+                })
+                console.log(this.state.studentList)
             })
     }
-    acceptRequest = (teacherId, studentId, studentName) => {
+
+    componentDidMount() {
+        this.loadData();
+    }
+    acceptRequest = (teacherId, studentId, studentName, index) => {
         if (this.state.displayName["student" + studentId]) {
-            axios.post(serverUrl + "api/enrollment/request/studentInfo/requestHandle", {
+            axios.post(serverUrl + "api/enrollment/teacher/studentInfo/requestHandle", {
                 status: "accept",
                 teacherId: teacherId,
                 studentId: studentId,
                 displayName: this.state.displayName["student" + studentId]
+            }, ()=>{
+                this.loadData();
             })
+            this.state.student.splice(index, 1)
         }
         else {
-            axios.post(serverUrl + "api/enrollment/request/studentInfo/requestHandle", {
+            axios.post(serverUrl + "api/enrollment/teacher/studentInfo/requestHandle", {
                 status: "accept",
                 teacherId: teacherId,
                 studentId: studentId,
                 displayName: studentName
+            }, ()=>{
+                this.loadData();
             })
+            this.state.student.splice(index, 1)
         }
     }
 
-    refuseRequest = (teacherId, studentId) =>{
-        axios.post(serverUrl+ "/api/enrollment/student/studentInfo/requestHandle",
-        {
-            status:"refuse",
-            teacherId: teacherId,
-            studentId: studentId
-        })
+    refuseRequest = (teacherId, studentId, index) => {
+        axios.post(serverUrl + "api/enrollment/teacher/studentInfo/requestHandle",
+            {
+                status: "refuse",
+                teacherId: teacherId,
+                studentId: studentId
+            })
+        this.state.student.splice(index, 1)
     }
 
 
@@ -127,6 +163,60 @@ class StudentManagement extends Component {
         }
         console.log(this.state.student)
     }
+
+    fillInput = (e) => {
+        if (e.target.name === "studentEmail") {
+            this.setState({
+                studentEmail: e.target.value
+            }, () => { this.validateEmail(this.state.studentEmail) });
+        }
+        else {
+            console.log(e.target.name);
+            this.setState({
+                [e.target.name]: e.target.value,
+            })
+        }
+    }
+
+    validateEmail = (email) => {
+        var vnf_regex = /^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/;
+        if (email) {
+            if (vnf_regex.test(email) == false) {
+
+                this.setState({
+                    error: "Email của bạn không đúng định dạng!",
+                    valid: false
+                });
+                return;
+            }
+        } else {
+            this.setState({
+                error: "Email không được để trống!",
+                valid: false
+            })
+            return;
+        }
+        this.setState({
+            valid: true
+        })
+    }
+
+    sendRequest = () => {
+        if (this.state.studentEmail && !this.state.setDisplay.trim() == "") {
+            axios.post(serverUrl + "api/enrollment/teacher/request", {
+                studentEmail: this.state.studentEmail,
+                teacherEmail: this.props.user.email,
+                displayedName: this.state.setDisplay.trim()
+            })
+        } else {
+            axios.post(serverUrl + "api/enrollment/teacher/request", {
+                studentEmail: this.state.studentEmail,
+                teacherEmail: this.props.user.email,
+                displayedName: null
+            })
+        }
+    }
+
     render() {
         const countStudent = () => {
             if (this.state.student.length > 0) {
@@ -174,8 +264,8 @@ class StudentManagement extends Component {
                                     <div className="col s7"><input type="text" placeholder="Điền tên hiển thị" style={{ height: '25px', fontFamily: 'iCiel Effra' }} name={"student" + studentInfo.userId} onChange={this.displayStudentName} /></div>
                                 </div>
                                 <div className='col s12' style={this.style.column}>
-                                    <Link style={{ alignSelf: 'flex-end', color: '#f44336', fontSize: '18px', paddingLeft: '11.25px' }} onClick={(e) => { console.log(this.props.user.uid) }}>Từ chối</Link>
-                                    <Link style={{ float: "right", fontSize: '18px', paddingRight: '11.25px' }} onClick={(e) => { this.acceptRequest(this.props.user.uid, studentInfo.userId, studentInfo.fullName) }}>Xác nhận</Link>
+                                    <Link style={{ alignSelf: 'flex-end', color: '#f44336', fontSize: '18px', paddingLeft: '11.25px' }} onClick={(e) => { this.refuseRequest(this.props.user.uid, studentInfo.userId, this.state.student.indexOf(studentInfo)) }}>Từ chối</Link>
+                                    <Link style={{ float: "right", fontSize: '18px', paddingRight: '11.25px' }} onClick={(e) => { this.acceptRequest(this.props.user.uid, studentInfo.userId, studentInfo.fullName, this.state.student.indexOf(studentInfo)) }}>Xác nhận</Link>
                                 </div>
                             </div>
                         </div>
@@ -191,6 +281,19 @@ class StudentManagement extends Component {
             else {
                 return (
                     <p>Bạn không có yêu cầu nào</p>
+                )
+            }
+        }
+
+        const confirmationButton = () => {
+            if (this.state.valid === true) {
+                return (
+                    <Link className="float-right" onClick={this.sendRequest}>Xác nhận</Link>
+                )
+            }
+            else {
+                return (
+                    <span className="float-right" style={{ cursor: 'not-allowed', color: '#f44336' }}>Xác nhận</span>
                 )
             }
         }
@@ -252,24 +355,50 @@ class StudentManagement extends Component {
 
                             </div>
                         </Modal>
-                        <p className='grey-text text-darken-1'>08 học sinh</p>
+                        <span className='grey-text text-darken-1 modal-trigger' href="#map-test" style={{ cursor: 'pointer', fontSize: '20px', padding: '10px 0' }}>{this.state.studentList.length > 0 ? this.state.studentList.length + " học sinh" : "0 học sinh"}</span>
                     </div>
                     <div className="col s9 container z-depth-1">
                         Quảng cáo
                     </div>
                     <div className="col s12 no-padding center">
-                        <SimpleTable />
+                        <SimpleTable style={{ fontFamily: 'Monserrat' }} headCells={[
+                            { id: 'index', numeric: true, disablePadding: false, label: '' },
+                            { id: 'name', numeric: false, disablePadding: false, label: 'Tên hiển thị' },
+                            { id: 'email', numeric: false, disablePadding: false, label: 'Email' },
+                            { id: 'phoneNumber', numeric: false, disablePadding: false, label: 'Số điện thoại' },
+                            { id: 'gender', numeric: false, disablePadding: false, label: 'Giới tính' },
+                            { id: 'dob', numeric: false, disablePadding: false, label: 'Ngày sinh' },
+                        ]}
+                            rows={this.state.studentList} />
                     </div>
                 </div>
                 <div>
                     <a href="#addStudent" style={{ position: 'relative' }} className="btn-floating btn-large blue my-floating-btn modal-trigger">
                         <i className="material-icons">add</i>
                     </a>
-                    <Modal id="addStudent" options={{ preventScrolling: true }}>
-                        <div className="modal-content">
+                    <Modal id="addStudent" options={{ preventScrolling: true }} style={{ height: "80vh", width: '37vw', overflow: "hidden", borderRadius: "25px" }} actions={[]}>
+                        <div className="modal-content" style={{
+                            position: "absolute",
+                            top: "0",
+                            bottom: "0",
+                            left: "0",
+                            right: "-17px", /* Increase/Decrease this value for cross-browser compatibility */
+                            overflowY: "scroll"
+                        }}>
+                            {/* {showResponseMsg()} */}
                             <h5 className="center">Thêm học sinh</h5>
                             <div className="line"></div>
-
+                            <label name='label-email' style={{ fontSize: '20px', color: '#000' }} htmlFor="">Email học sinh: </label>
+                            <input pattern="^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$" className="validate" type="email" name="studentEmail" id="studentMail" required onChange={this.fillInput} />
+                            <span className='helper-text' data-error={this.state.error}></span>
+                            <div className="note col s12">
+                                <label name='label-email' style={{ fontSize: '20px', color: '#000' }} htmlFor="setDisplay">Tên hiển thị: </label>
+                                <input type="text" name="setDisplay" onChange={this.fillInput} />
+                            </div>
+                            <div style={{ marginBottom: '40px' }}>
+                            </div>
+                            <span style={{ float: 'left' }} className="modal-action modal-close">Hủy thao tác</span>
+                            {confirmationButton()}
                         </div>
                     </Modal>
                 </div>
