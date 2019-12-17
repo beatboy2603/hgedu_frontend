@@ -31,6 +31,7 @@ import {
   getStudentsByParentId,
   parentGetTeacherByStudentId
 } from "../../actions/classAction";
+import {serverUrl} from '../common/common'
 
 class StudentManagement extends Component {
   constructor(props) {
@@ -247,7 +248,7 @@ class StudentManagement extends Component {
           classes: [...classes, newClass]
         })
         // this.props.createClass(newClass);
-        axios.post("http://localhost:8084/api/classManagement/", newClass).then(res=>{
+        axios.post(serverUrl+"api/classManagement/", newClass).then(res=>{
           this.props.getClasses1(this.props.user.uid);
         })
         

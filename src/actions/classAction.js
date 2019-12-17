@@ -42,7 +42,7 @@ export const getStudentClasses = (userId) => async dispatch => {
 }
 
 export const getClasses1 = id => async dispatch => {
-  const res = await axios.get(`http://localhost:8084/api/classManagement/${id}`);
+  const res = await axios.get(serverUrl + `api/classManagement/${id}`);
   dispatch({
     type: GET_CLASSES1,
     payload: res.data
@@ -50,7 +50,7 @@ export const getClasses1 = id => async dispatch => {
 };
 
 export const getTeacher = userId => async dispatch => {
-  const res = await axios.get(`http://localhost:8084/api/classManagement/teacher/${userId}`);
+  const res = await axios.get(serverUrl + `api/classManagement/teacher/${userId}`);
   dispatch({
     type: GET_TEACHER,
     payload: res.data
@@ -58,7 +58,7 @@ export const getTeacher = userId => async dispatch => {
 }
 
 export const getClassesByStudentId = studentId => async dispatch => {
-  const res = await axios.get(`http://localhost:8084/api/classManagement/studentClass/${studentId}`);
+  const res = await axios.get(serverUrl + `api/classManagement/studentClass/${studentId}`);
   dispatch({
     type: GGET_CLASSES_BY_STUDENT,
     payload: res.data
@@ -66,7 +66,7 @@ export const getClassesByStudentId = studentId => async dispatch => {
 };
 
 export const getStudentsByParentId = parentId => async dispatch => {
-  const res = await axios.get(`http://localhost:8084/api/classManagement/parentStudent/${parentId}`);
+  const res = await axios.get(serverUrl + `api/classManagement/parentStudent/${parentId}`);
   dispatch({
     type: GET_STUDENT_BY_PARENTID,
     payload: res.data
@@ -74,7 +74,7 @@ export const getStudentsByParentId = parentId => async dispatch => {
 };
 
 export const getConnnectedStudent = teacherId => async dispatch => {
-  const res = await axios.get(`http://localhost:8084/api/classManagement/studentTeacher/connected/${teacherId}`);
+  const res = await axios.get(serverUrl + `api/classManagement/studentTeacher/connected/${teacherId}`);
   dispatch({
     type: GET_CONNECTED_STUDENT,
     payload: res.data
@@ -82,7 +82,7 @@ export const getConnnectedStudent = teacherId => async dispatch => {
 }
 
 export const getConnnectedTeacher = studentId => async dispatch => {
-  const res = await axios.get(`http://localhost:8084/api/classManagement/studentTeacher/connected/teacher/${studentId}`);
+  const res = await axios.get(serverUrl + `api/classManagement/studentTeacher/connected/teacher/${studentId}`);
   dispatch({
     type: GET_CONNECTED_TEACHER,
     payload: res.data
@@ -90,7 +90,7 @@ export const getConnnectedTeacher = studentId => async dispatch => {
 }
 
 export const getStudentTeacher = teacherId => async dispatch => {
-  const res = await axios.get(`http://localhost:8084/api/classManagement/studentTeacher/${teacherId}`);
+  const res = await axios.get(serverUrl + `api/classManagement/studentTeacher/${teacherId}`);
   dispatch({
     type: GET_STUDENTTEACHER,
     payload: res.data
@@ -98,7 +98,7 @@ export const getStudentTeacher = teacherId => async dispatch => {
 }
 
 export const getStudentTeacher1 = studentId => async dispatch => {
-  const res = await axios.get(`http://localhost:8084/api/classManagement/studentTeacher/teacher/${studentId}`);
+  const res = await axios.get(serverUrl + `api/classManagement/studentTeacher/teacher/${studentId}`);
   dispatch({
     type: GET_STUDENTTEACHER_TEACHER,
     payload: res.data
@@ -106,7 +106,7 @@ export const getStudentTeacher1 = studentId => async dispatch => {
 }
 
 export const getParent = studentId => async dispatch => {
-  const res = await axios.get(`http://localhost:8084/api/classManagement/parent/${studentId}`);
+  const res = await axios.get(serverUrl + `api/classManagement/parent/${studentId}`);
   dispatch({
     type: GET_PARENT,
     payload: res.data
@@ -115,7 +115,7 @@ export const getParent = studentId => async dispatch => {
 
 export const getClassStudents = classId => async dispatch => {
   const res = await axios.get(
-    `http://localhost:8084/api/classManagement/classStudent/${classId}`
+    serverUrl + `api/classManagement/classStudent/${classId}`
   );
   dispatch({
     type: GET_CLASSSTUDENT,
@@ -124,7 +124,7 @@ export const getClassStudents = classId => async dispatch => {
 };
 
 export const getExamByClassId = () => async dispatch => {
-  const res = await axios.get(`http://localhost:8084/api/classManagement/exam`);
+  const res = await axios.get(serverUrl + `api/classManagement/exam`);
   dispatch({
     type: GET_EXAM_BY_CLASSID,
     payload: res.data
@@ -132,7 +132,7 @@ export const getExamByClassId = () => async dispatch => {
 }
 
 export const parentGetTeacherByStudentId = studentId => async dispatch => {
-  const res = await axios.get(`http://localhost:8084/api/classManagement/parentFindTeacher/${studentId}`);
+  const res = await axios.get(serverUrl + `api/classManagement/parentFindTeacher/${studentId}`);
   dispatch({
     type: PARENT_GET_TEACHER,
     payload: res.data
@@ -142,7 +142,7 @@ export const parentGetTeacherByStudentId = studentId => async dispatch => {
 
 
 export const getClassStudentsByStudentId = studentId => async dispatch => {
-  const res = await axios.get(`http://localhost:8084/api/classManagement/classStudent/classes/${studentId}`);
+  const res = await axios.get(serverUrl + `api/classManagement/classStudent/classes/${studentId}`);
   dispatch({
     type: GET_CLASS_STUDENT_BY_STUDENTID,
     payload: res.data
@@ -150,7 +150,7 @@ export const getClassStudentsByStudentId = studentId => async dispatch => {
 }
 
 export const getStudents = id => async dispatch => {
-  const res = await axios.get(`http://localhost:8084/api/classManagement/students/${id}`);
+  const res = await axios.get(serverUrl + `api/classManagement/students/${id}`);
   dispatch({
     type: GET_STUDENTS,
     payload: res.data
@@ -158,7 +158,7 @@ export const getStudents = id => async dispatch => {
 };
 
 export const getGrade = id => async dispatch => {
-  const res = await axios.get(`http://localhost:8084/api/classManagement/student/${id}`);
+  const res = await axios.get(serverUrl + `api/classManagement/student/${id}`);
   dispatch({
     type: GET_GRADE,
     payload: res.data
@@ -167,7 +167,7 @@ export const getGrade = id => async dispatch => {
 
 export const createClass = class1 => async dispatch => {
   try {
-    const res = await axios.post("http://localhost:8084/api/classManagement/", class1);
+    const res = await axios.post(serverUrl + "api/classManagement/", class1);
     dispatch({
       type: GET_ERRORS,
       payload: {}
@@ -183,7 +183,7 @@ export const createClass = class1 => async dispatch => {
 
 export const deleteClass = id => async dispatch => {
   if (window.confirm("Are you sure?")) {
-    await axios.delete(`http://localhost:8084/api/classManagement/${id}`);
+    await axios.delete(serverUrl + `api/classManagement/${id}`);
     dispatch({
       type: DELETE_CLASS,
       payload: id
@@ -193,7 +193,7 @@ export const deleteClass = id => async dispatch => {
 
 export const deleteStudent = id => async dispatch => {
   if (window.confirm("Are you sure?")) {
-    await axios.delete(`http://localhost:8084/api/classManagement/student/${id}`);
+    await axios.delete(serverUrl + `api/classManagement/student/${id}`);
     dispatch({
       type: DELETE_STUDENT,
       payload: id
@@ -203,7 +203,7 @@ export const deleteStudent = id => async dispatch => {
 
 export const deleteStudentTeacher = studentId => async dispatch => {
   if (window.confirm("Are you sure?")) {
-    await axios.delete(`http://localhost:8084/api/classManagement/studentTeacher/${studentId}`);
+    await axios.delete(serverUrl + `api/classManagement/studentTeacher/${studentId}`);
     dispatch({
       type: DELETE_STUDENT_TEACHER,
       payload: studentId

@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-export const axiosPost = (config) => {
-    return axios.post('http://localhost:8084/hgedu_server/api', config);
-}
+// export const axiosPost = (config) => {
+//     return axios.post('http://localhost:8084/hgedu_server/api', config);
+// }
 
-export const serverUrl = 'http://localhost:8084/';
+export const serverUrl = 'http://hgedu-server.herokuapp.com/';
 
 export const setCookie = (key, value, expHours) => {
     var d = new Date();

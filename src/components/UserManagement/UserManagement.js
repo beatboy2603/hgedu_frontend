@@ -14,7 +14,7 @@ import Select from "@material-ui/core/Select";
 import CustomizedSelect from "../common/CustomizedSelect";
 import CustomizedTable from "./CustomizedTable";
 import moment from "moment";
-import common, { formatDate } from "../common/common";
+import common, { formatDate, serverUrl } from "../common/common";
 import { border } from "@material-ui/system";
 
 class UserManagemnt extends Component {
@@ -78,7 +78,7 @@ class UserManagemnt extends Component {
   };
 
   componentWillMount() {
-    axios.get("http://localhost:8084/api/user/allUsers").then(res => {
+    axios.get(serverUrl+"api/user/allUsers").then(res => {
       console.log("all");
       console.log(res.data);
       this.setState({
@@ -86,7 +86,7 @@ class UserManagemnt extends Component {
       });
     });
 
-    axios.get("http://localhost:8084/api/user/countUsers").then(res => {
+    axios.get(serverUrl+"api/user/countUsers").then(res => {
       console.log(res.data + "as");
       this.setState({
         ...this.state,
@@ -136,12 +136,12 @@ class UserManagemnt extends Component {
       }
       
       axios
-        .post("http://localhost:8084/api/user/addMod", {
+        .post(serverUrl+"api/user/addMod", {
           email: this.state.addModEmail,
           roleId: 2
         })
         .then(res => {
-          axios.get("http://localhost:8084/api/user/allUsers").then(res => {
+          axios.get(serverUrl+"api/user/allUsers").then(res => {
             
             this.setState({
               users: res.data
@@ -177,7 +177,7 @@ class UserManagemnt extends Component {
     //       .format("YYYY-MM-DD HH:MM:SS");
     console.log(user);
     axios
-      .post("http://localhost:8084/api/user/banUsers", {
+      .post(serverUrl+"api/user/banUsers", {
         userId: user.userId,
         userSub: user.userSub,
         email: user.email,
@@ -195,7 +195,7 @@ class UserManagemnt extends Component {
 
       })
       .then(res => {
-        axios.get("http://localhost:8084/api/user/allUsers").then(res => {
+        axios.get(serverUrl+"api/user/allUsers").then(res => {
           this.setState({
             users: res.data
           });
@@ -210,7 +210,7 @@ class UserManagemnt extends Component {
     // })
 
     axios
-      .post("http://localhost:8084/api/user/banForever", {
+      .post(serverUrl+"api/user/banForever", {
         userId: user.userId,
         userSub: user.userSub,
         email: user.email,
@@ -226,7 +226,7 @@ class UserManagemnt extends Component {
         bannedUntil: this.state.currentDate
       })
       .then(res => {
-        axios.get("http://localhost:8084/api/user/allUsers").then(res => {
+        axios.get(serverUrl+"api/user/allUsers").then(res => {
           this.setState({
             users: res.data
           });
@@ -236,7 +236,7 @@ class UserManagemnt extends Component {
 
   unBanUser = user => {
     axios
-      .post("http://localhost:8084/api/user/unBanUsers", {
+      .post(serverUrl+"api/user/unBanUsers", {
         userId: user.userId,
         userSub: user.userSub,
         email: user.email,
@@ -251,7 +251,7 @@ class UserManagemnt extends Component {
         bannedUntil: this.state.currentDate
       })
       .then(res => {
-        axios.get("http://localhost:8084/api/user/allUsers").then(res => {
+        axios.get(serverUrl+"api/user/allUsers").then(res => {
           this.setState({
             users: res.data
           });
