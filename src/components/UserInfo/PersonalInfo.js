@@ -37,8 +37,11 @@ class PersonalInfo extends Component {
     }
 
     dateFormat = (text) => {
+        if(text != null){
+            return text.slice(8,10)+"/"+text.slice(5,7)+"/"+text.slice(0,4);
+        }
+        else return '';
         // console.log(text.slice(8,10)+"/"+text.slice(5,7)+"/"+text.slice(0,4))
-        return text.slice(8,10)+"/"+text.slice(5,7)+"/"+text.slice(0,4);
     }
 
     requestLink = (e) => {
@@ -89,7 +92,6 @@ class PersonalInfo extends Component {
             this.validateEmail();
         })
         console.log(this.state.request.studentMail);
-        this.state.request.parentMail = this.props.user.email
     }
 
     acceptRequest = (e, text, index) => {
@@ -220,7 +222,6 @@ class PersonalInfo extends Component {
         }
         return (
             <div>
-
                 <div>
                     <div className="col s12" style={{ margin: '5px' }}><h5 className='font-montserrat' style={{ ...style.colorizedText, ...style.margin30 }}>Thông tin cá nhân</h5>
                     </div>
@@ -243,7 +244,9 @@ class PersonalInfo extends Component {
                         </div>
                         <div style={style.field}>
                             <p style={style.detail.title}>Ngày sinh:</p>
+                        {this.props.user.dob &&
                             <p style={style.detail.content}>{this.dateFormat(this.props.user.dob)}</p>
+                        }
                         </div>
                         <div style={style.field}>
                             <p style={style.detail.title}>Trường:</p>

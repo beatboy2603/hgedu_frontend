@@ -51,22 +51,24 @@ class PersonalInfoEdit extends Component {
     }
 
     submitData(e) {
-        console.log(this.state);
-        e.preventDefault();
-        axios.put(serverUrl + 'api/user/' + this.props.user.uid, this.state)
-            .then(res =>
-                console.log(res.status));
-        if (window.confirm('Sure to update?'))
+        if (window.confirm('Bạn có muốn thay đổi thông tin?')) {
+            e.preventDefault();
+            axios.put(serverUrl + 'api/user/' + this.props.user.uid, this.state)
+                .then(res =>
+                    console.log(res.status));
             console.log('success!');
-        this.props.dispatch({
-            type: "UPDATE_USER", payload: {
-                phone: this.state.phone,
-                gender: this.state.gender,
-                dob: this.state.dob,
-                school: this.state.school,
-            }
-        });
-        this.props.history.push("/user/personalInfo")
+            this.props.dispatch({
+                type: "UPDATE_USER", payload: {
+                    phone: this.state.phone,
+                    gender: this.state.gender,
+                    dob: this.state.dob,
+                    school: this.state.school,
+                }
+            });
+            this.props.history.push("/user/personalInfo")
+        }
+
+        
     }
 
     handleDate = (value) => {
@@ -76,8 +78,11 @@ class PersonalInfoEdit extends Component {
     }
 
     dateFormat = (text) => {
+        if (text) {
+            return text.slice(8, 10) + "/" + text.slice(5, 7) + "/" + text.slice(0, 4);
+        }
+        else return '';
         // console.log(text.slice(8,10)+"/"+text.slice(5,7)+"/"+text.slice(0,4))
-        return text.slice(8,10)+"/"+text.slice(5,7)+"/"+text.slice(0,4);
     }
 
     str2bool = (string) => {
@@ -217,7 +222,7 @@ class PersonalInfoEdit extends Component {
 
                             <div style={style.field}>
                                 <p style={style.detail.title}>Ngày sinh:</p>
-                                <CustomizedDatePicker width="376px" customStyle={{marginLeft:"-11.25px"}} handleParentState={this.handleDate} defaultValue={this.dateFormat(this.props.user.dob)}/>
+                                <CustomizedDatePicker width="376px" customStyle={{ marginLeft: "-11.25px" }} handleParentState={this.handleDate} defaultValue={this.dateFormat(this.props.user.dob)} />
                                 {/* <input type="text" style={style.detail.c/ontent} name="dob" value={this.dateFormat(this.state.dob)} onChange={this.changeInfo} /> */}
                             </div>
                             <div style={style.field}>

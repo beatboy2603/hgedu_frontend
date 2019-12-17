@@ -207,9 +207,9 @@ const Sidenav = (props) => {
                         <NavLink to="/home" activeClassName="side-nav-active">
                             <i className="material-icons padding-vertical-10" style={iconColor}>home</i>
                         </NavLink>
-                        {/* <NavLink to="/teacherList" activeClassName="side-nav-active">
+                        <NavLink to="/classManagement/teacherList" activeClassName="side-nav-active">
                             <i className="material-icons padding-vertical-10" style={iconColor}>people</i>
-                        </NavLink> */}
+                        </NavLink>
                         <NavLink to='/studentExams' activeClassName="side-nav-active">
                             <i className="material-icons padding-vertical-10" style={iconColor}>check_box</i>
                         </NavLink>
@@ -367,10 +367,10 @@ const Sidenav = (props) => {
                             <i className="material-icons left padding-vertical-10" style={iconColor}>home</i>
                             <span style={iconColor}>Trang chủ</span>
                         </NavLink>
-                        {/* <NavLink to="/teacherList" className='flex-row' activeClassName="side-nav-active">
+                        <NavLink to="/classManagement/teacherList" className='flex-row' activeClassName="side-nav-active">
                             <i className="material-icons padding-vertical-10" style={iconColor}>people</i>
                             <span style={iconColor}>Lớp học</span>
-                        </NavLink> */}
+                        </NavLink>
                         <NavLink to='/studentExams' className='flex-row' activeClassName="side-nav-active">
                             <i className="material-icons left padding-vertical-10" style={iconColor}>check_box</i>
                             <span style={iconColor}>Kiểm tra</span>

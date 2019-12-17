@@ -28,6 +28,7 @@ import { getAuthenCookie, setCookie } from './components/common/common';
 import ViewNews from './components/News/ViewNews';
 import PersonalInfo from './components/UserInfo/PersonalInfo';
 import axios from 'axios';
+import TeacherList from './components/StudentClassManagement/TeacherList';
 
 import StudentExams from './components/Exams/StudentExams';
 // const persistConfig = {
@@ -140,6 +141,7 @@ class App extends Component {
                     <Route path='/examInfo' component={ExamInfo} />
                     <Route path='/studentExams' component={StudentExams} />
                     <Route path='/exam/:examTitle' component={ExamInfo} />
+                    <Route path='/classManagement/teacherList' component={TeacherList}/>
                     <Route path="*" component={NotFoundPage} />
                     {/* <Route path='/userInfo' component={UserInfo}/> */}
                   </Switch>
