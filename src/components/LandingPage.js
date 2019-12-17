@@ -96,8 +96,13 @@ class LandingPage extends Component {
                     this.props.dispatch({ type: "UPDATE_USER", payload: { googleJwt: token } });
                     this.props.history.push('/signup');
                 } else {
-                    {
-                        let user = res.data.user;
+                    let user = res.data.user;
+                    let bannedUntil = new Date(user.bannedUntil);
+                    let todaysDate = new Date();
+                    let dateDifference = Number(todaysDate) - Number(bannedUntil);
+                    // console.log("diff", dateDifference);
+                    if(!user.isBan||(user.isBan&&dateDifference>0)){
+                        // let user = res.data.user;
                         let jwt = res.data.jwt;
                         // this.props.dispatch({ type: "CHANGE_ROLE", payload: user.roleId });
                         this.decodeToken(token).then(res => {
@@ -147,6 +152,8 @@ class LandingPage extends Component {
                             }
                             this.props.history.push('/home');
                         }
+                    }else{
+                        alert("Bạn đang bị ban!");
                     }
                 }
                 // this.redirect();
@@ -154,7 +161,7 @@ class LandingPage extends Component {
         }
 
         return (
-            <div className="row">
+            <div className="row"> 
                 <div style={{ maxWidth: "100vw", minHeight: "100vh", backgroundImage: `url(${BackGroundIMG})`, backgroundSize: "cover" }}>
                     <img onClick={() => { this.props.history.push('/signup'); }} src={Logo} alt="Logo" style={{ width: "8vw", position: "absolute", top: "5vh", left: "5vw" }} />
                     {/* {!this.props.isAuthenticated && */}

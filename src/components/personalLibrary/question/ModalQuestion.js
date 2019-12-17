@@ -12,6 +12,7 @@ import FormControl from '@material-ui/core/FormControl';
 import { serverUrl } from '../../common/common';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { ModalBoostrap } from "react-bootstrap";
 
 class ModalQuestion extends Component {
 
@@ -51,6 +52,7 @@ class ModalQuestion extends Component {
             }
         ],
         valid: false,
+        showModal: false,
     }
 
     checkValid = () => {

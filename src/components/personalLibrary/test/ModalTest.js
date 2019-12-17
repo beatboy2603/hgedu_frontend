@@ -196,6 +196,17 @@ class ModalTest extends Component {
         if (this.state.testQuestionList.length <= 0) {
             customValid = false;
         }
+        if (this.props.folder && this.props.folder.folders) {
+            let hasSameTestCode = false;
+            this.props.folder.folders.map((subEl, j) => {
+                if ((this.state.testDetail.testCode.trim() == subEl.folderName && this.state.currentFolder.folderId==subEl.parentFolderId)||(subEl.folderTypeId==3&&this.state.testDetail.testCode.trim() == subEl.folderName)) {
+                    hasSameTestCode = true;
+                }
+            })
+            if (hasSameTestCode) {
+                customValid = false;
+            }
+        }
         this.setState({
             customValid
         })
@@ -205,7 +216,7 @@ class ModalTest extends Component {
     addCustomTest = ()=>{
         let testFolder = {
             teacherId: this.props.user.uid,
-            folderName: this.state.testDetail.title,
+            folderName: this.state.testDetail.testCode,
             folderTypeId: 3,
             parentFolderId: this.state.currentFolder.folderId,
             subGroupId: 2,
@@ -218,6 +229,31 @@ class ModalTest extends Component {
         console.log("testFolder", testFolder);
         console.log("test", test);
         console.log("testQuestionList", this.state.testQuestionList);
+        let childQuestions = [];
+        this.state.testQuestionList.map((el, i)=>{
+            if(el.childQuestions){
+                el.childQuestions.map((subEl, k)=>{
+                    childQuestions.push(subEl);
+                })
+            }
+        });
+        let testQuestionList = [...this.state.testQuestionList, ...childQuestions];
+        testQuestionList = testQuestionList.map((el, i)=>{
+            el.testQuestionIdentity = {
+                testId: 0,
+                questionId: el.questionId,
+            }
+            return el;
+        });
+        let testContentPlaceholder ={
+            testFolder,
+            test,
+            testQuestionList
+        }
+        console.log(testContentPlaceholder);
+        axios.post(serverUrl+"api/test/addTest", testContentPlaceholder).then(res=>{
+            console.log(res);
+        })
     }
 
     waitUpdate = false;

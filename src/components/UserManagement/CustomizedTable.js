@@ -269,7 +269,7 @@ export default function EnhancedTable({ headCells, rows, checkRoleId, checkBan }
                       </TableCell>
                       <TableCell>{checkRoleId(row)}</TableCell>
                       <TableCell>{row.fullName}</TableCell>
-                      <TableCell>{checkBan(row)}</TableCell>
+                      <TableCell>{checkBan(row, row.id)}</TableCell>
                     </TableRow>
                   );
                 })}
