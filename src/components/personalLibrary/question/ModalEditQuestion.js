@@ -363,7 +363,7 @@ class ModalQuestion extends Component {
                                             {i == 1 && "B: "}
                                             {i == 2 && "C: "}
                                             {i == 3 && "D: "}
-                                            {answer.content && answer.content.map(
+                                            {answer.content && answer.content.ops && answer.content.ops.map(
                                                 obj => obj.insert.formula ? (<InlineMath math={obj.insert.formula} />) : (obj.insert.image ? (<img src={obj.insert.image} alt="image" width={obj.attributes && obj.attributes.width} />) : (<span> {obj.insert} </span>)))}
                                         </span>
                                     ) : (
@@ -372,7 +372,7 @@ class ModalQuestion extends Component {
                                                 {i == 1 && "B: "}
                                                 {i == 2 && "C: "}
                                                 {i == 3 && "D: "}
-                                                {answer.content && answer.content.map(
+                                                {answer.content && answer.content.ops && answer.content.ops.map(
                                                     obj => obj.insert.formula ? (<InlineMath math={obj.insert.formula} />) : (obj.insert.image ? (<img src={obj.insert.image} alt="image" width={obj.attributes && obj.attributes.width} />) : (<span> {obj.insert} </span>)))}
                                             </span>
                                         )}
@@ -434,11 +434,13 @@ class ModalQuestion extends Component {
 
 
     setCurrentQuestion = () => {
+        console.log(JSON.stringify({ops:[{insert: "\"Tôi nói (1) nghe rõ không\" - (2) nói↵"}]}));
 
         if (this.props.currentQuestion) {
             let currentQuestion = this.props.currentQuestion;
             axios.get(serverUrl + "api/question/getFullQuestionAndAnswers/" + currentQuestion.questionId).then(res => {
                 let questionList = res.data;
+                console.log("before", res);
                 let questionDetail = {
                     questionCode: "",
                     content: null,
@@ -448,25 +450,30 @@ class ModalQuestion extends Component {
                 };
                 if (questionList.length > 1) {
                     questionDetail = questionList[0].question;
-                    questionList = questionList.filter((el,i)=>i!=0);
-                    questionDetail.content = questionDetail.content.slice(0, questionDetail.content.length - 2) + "]";
+                    // questionList = questionList.filter((el,i)=>{return i!=0});
+                    console.log("before", questionList);
+                    questionList.splice(0,1);
+                    console.log("after" ,questionList);
+                    // questionDetail.content = questionDetail.content.slice(0, questionDetail.content.length - 2) + "]";
                     questionDetail.content = JSON.parse(questionDetail.content);
                     questionDetail.questionSeries = true;
                     
                 }
                 questionList.map((el, i) => {
-                    el.question.content = el.question.content.slice(0, el.question.content.length - 2) + "]";
+                    console.log(el);
+                    // el.question.content = el.question.content.slice(0, el.question.content.length - 2) + "]";
                     el.question.content = JSON.parse(el.question.content);
                     el.tempAnswer = {
                         content: "",
                         isCorrect: false,
                         linkedAnswers: null
                     }
-                    el.answers.map((answer,i)=>{
-                        answer.content = answer.content.slice(0, answer.content.length - 2) + "]";
+                    el.answers && el.answers.map((answer,i)=>{
+                        // answer.content = answer.content.slice(0, answer.content.length - 2) + "]";
                         answer.content = JSON.parse(answer.content);
                         return answer;
                     })
+                    el.question.explanation = JSON.parse(el.question.explanation);
                     return el;
                 })
                 this.setState(prevState => ({

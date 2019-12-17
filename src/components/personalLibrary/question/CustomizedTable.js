@@ -205,11 +205,11 @@ const ExpansionPanelDetails = withStyles(theme => ({
 export default function EnhancedTable({ headCells, rows, setCurrentQuestion }) {
   const classes = useStyles();
   const [order, setOrder] = React.useState('desc');
-  const [orderBy, setOrderBy] = React.useState('dateCreated');
+  const [orderBy, setOrderBy] = React.useState('questionId');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [expanded, setExpanded] = React.useState(false);
 
   const handleRequestSort = (event, property) => {
@@ -304,11 +304,11 @@ export default function EnhancedTable({ headCells, rows, setCurrentQuestion }) {
                         }}>nani</div> */}
                         <TableCell colSpan={5} style={{ padding: "0" }}>
                           <ExpansionPanel square className="row-hover" >
-                            <ExpansionPanelSummary onClick={()=>{setCurrentQuestion(row)}} style={{ padding: "0" }} aria-controls="panel1d-content" id="panel1d-header">
+                            <ExpansionPanelSummary title={row.description} onClick={()=>{setCurrentQuestion(row)}} style={{ padding: "0" }} aria-controls="panel1d-content" id="panel1d-header">
                               <TableCell className="table-col-width-15" component="th" id={labelId} scope="row">
                                 <span className="font-effra font-size-18 grey-text text-darken-3">{row.questionCode}</span>
                               </TableCell>
-                              <TableCell className="table-col-width-40"><span className="font-effra font-size-18 grey-text text-darken-3">{row.content.map(
+                              <TableCell className="table-col-width-40"><span className="font-effra font-size-18 grey-text text-darken-3">{row.content&&row.content.ops&&row.content.ops.map(
                                 obj => obj.insert.formula ? (<InlineMath math={obj.insert.formula} />) : (obj.insert.image ? (<img src={obj.insert.image} alt="image" width={obj.attributes && obj.attributes.width} />) : (<span> {obj.insert} </span>)))
                               }</span></TableCell>
                               <TableCell className="table-col-width-15">
@@ -330,11 +330,11 @@ export default function EnhancedTable({ headCells, rows, setCurrentQuestion }) {
                             <ExpansionPanelDetails className={classes.details} style={{ paddingBottom: 0 }}>
 
                               {row.childQuestions && row.childQuestions.map((item, index) => (
-                                <TableRow key={item.questionId} style={{backgroundColor:"#EEEEEE", cursor: "pointer"}} href="#editQuestion" className="modal-trigger">
+                                <TableRow onClick={()=>{setCurrentQuestion(row)}} title={item.description} key={item.questionId} style={{backgroundColor:"#EEEEEE", cursor: "pointer"}} href="#editQuestion" className="modal-trigger">
                                   <TableCell className="table-col-width-15" id={labelId} scope="row">
                                     <span className="font-effra font-size-18 grey-text text-darken-3">{item.questionCode}</span>
                                   </TableCell>
-                                  <TableCell className="table-col-width-40"><span className="font-effra font-size-18 grey-text text-darken-3">{item.content.map(
+                                  <TableCell className="table-col-width-40"><span className="font-effra font-size-18 grey-text text-darken-3">{item.content&&item.content.ops&&item.content.ops.map(
                                     obj => obj.insert.formula ? (<InlineMath math={obj.insert.formula} />) : (obj.insert.image ? (<img src={obj.insert.image} alt="image" width={obj.attributes && obj.attributes.width} />) : (<span> {obj.insert} </span>)))
                                   }</span></TableCell>
                                   <TableCell className="table-col-width-15"><span className="font-effra font-size-18 grey-text text-darken-3">{item.difficultyId == 1 && "Nhận biết"}
@@ -363,11 +363,12 @@ export default function EnhancedTable({ headCells, rows, setCurrentQuestion }) {
                           selected={isItemSelected}
                           href="#editQuestion" className="modal-trigger"
                           style={{cursor: "pointer"}}
+                          title={row.description}
                         >
                           <TableCell component="th" id={labelId} scope="row">
                             <span className="font-effra font-size-18 grey-text text-darken-3">{row.questionCode}</span>
                           </TableCell>
-                          <TableCell><span className="font-effra font-size-18 grey-text text-darken-3">{row.content.map(
+                          <TableCell><span className="font-effra font-size-18 grey-text text-darken-3">{row.content&&row.content.ops&&row.content.ops.map(
                             obj => obj.insert.formula ? (<InlineMath math={obj.insert.formula} />) : (obj.insert.image ? (<img src={obj.insert.image} alt="image" width={obj.attributes && obj.attributes.width} />) : (<span> {obj.insert} </span>)))
                           }</span></TableCell>
                           <TableCell><span className="font-effra font-size-18 grey-text text-darken-3">{row.difficultyId == 1 && "Nhận biết"}
@@ -392,7 +393,7 @@ export default function EnhancedTable({ headCells, rows, setCurrentQuestion }) {
           </Table>
         </div>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10, 25, 100]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}

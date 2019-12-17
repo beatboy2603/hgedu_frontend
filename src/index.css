@@ -576,6 +576,9 @@ i{
 .table-col-width-40 {
   width: 40%;
 }
+.table-col-width-70 {
+  width: 70%;
+}
 
 .row-hover tr:hover {
   background-color:  #f5f5f5;

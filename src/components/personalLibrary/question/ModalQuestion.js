@@ -26,6 +26,7 @@ class ModalQuestion extends Component {
             questionSeries: false,
             folderId: null,
             knowledgeGroup: null,
+            description: "",
         },
         questionList: [
             {
@@ -55,20 +56,81 @@ class ModalQuestion extends Component {
     checkValid = () => {
         let valid = true;
         if (this.state.questionDetail.questionSeries) {
-            if(!this.state.questionDetail.questionCode||this.isQuillEmpty(this.state.questionDetail.content)){
-                valid=false;
-            }
-        }
-        this.state.questionList.map((el, i) => {
-            if (this.isQuillEmpty(el.question.content)) {
+            if (!this.state.questionDetail.questionCode.trim() || this.isQuillEmpty(this.state.questionDetail.content)) {
                 valid = false;
             }
-            el.answers.map((el, i) => {
-                if (this.isQuillEmpty(el.content)) {
+            if (!this.state.questionList[0].question.gradeLevelId) {
+                valid = false;
+            }
+            this.state.questionList.map((el, i) => {
+                if (!this.state.questionList[i].question.questionCode.trim() || this.isQuillEmpty(this.state.questionList[i].question.content) || !this.state.questionList[i].question.difficultyId || !this.state.questionList[i].question.questionTypeId) {
                     valid = false;
+                } else {
+                    if (this.props.question && this.props.question.questions) {
+                        let hasSameQuestionCode = false;
+                        this.props.question.questions.map((subEl, j) => {
+                            if (this.state.questionList[i].question.questionCode.trim() == subEl.questionCode || this.state.questionList[i].question.questionCode.trim() == this.state.questionDetail.questionCode.trim()) {
+                                hasSameQuestionCode = true;
+                            }
+                        })
+                        this.state.questionList.map((subEl, j) => {
+                            if (i != j && el.question.questionCode.trim() == subEl.question.questionCode.trim()) {
+                                hasSameQuestionCode = true;
+                            }
+                        })
+                        if (hasSameQuestionCode) {
+                            valid = false;
+                        }
+                    }
+                }
+                if (this.state.questionList[i].answers.length < 2) {
+                    valid = false;
+                } else {
+                    let hasIsCorrect = false;
+                    this.state.questionList[i].answers.map((el, i) => {
+                        if (el.isCorrect) {
+                            hasIsCorrect = true;
+                        }
+                    })
+                    if (!hasIsCorrect) {
+                        valid = false;
+                    }
                 }
             })
+        } else {
+            if (!this.state.questionList[0].question.questionCode.trim() || this.isQuillEmpty(this.state.questionList[0].question.content) || !this.state.questionList[0].question.difficultyId || !this.state.questionList[0].question.gradeLevelId || !this.state.questionList[0].question.questionTypeId) {
+                valid = false;
+            } else {
+                if (this.props.question && this.props.question.questions) {
+                    let hasSameQuestionCode = false;
+                    this.props.question.questions.map((el, i) => {
+                        if (this.state.questionList[0].question.questionCode.trim() == el.questionCode) {
+                            hasSameQuestionCode = true;
+                        }
+                    })
+                    if (hasSameQuestionCode) {
+                        valid = false;
+                    }
+                }
+            }
+            if (this.state.questionList[0].answers.length < 2) {
+                valid = false;
+            } else {
+                let hasIsCorrect = false;
+                this.state.questionList[0].answers.map((el, i) => {
+                    if (el.isCorrect) {
+                        hasIsCorrect = true;
+                    }
+                })
+                if (!hasIsCorrect) {
+                    valid = false;
+                }
+            }
+        }
+        this.setState({
+            valid
         })
+        return valid;
     }
 
     isQuillEmpty = (value) => {
@@ -158,6 +220,16 @@ class ModalQuestion extends Component {
             questionDetail: {
                 ...prevState.questionDetail,
                 questionCode: value,
+            }
+        }))
+    }
+
+    handleQuestionSeriesDescription = (e) => {
+        const value = e.target.value;
+        this.setState(prevState => ({
+            questionDetail: {
+                ...prevState.questionDetail,
+                description: value,
             }
         }))
     }
@@ -344,37 +416,35 @@ class ModalQuestion extends Component {
         const renderedAnswers = this.state.questionList[index].answers.map((answer, i) => {
             return (
                 <div >
-                    {/* <div>
-                        {i == 0 && "A:"}
-                        {answer.content.map(
-                            obj => obj.insert.formula ? (<InlineMath math={obj.insert.formula} />) : (<span> {obj.insert} </span>))}
-                    </div> */}
                     {answer.content &&
                         <div className="flex-row" style={{ justifyContent: "space-between" }}>
                             <div style={{ maxWidth: "50vw", wordBreak: "break-all" }}>
-                                <label>
-                                    <input name={"group" + index} type="radio" onClick={() => { this.chooseRightAnswer(index, i); console.log(answer) }} />
-
-                                    {answer.isCorrect ? (
+                                {answer.isCorrect ? (
+                                    <label>
+                                        <input name={"group" + index} type="radio" onClick={() => { this.chooseRightAnswer(index, i); console.log(answer) }} checked />
                                         <span style={{ color: "#086bd1" }}>
                                             {i == 0 && "A: "}
                                             {i == 1 && "B: "}
                                             {i == 2 && "C: "}
                                             {i == 3 && "D: "}
-                                            {answer.content && answer.content.map(
+                                            {answer.content && answer.content.ops && answer.content.ops.map(
                                                 obj => obj.insert.formula ? (<InlineMath math={obj.insert.formula} />) : (obj.insert.image ? (<img src={obj.insert.image} alt="image" width={obj.attributes && obj.attributes.width} />) : (<span> {obj.insert} </span>)))}
                                         </span>
-                                    ) : (
+                                    </label>
+                                ) : (
+                                        <label>
+                                            <input name={"group" + index} type="radio" onClick={() => { this.chooseRightAnswer(index, i); console.log(answer) }} />
                                             <span style={{ color: "rgba(0,0,0,0.87)" }}>
                                                 {i == 0 && "A: "}
                                                 {i == 1 && "B: "}
                                                 {i == 2 && "C: "}
                                                 {i == 3 && "D: "}
-                                                {answer.content && answer.content.map(
+                                                {answer.content && answer.content.ops && answer.content.ops.map(
                                                     obj => obj.insert.formula ? (<InlineMath math={obj.insert.formula} />) : (obj.insert.image ? (<img src={obj.insert.image} alt="image" width={obj.attributes && obj.attributes.width} />) : (<span> {obj.insert} </span>)))}
                                             </span>
-                                        )}
-                                </label>
+                                        </label>
+                                    )}
+
                             </div>
 
                             <div>
@@ -430,48 +500,110 @@ class ModalQuestion extends Component {
         }))
     }
 
-    waitUpdate = false;
 
-    componentDidUpdate() {
-        let folderId = this.props.match.params.folderId;
-        if (this.state.currentFolder && folderId !== this.state.currentFolder.folderId && !this.waitUpdate) {
-            if (this.props.folder.folders) {
-                this.waitUpdate = true;
-                this.props.folder.folders.map((folder, index) => {
-                    if (folder.folderId == folderId) {
-                        let currentFolder = folder;
-                        if (currentFolder !== this.state.currentFolder) {
-                            this.setState(prevState => ({
-                                ...prevState,
-                                currentFolder,
-                                questionDetail: {
-                                    ...prevState.questionDetail,
-                                    folderId: currentFolder.folderId,
-                                }
-                            }), () => {
-                                this.waitUpdate = false;
-                            })
-                        } else {
-                            this.waitUpdate = false;
-                        }
-                    }
+    addQuestion = (e) => {
+        let valid = this.checkValid();
+        if (!valid) {
+            alert("Nội dung câu hỏi chưa hợp lệ!\nBạn hãy kiểm tra lại các trường thông tin cần thiết, trùng mã câu hỏi, v.v")
+            return;
+        }
+        let data = [];
+        if (this.state.questionDetail.questionSeries) {
+            // this.setState(prevState => ({
+            //     ...prevState,
+            //     questionDetail: {
+            //         ...prevState.questionDetail,
+            //         content: JSON.stringify(prevState.questionDetail.question.content),
+            //         questionTypeId: 3,
+            //     }
+            // }))
+            data = [{
+                question: this.state.questionDetail
+            }, ...this.state.questionList];
+            // data[0].question.content = JSON.stringify(data[0].question.content);
+            data[0].question.questionTypeId = 3;
+            data = data.map((el, i) => {
+                el.question.gradeLevelId = this.state.questionList[0].question.gradeLevelId;
+                return el;
+            })
+        } else {
+            data = [this.state.questionList[0]];
+        }
+        data = data.map((el, i) => {
+            el.question.folderId = this.state.currentFolder.folderId;
+            el.question.content = JSON.stringify(el.question.content);
+            if (el.answers && el.answers.length > 0) {
+                el.answers = el.answers.map((answer, j) => {
+                    answer.content = JSON.stringify(answer.content);
+                    return answer;
                 })
             }
-        }
+            if (el.question.explanation) {
+                el.question.explanation = JSON.stringify(el.question.explanation);
+            }
+            return el;
+        })
+        console.log("data a", data);
+        axios.post(serverUrl + 'api/question/addQuestion/' + this.props.user.uid, data).then(res => {
+            console.log(res);
+            if(res.data=="added"){
+                console.log("added");
+                this.props.updateQuestionList();
+            }
+            console.log("after add");
+        })
+        // console.log(data);
     }
+
+    // waitUpdate = false;
+
+    static getDerivedStateFromProps(props, state) {
+        if (props.currentFolder !== state.currentFolder) {
+            return { currentFolder: props.currentFolder };
+        }
+        return null;
+    }
+
+    // componentDidUpdate() {
+    //     let folderId = this.props.match.params.folderId;
+    //     if (this.state.currentFolder && folderId !== this.state.currentFolder.folderId && !this.waitUpdate) {
+    //         if (this.props.folder.folders) {
+    //             this.waitUpdate = true;
+    //             this.props.folder.folders.map((folder, index) => {
+    //                 if (folder.folderId == folderId) {
+    //                     let currentFolder = folder;
+    //                     if (currentFolder !== this.state.currentFolder) {
+    //                         this.setState(prevState => ({
+    //                             ...prevState,
+    //                             currentFolder,
+    //                             questionDetail: {
+    //                                 ...prevState.questionDetail,
+    //                                 folderId: currentFolder.folderId,
+    //                             }
+    //                         }), () => {
+    //                             this.waitUpdate = false;
+    //                         })
+    //                     } else {
+    //                         this.waitUpdate = false;
+    //                     }
+    //                 }
+    //             })
+    //         }
+    //     }
+    // }
 
     componentDidMount() {
         let folderId = this.props.match.params.folderId;
-        axios.get(serverUrl + "api/folder/" + folderId).then(res => {
-            this.setState(prevState => ({
-                ...prevState,
-                currentFolder: res.data,
-                questionDetail: {
-                    ...prevState.questionDetail,
-                    folderId: res.data.folderId,
-                }
-            }))
-        })
+        // axios.get(serverUrl + "api/folder/" + folderId).then(res => {
+        //     this.setState(prevState => ({
+        //         ...prevState,
+        //         currentFolder: res.data,
+        //         questionDetail: {
+        //             ...prevState.questionDetail,
+        //             folderId: res.data.folderId,
+        //         }
+        //     }))
+        // })
         axios.get(serverUrl + "api/question/getFormIdentifiers/" + this.props.user.uid).then(res => {
             const formIdentifiers = res.data.map(el => {
                 return { value: el, text: el }
@@ -497,16 +629,6 @@ class ModalQuestion extends Component {
                     folderId: res.data.folderId,
                 }
             }))
-        })
-    }
-
-    testSend = () => {
-        let data = [this.state.questionDetail, ...this.state.questionList];
-        axios.post(serverUrl + 'api/question/addQuestion', data).then(res => {
-            console.log(res);
-        })
-        axios.post(serverUrl + 'api/question/wew').then(res => {
-            console.log(res);
         })
     }
 
@@ -652,7 +774,7 @@ class ModalQuestion extends Component {
                                         source={{ name: "specialKnowledge", index: i }}
                                     />
                                 </div>
-                                <div className="col s2" style={lineSpacing}>Hướng dẫn giải<span className='red-text'>*</span>:</div>
+                                <div className="col s2" style={lineSpacing}>Hướng dẫn giải:</div>
                                 <div className="col s10" style={lineSpacing}>
                                     <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionList[i].question.explanation} updateContent={this.handleQuillChange} quillSource="explanation" index={i} toolbarModules={[['image'],
                                     ['formula'],]} setResetAll={resetForm => {
@@ -661,7 +783,7 @@ class ModalQuestion extends Component {
                                         }))
                                     }} />
                                 </div>
-                                {this.state.questionList.length>1 &&
+                                {this.state.questionList.length > 1 &&
                                     <div className="col s12">
                                         <span style={{ cursor: "pointer" }} className="red-text lighten-1" onClick={(e) => { this.deleteQuestionFromSeries(e, i) }}>Xóa</span>
                                     </div>
@@ -674,10 +796,11 @@ class ModalQuestion extends Component {
         })
 
         return (
-            <div onClick={()=>{this.checkValid()}}>
-                <a href="#addQuestion" style={{ position: "fixed" }} className="btn-floating btn-large my-floating-btn blue modal-trigger">
-                    <i className="material-icons">add</i>
-                </a>
+            <div onClick={() => { this.checkValid() }}>
+                {this.state.currentFolder && this.state.currentFolder.folderId != 0 &&
+                    <a href="#addQuestion" style={{ position: "fixed" }} className="btn-floating btn-large my-floating-btn blue modal-trigger">
+                        <i className="material-icons">add</i>
+                    </a>}
                 <button onClick={() => { console.log(this.state) }}>Click me yo</button>
                 <button onClick={() => { this.testSend() }}>test axios</button>
                 <Modal id="addQuestion" options={{ preventScrolling: true }} style={{ width: "70vw", maxHeight: "80vh", height: "80vh", overflow: "hidden", borderRadius: "25px", border: "4px solid #086bd1" }} actions={[]}>
@@ -705,7 +828,7 @@ class ModalQuestion extends Component {
                                                 <input type="text" className="validate" value={this.state.questionDetail.questionCode} onChange={(e) => { this.handleQuestionSeriesCode(e) }} />
                                             </div>
                                         </div>
-                                        <div className="col s2">Câu hỏi chùm<span className='red-text'>*</span>:</div>
+                                        <div className="col s2">Nội dung chung<span className='red-text'>*</span>:</div>
                                         <div className="col s10">
                                             <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionDetail.content} updateContent={this.handleQuestionSeriesContent} quillSource="questionSeries" index={0} toolbarModules={[['image'],
                                             ['formula'],]} setResetAll={resetForm => {
@@ -713,6 +836,10 @@ class ModalQuestion extends Component {
                                                     resetAll: [...prevState.resetAll, resetForm],
                                                 }))
                                             }} />
+                                        </div>
+                                        <div className="col s2" style={lineSpacing}>Mô tả:</div>
+                                        <div className="col s10 input-field">
+                                            <input id='description' type="text" className="validate" value={this.state.questionDetail.description} onChange={(e) => { this.handleQuestionSeriesDescription(e) }} style={{ width: "20vw" }} />
                                         </div>
                                     </div>
                                 ) : (
@@ -736,7 +863,7 @@ class ModalQuestion extends Component {
                                     )}
 
                                 <div className="col s12" style={lineSpacing}>
-                                    <Toggle label="Chế độ câu hỏi chùm" handleToggleChange={this.handleToggleChange} customStyle={{ position: "relative", left: "-20px" }}/>
+                                    <Toggle label="Chế độ câu hỏi chùm" handleToggleChange={this.handleToggleChange} customStyle={{ position: "relative", left: "-20px" }} />
                                 </div>
 
                                 {!this.state.questionDetail.questionSeries ? (
@@ -831,7 +958,7 @@ class ModalQuestion extends Component {
                                                 source={{ name: "specialKnowledge", index: 0 }}
                                             />
                                         </div>
-                                        <div className="col s2" style={lineSpacing}>Hướng dẫn giải<span className='red-text'>*</span>:</div>
+                                        <div className="col s2" style={lineSpacing}>Hướng dẫn giải:</div>
                                         <div className="col s10" style={lineSpacing}>
                                             <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionList[0].question.explanation} updateContent={this.handleQuillChange} quillSource="explanation" index={0} toolbarModules={[['image'],
                                             ['formula'],]} setResetAll={resetForm => {
@@ -854,7 +981,9 @@ class ModalQuestion extends Component {
                         </div>
                         <div className="line" style={{ width: "96%", marginLeft: "2%", marginBottom: "30px" }}></div>
                         <a className="modal-action modal-close black-text lighten-1" style={{ margin: "0 1.5vw", float: "left" }}>Hủy thao tác</a>
-                        <a className="modal-action modal-close blue-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }} onClick={this.addQuestion}>Hoàn tất</a>
+                        {this.state.valid &&
+                            <a className="modal-action modal-close blue-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }} onClick={this.addQuestion}>Hoàn tất</a>
+                        }
                     </div>
                 </Modal>
             </div >

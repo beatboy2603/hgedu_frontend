@@ -108,6 +108,7 @@ class LandingPage extends Component {
                                 picture: googleToken.picture,
                                 sub: googleToken.sub,
                             }
+                            console.log(googleToken.name);
                             this.props.dispatch({ type: "UPDATE_USER", payload: user });
                         })
                         this.props.dispatch({

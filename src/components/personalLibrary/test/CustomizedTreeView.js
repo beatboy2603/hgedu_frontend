@@ -22,11 +22,6 @@ const useTreeItemStyles = makeStyles(theme => ({
             color: 'var(--tree-view-color)',
         },
     },
-    // hover: {
-    //     "&:hover": {
-    //         backgroundColor: "white",
-    //     }
-    // },
     content: {
         // color: theme.palette.text.secondary,
         color: "#424242",
@@ -116,7 +111,7 @@ const useStyles = makeStyles({
 function CustomizedTreeView(props) {
     const classes = useStyles();
 
-    const { folders, setCurrentFolder } = props;
+    const { folders, setCurrentFolder, source } = props;
 
     const handleClick = (folder, path) => {
         // props.history.push('/personalLibrary/' + path + "/" + folder.folderId);
@@ -148,23 +143,23 @@ function CustomizedTreeView(props) {
             if (subfolders.length > 0) {
                 return (
                     <StyledTreeItem setCurrentFolder={setCurrentFolder} folder={folder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={Folder} color="#1a73e8"
-                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={true} onClick={() => setCurrentFolder(folder)}>
+                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={true} >
                         <div style={{ paddingLeft: "10px" }}>{recursiveTree(folders, subfolders)}</div>
                     </StyledTreeItem>
                 )
             } else {
                 if (folder.folderTypeId == 1) {
                     return <StyledTreeItem setCurrentFolder={setCurrentFolder} folder={folder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={FolderOpenIcon} color="#1a73e8"
-                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={() => setCurrentFolder(folder)} />
+                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false}/>
                 } else if (folder.folderTypeId == 2) {
                     return <StyledTreeItem setCurrentFolder={setCurrentFolder} folder={folder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={DescriptionIcon} color="#1a73e8"
-                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={() => handleClick(folder, "knowledgeGroup")} />
+                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={(e) => setCurrentFolder(e, folder, source)} />
                 } else if (folder.folderTypeId == 3) {
                     return <StyledTreeItem setCurrentFolder={setCurrentFolder} folder={folder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={DescriptionIcon} color="#1a73e8"
-                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={() => handleClick(folder, "test")} />
+                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={(e) => setCurrentFolder(e, folder, source)} />
                 } else {
                     return <StyledTreeItem setCurrentFolder={setCurrentFolder} folder={folder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={FolderOpenIcon} color="#1a73e8"
-                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={() => setCurrentFolder(folder)} />
+                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} />
                 }
             }
         })
