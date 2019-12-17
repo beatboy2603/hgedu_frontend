@@ -4,7 +4,7 @@ import axios from 'axios';
 //     return axios.post('http://localhost:8084/hgedu_server/api', config);
 // }
 
-export const serverUrl = 'http://hgedu-server.herokuapp.com/';
+export const serverUrl = 'https://hgedu-server.herokuapp.com/';
 
 export const setCookie = (key, value, expHours) => {
     var d = new Date();
