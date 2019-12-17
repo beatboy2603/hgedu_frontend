@@ -418,19 +418,19 @@ i{
 }
 
 .fit-modal .modal-content {
-  width: fit-content;
+  width: fit-content !important;
 }
 
 .fit-modal .modal-content h4 {
-  display: none;
+  display: none !important;
 }
 
 .fit-modal .modal-footer {
-  display: none;
+  display: none !important;
 }
 
 .fit-content {
-  width: fit-content;
+  width: fit-content !important;
 }
 
 .date-picker {
@@ -597,7 +597,7 @@ i{
 }
 
 .view-exam .modal-content {
-  padding: 0
+  padding: 0 !important;
 }
 
 .view-exam .modal-footer {
@@ -609,18 +609,92 @@ i{
 }
 
 .exam-tabs button:focus {
-  background-color: transparent;
+  background-color: transparent !important;
 }
 
 .exam-tabs .MuiTab-textColorSecondary.Mui-selected {
-  color: #086bd1
+  color: #299bff
 }
 
 .exam-tabs .PrivateTabIndicator-colorSecondary-300 {
-  background-color: #086bd1
+  background-color: #299bff
+}
+
+.exam-radio-primary .MuiRadio-colorPrimary.Mui-checked {
+  color: #299bff;
+}
+
+.exam-radio-primary .MuiFormControlLabel-label {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.radio-primary .MuiRadio-colorPrimary.Mui-checked {
+  color: #299bff;
+}
+
+.radio-primary .MuiFormControlLabel-label {
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 0.875rem;
+  padding: 9px
+}
+
+.button-primary .MuiButton-containedPrimary {
+  background-color:  #1565c0;
 }
 
 .abbreviationLibrary .materialize-textarea{
   min-height: 20vh;
   max-height: 20vh;
 }
+.button-primary button:hover {
+  background-color:  #1565c0;
+}
+
+.invalid-feedback {
+  margin-top: 2vh;
+  color: #e32;
+  font-style: italic;
+}
+
+.exam-content .ql-container {
+  border-radius: 0;
+  background: none !important;
+}
+
+.exam-content .ql-container.ql-snow {
+  border: none !important;
+}
+
+.exam-content .ql-container .ql-editor {
+  padding: 0;
+  cursor: default !important;
+  min-height: auto;
+}
+
+.radio-primary .MuiFormControlLabel-label .exam-content .ql-container .ql-editor p {
+  cursor: pointer !important;
+}
+
+/* width */
+/* ::-webkit-scrollbar {
+  width: 5px;
+} */
+
+/* Track */
+/* ::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+} */
+ 
+/* Handle */
+/* ::-webkit-scrollbar-thumb {
+  background: #888; 
+  border-radius: 10px;
+} */
+
+/* Handle on hover */
+/* ::-webkit-scrollbar-thumb:hover {
+  background: #086bd1; 
+} */
+

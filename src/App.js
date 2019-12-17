@@ -7,6 +7,8 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import AbbreviationLibrary from './components/abbreviation/AbbreviationLibrary';
 import StudentManagement from './components/StudentManagement';
 import TestManagement from './components/Exams/TestManagement';
+import DoExam from './components/Exams/DoExam';
+import ExamInfo from './components/Exams/ExamInfo';
 import LandingPage from './components/LandingPage';
 import NewsList from './components/News/NewsList';
 import { PersistGate } from 'redux-persist/lib/integration/react';
@@ -27,6 +29,7 @@ import ViewNews from './components/News/ViewNews';
 import PersonalInfo from './components/UserInfo/PersonalInfo';
 import axios from 'axios';
 
+import StudentExams from './components/Exams/StudentExams';
 // const persistConfig = {
 //   key: 'root',
 //   storage: storage,
@@ -78,7 +81,7 @@ class App extends Component {
             }
           });
         }
-        
+
         return response;
       }, function (error) {
         return Promise.reject(error);
@@ -97,9 +100,11 @@ class App extends Component {
             <PersistGate loading={null} persistor={persistor}>
               <BrowserRouter>
                 <div className="App" onClick={() => { this.checkAuthen() }}>
-                  <div style={{ zIndex: "1" }}>
-                    <Sidenav isAuthenticated={this.state.isAuthenticated} checkAuthen={this.checkAuthen}/>
-                  </div>
+                  {window.location.pathname !== '/doExam' &&
+                    <div style={{ zIndex: "1" }}>
+                      <Sidenav isAuthenticated={this.state.isAuthenticated} />
+                    </div>
+                  }
                   <Switch>
                     <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={false} exact path='/'>
                       <LandingPage checkAuthen={this.checkAuthen} />
@@ -131,6 +136,10 @@ class App extends Component {
                     <Route path='/testWord' component={TestWord} />
                     <Route path='/userManagement' component={UserManagement} />
                     <Route path='/news/view/:newsTitle' component={ViewNews} />
+                    <Route path='/doExam' component={DoExam} />
+                    <Route path='/examInfo' component={ExamInfo} />
+                    <Route path='/studentExams' component={StudentExams} />
+                    <Route path='/exam/:examTitle' component={ExamInfo} />
                     <Route path="*" component={NotFoundPage} />
                     {/* <Route path='/userInfo' component={UserInfo}/> */}
                   </Switch>

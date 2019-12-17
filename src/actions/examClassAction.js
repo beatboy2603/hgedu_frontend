@@ -1,8 +1,9 @@
 import {GET_SELECTED_EXAM_CLASSES, GET_ERRORS} from "./types";
-import axios from 'axios'
+import axios from 'axios';
+import {serverUrl} from '../components/common/common';
 
 export const getSelectedExamClasses = (examId) => async dispatch => {
-    const res = await axios.get("http://localhost:8084/api/examClass/classes/" + examId + "/all");
+    const res = await axios.get(serverUrl + "api/examClass/classes/" + examId + "/all");
     dispatch({
         type: GET_SELECTED_EXAM_CLASSES,
         payload: res.data
@@ -12,7 +13,7 @@ export const getSelectedExamClasses = (examId) => async dispatch => {
 export const deleteExamClasses = (examId, history) => { 
     return async dispatch => {
         try {
-            const result = await axios.delete("http://localhost:8084/api/examClass/" + examId);
+            const result = await axios.delete(serverUrl + "api/examClass/" + examId);
             history.push("/testManagement")
         } catch (error) {
             dispatch({

@@ -95,7 +95,7 @@ const Sidenav = (props) => {
                 if (auth2) {
                     setCookie("authenticated", "false", -1);
                     axios.defaults.headers.common['Authorization'] = null;
-                    if(props.checkAuthen){
+                    if (props.checkAuthen) {
                         props.checkAuthen();
                     }
                     auth2.signOut().then(() => {
@@ -107,7 +107,7 @@ const Sidenav = (props) => {
         } else {
             setCookie("authenticated", "false", -1);
             axios.defaults.headers.common['Authorization'] = null;
-            if(props.checkAuthen){
+            if (props.checkAuthen) {
                 props.checkAuthen();
             }
             auth2.signOut().then(() => {
@@ -137,10 +137,10 @@ const Sidenav = (props) => {
                     <div className="role-changer" style={{ display: 'flex', flexDirection: 'row' }}>
                         {role === 3 && userRoleId === 1 ?
                             (
-                                <i title='Giáo viên' className="material-icons padding-vertical-10"style={{ ...style.iconChoice, ...style.iconColorActive }} >import_contacts</i>
+                                <i title='Giáo viên' className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...style.iconColorActive }} >import_contacts</i>
                             ) : (
                                 <Link to="/home">
-                                    <i title='Giáo viên' className="material-icons padding-vertical-10" onClick= {toTeacher} style={{ ...style.iconChoice, ...iconColor }} >import_contacts</i>
+                                    <i title='Giáo viên' className="material-icons padding-vertical-10" onClick={toTeacher} style={{ ...style.iconChoice, ...iconColor }} >import_contacts</i>
                                 </Link>
                             )
                         }
@@ -148,7 +148,7 @@ const Sidenav = (props) => {
                             (<i className="material-icons padding-vertical-10" style={{ ...style.iconChoice, ...style.iconColorActive }} >school</i>
                             ) : (
                                 <Link to="/home">
-                                    <i className="material-icons padding-vertical-10" onClick= {toStudent} style={{ ...style.iconChoice, ...iconColor }} >school</i>
+                                    <i className="material-icons padding-vertical-10" onClick={toStudent} style={{ ...style.iconChoice, ...iconColor }} >school</i>
                                 </Link>
                             )
                         }
@@ -207,8 +207,16 @@ const Sidenav = (props) => {
                         <NavLink to="/home" activeClassName="side-nav-active">
                             <i className="material-icons padding-vertical-10" style={iconColor}>home</i>
                         </NavLink>
-                        <NavLink to="/teacherList" activeClassName="side-nav-active">
+                        {/* <NavLink to="/teacherList" activeClassName="side-nav-active">
                             <i className="material-icons padding-vertical-10" style={iconColor}>people</i>
+                        </NavLink> */}
+                        <NavLink to='/studentExams' activeClassName="side-nav-active">
+                            <i className="material-icons padding-vertical-10" style={iconColor}>check_box</i>
+                        </NavLink>
+                    </div>
+                    <div className="user-option" style={style.userOption} onMouseLeave={hideObj} >
+                        <NavLink to="/user" >
+                            <i onMouseOver={showObj} className="material-icons padding-vertical-10" style={iconColor} >account_circle</i>
                         </NavLink>
                     </div>
                     {changeRole(props.user.role, props.user.userRoleId)}
@@ -358,6 +366,14 @@ const Sidenav = (props) => {
                         <NavLink to="/home" className='flex-row' activeClassName="side-nav-active">
                             <i className="material-icons left padding-vertical-10" style={iconColor}>home</i>
                             <span style={iconColor}>Trang chủ</span>
+                        </NavLink>
+                        {/* <NavLink to="/teacherList" className='flex-row' activeClassName="side-nav-active">
+                            <i className="material-icons padding-vertical-10" style={iconColor}>people</i>
+                            <span style={iconColor}>Lớp học</span>
+                        </NavLink> */}
+                        <NavLink to='/studentExams' className='flex-row' activeClassName="side-nav-active">
+                            <i className="material-icons left padding-vertical-10" style={iconColor}>check_box</i>
+                            <span style={iconColor}>Kiểm tra</span>
                         </NavLink>
                     </div>
                     <NavLink className='flex-row' to='/user'>

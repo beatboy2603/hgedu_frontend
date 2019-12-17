@@ -26,10 +26,16 @@ class DatetimePicker extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
 
+        this.updateState = this.updateState.bind(this);
+
         this.maxHour = 23;
         this.minHour = 0;
         this.maxMinute = 59;
         this.minMinute = 0;
+    }
+
+    updateState = (startTime) => {
+        this.setState({startTime});
     }
 
     getStandardNumberString = (number) => {
@@ -56,6 +62,7 @@ class DatetimePicker extends Component {
         } else if (date >= this.state.startTime && this.state.type === 'END') {
             this.setState({error: ''});
         }
+        console.log("date", date)
         this.setState({selectedDate: date})
     }
 
@@ -164,9 +171,11 @@ class DatetimePicker extends Component {
         }
         if(nextProps.selectedDate !== this.props.selectedDate) {
             let selectedDate = new Date(nextProps.selectedDate);
-            this.setState({selectedDate: selectedDate,
-                hour: this.getStandardNumberString(selectedDate.getHours()),
-                minute: this.getStandardNumberString(selectedDate.getMinutes())})
+            if(selectedDate !== 'Invalid Date') {
+                this.setState({selectedDate: selectedDate,
+                    hour: this.getStandardNumberString(selectedDate.getHours()),
+                    minute: this.getStandardNumberString(selectedDate.getMinutes())})
+            }
         }
     }
 
