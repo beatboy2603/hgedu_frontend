@@ -123,7 +123,7 @@ class TestManagement extends Component {
                     { this.state.type && this.state.type === 'HISTORY' &&
                         <h5 className="blue-text text-darken-3 bold">Nhật kí</h5>
                     }
-                        <p className='grey-text text-darken-1'>08 bài kiểm tra</p>
+                        {/* <p className='grey-text text-darken-1'>08 bài kiểm tra</p> */}
                     </div>
                     <div className="col s9 container z-depth-1">
                         Quảng cáo

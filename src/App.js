@@ -6,6 +6,8 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import AbbreviationLibrary from './components/abbreviation/AbbreviationLibrary';
 import StudentManagement from './components/StudentManagement';
 import TestManagement from './components/Exams/TestManagement';
+import DoExam from './components/Exams/DoExam';
+import ExamInfo from './components/Exams/ExamInfo';
 import LandingPage from './components/LandingPage';
 import NewsList from './components/News/NewsList';
 import { PersistGate } from 'redux-persist/lib/integration/react';
@@ -23,6 +25,7 @@ import ProtectedRoute from './components/common/ProtectedRoute';
 import UserManagement from './components/UserManagement/UserManagement';
 import { getAuthenCookie } from './components/common/common';
 import ViewNews from './components/News/ViewNews';
+import StudentExams from './components/Exams/StudentExams';
 // const persistConfig = {
 //   key: 'root',
 //   storage: storage,
@@ -59,9 +62,11 @@ class App extends Component {
         <PersistGate loading={null} persistor={persistor}>
           <BrowserRouter>
             <div className="App" onClick={() => { this.checkAuthen() }}>
+            {window.location.pathname !== '/doExam' &&
               <div style={{ zIndex: "1" }}>
                 <Sidenav isAuthenticated={this.state.isAuthenticated} />
               </div>
+            }
               <Switch>
                 <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={false} exact path='/'>
                   <LandingPage />
@@ -93,6 +98,10 @@ class App extends Component {
                 <Route path='/testWord' component={TestWord} />
                 <Route path='/userManagement' component={UserManagement} />
                 <Route path='/news/view/:newsTitle' component={ViewNews} />
+                <Route path='/doExam' component={DoExam} />
+                <Route path='/examInfo' component={ExamInfo} />
+                <Route path='/studentExams' component={StudentExams} />
+                <Route path='/exam/:examTitle' component={ExamInfo} />
                 {/* <Route path='/userInfo' component={UserInfo}/> */}
               </Switch>
             </div>

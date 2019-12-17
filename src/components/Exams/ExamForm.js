@@ -35,6 +35,8 @@ import classnames from 'classnames';
 import Link from '@material-ui/core/Link';
 import {CustomCheckbox} from '../common/CustomCheckbox';
 import axios from 'axios';
+import {serverUrl} from '../common/common';
+import viLocale from "date-fns/locale/vi";
 
 const styles = makeStyles(theme => ({
     root: {
@@ -109,7 +111,7 @@ class ExamForm extends Component {
         this.state = {
             _id: 0,
             title: '',
-            errors: {},
+            errors: {title: '', code: '', duration: '', trials: '', startTime: '', classes: '', tests: ''},
             selectedClassList: [],
             selectedTestList: [],
             testList: [],
@@ -120,6 +122,11 @@ class ExamForm extends Component {
             durationSelectionValue: 0,
             trials: 0,
             trialsSelectionValue: 0,
+            powers: [],
+            isShowAnswers: '0',
+            isShowExplanation: '0',
+            selectedPower: 1,
+            examCode: ''
             //isSelectedTestUodated: false,
         }
 
@@ -135,10 +142,43 @@ class ExamForm extends Component {
         this.updateSelectedStartEntryTime = this.updateSelectedStartEntryTime.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleMarkSave = this.handleMarkSave.bind(this);
+        this.handleShowAnswers = this.handleShowAnswers.bind(this);
+        this.handleShowExplanation = this.handleShowExplanation.bind(this);
+        this.handlePowerChange = this.handlePowerChange.bind(this);
+        this.handleCodeChange = this.handleCodeChange.bind(this);
         this.resetForm = this.resetForm.bind(this);
 
         this.getSelectedClasses = this.getSelectedClasses.bind(this);
         this.getSelectedTests = this.getSelectedTests.bind(this);
+
+        this.getPowers = this.getPowers.bind(this);
+
+        this.endTimeRef = React.createRef();
+    }
+
+    checkValidSubmit = () => {
+        if(this.state.title && this.state.startEntryTime && this.state.selectedClassList.length !== 0 && this.state.selectedTestList.length !== 0) {
+            return true;
+        }
+        return false;
+    }
+
+    componentDidUpdate() {
+        if(this.state.selectedClassList.length === 0 && !this.state.errors.classes) {
+            let errors = this.state.errors;
+            errors.classes = 'Hãy chọn ít nhất một lớp.'
+            this.setState({errors});
+        }
+        if(this.state.selectedTestList.length === 0 && !this.state.errors.tests) {
+            let errors = this.state.errors;
+            errors.tests = 'Hãy chọn ít nhất một bài kiểm tra.'
+            this.setState({errors});
+        }
+        if(this.state.selectedTestList.length !== 0 && this.state.errors.tests) {
+            let errors = this.state.errors;
+            errors.tests = ''
+            this.setState({errors});
+        }
     }
 
     componentWillReceiveProps(nextProps) {
@@ -155,7 +195,7 @@ class ExamForm extends Component {
     }
 
     getSelectedClasses = (examId) => {
-        axios.get("http://localhost:8084/api/examClass/classes/" + examId + "/all")
+        axios.get(serverUrl + "api/examClass/classes/" + examId + "/all")
             .then(res => {
                 let result = [];
                 if(res.data) {
@@ -166,7 +206,7 @@ class ExamForm extends Component {
     }
 
     getSelectedTests = (examId) => {
-        axios.get("http://localhost:8084/api/examTest/tests/" + examId + "/all")
+        axios.get(serverUrl + "api/examTest/tests/" + examId + "/all")
             .then(res => {
                 this.setState({selectedTestList: res.data})
             })
@@ -185,11 +225,15 @@ class ExamForm extends Component {
             this.setState({
                 _id: exam.id,
                 title: exam.title,
-                errors: {},
+                errors: {title: '', code: '', duration: '', trials: ''},
                // selectedClassList: ,
                 //selectedTestList: [],
                 //testList: [],
-                isMarkSaved: exam.isMarked,
+                isMarkSaved: exam.isMarked ? '1' : '0',
+                isShowAnswers: exam.isShowAnswers ? '1' : '0',
+                isShowExplanation: exam.isShowExplanation ? '1' : '0',
+                examCode: exam.code,
+                selectedPower: exam.powerLevel,
                 startEntryTime: exam.startEntryTime,
                 endEntryTime: exam.endEntryTime === '0000-00-00 00:00:00' ? '' : exam.endEntryTime,
                 duration: exam.duration,
@@ -198,6 +242,8 @@ class ExamForm extends Component {
                 trialsSelectionValue: !trialsArr.includes(exam.trials) ? -1 : exam.trials,
             });
         }
+        //get powers
+        this.getPowers();
         //get selected tests
         //this.props.getSelectedExamTests(this.state._id);
         //set state for edit exam
@@ -205,9 +251,52 @@ class ExamForm extends Component {
 
     handleMarkSave = (e) => {
         if(e.target) {
-            console.log(e.target.value)
+            //console.log(e.target.value)
             this.setState({isMarkSaved: e.target.value});
         }
+    }
+
+    handleShowAnswers = (e) => {
+        if(e.target) {
+            //console.log(e.target.value)
+            this.setState({isShowAnswers: e.target.value});
+        }
+    }
+
+    handleShowExplanation = (e) => {
+        if(e.target) {
+            //console.log(e.target.value)
+            this.setState({isShowExplanation: e.target.value});
+        }
+    }
+
+    handlePowerChange = (e) => {
+        if(e.target) {
+            //console.log(e.target.value)
+            this.setState({selectedPower: e.target.value});
+        }
+    }
+
+    handleCodeChange = (e) => {
+        let errors = this.state.errors;
+        if(/^([A-Za-z0-9]{1,}([.]|[-]|[_]])?)+[A-Za-z0-9]*$/.test(e.target.value)) {
+            errors.code = ''
+        } else {
+            errors.code = 'Mã bài thi không được có dấu cách và ký tự đặc biệt'
+        }
+        this.setState({
+            examCode: e.target.value,
+            errors
+        })
+    }
+
+    getPowers = async () => {
+        await axios.get(serverUrl + "api/powers")
+        .then(res => {
+            //console.log("powers", res.data)
+            this.setState({powers: res.data})
+        })
+        .catch(error => console.log(error));
     }
 
     handleSubmit = (e) => {
@@ -220,16 +309,19 @@ class ExamForm extends Component {
                 title: this.state.title,
                 startEntryTime: this.state.startEntryTime ? this.state.startEntryTime : '0000-00-00 00:00:00',
                 endEntryTime: this.state.endEntryTime ? this.state.endEntryTime : '0000-00-00 00:00:00',
-                duration: this.state.duration,
-                trials: this.state.trials,
-                code: '',
+                duration: Number(this.state.duration),
+                trials: Number(this.state.trials),
+                code: this.state.examCode,
+                powerLevel: Number(this.state.selectedPower),
+                isShowExplanation: Number(this.state.isShowExplanation) ? true : false,
+                isShowAnswers: Number(this.state.isShowAnswers) ? true : false,
                 isMarked: Number(this.state.isMarkSaved) ? true : false,
                 dateUpdated: new Date(date.getTime() - date.getTimezoneOffset()*60000).toJSON().slice(0, 19).replace(/T/g, ' ')
             }
             const selectedClassList = this.state.selectedClassList;
             const selectedTestList = this.state.selectedTestList;
-            this.props.deleteExamClasses(this.state._id);
-            this.props.deleteExamTests(this.state._id);
+            // this.props.deleteExamClasses(this.state._id);
+            // this.props.deleteExamTests(this.state._id);
             this.props.updateExam(exam, selectedClassList,selectedTestList);
         } else {
             let date = new Date();
@@ -238,9 +330,12 @@ class ExamForm extends Component {
                 title: this.state.title,
                 startEntryTime: this.state.startEntryTime ? this.state.startEntryTime : '0000-00-00 00:00:00',
                 endEntryTime: this.state.endEntryTime ? this.state.endEntryTime : '0000-00-00 00:00:00',
-                duration: this.state.duration,
-                trials: this.state.trials,
-                code: '',
+                duration: Number(this.state.duration),
+                trials: Number(this.state.trials),
+                code: this.state.examCode,
+                powerLevel: Number(this.state.selectedPower),
+                isShowExplanation: Number(this.state.isShowExplanation) ? true : false,
+                isShowAnswers: Number(this.state.isShowAnswers) ? true : false,
                 isMarked: Number(this.state.isMarkSaved) ? true : false,
                 dateCreated: new Date(date.getTime() - date.getTimezoneOffset()*60000).toJSON().slice(0, 19).replace(/T/g, ' '),
                 dateUpdated: new Date(date.getTime() - date.getTimezoneOffset()*60000).toJSON().slice(0, 19).replace(/T/g, ' ')
@@ -299,6 +394,7 @@ class ExamForm extends Component {
                 this.setState({endEntryTime: ''})
             }
         }
+        this.endTimeRef.current.updateState(selectedSartEntryTime);
         this.setState({startEntryTime: selectedSartEntryTime});
     }
 
@@ -313,8 +409,15 @@ class ExamForm extends Component {
         //     this.setState({ [e.target.name]: e.target.value, errors });
         // } else {
         if(e.target) {
+            let errors = this.state.errors;
+            if(/^([A-Za-z0-9]{1,}([.,]|[-]| )?)+[A-Za-z0-9]*$/.test(e.target.value)) {
+                errors.title = ''
+            } else {
+                errors.title = 'Chủ đề phải là chữ cái, số hoặc ký tự khác như: . , -'
+            }
             this.setState({
-                [e.target.name]: e.target.value
+                title: e.target.value,
+                errors
             })
         }
         //}
@@ -324,34 +427,52 @@ class ExamForm extends Component {
     handleDurationChange = (e) => {
         if(e.target) {
             this.setState({durationSelectionValue: e.target.value})
-            if (e.target.value !== -1) 
-                this.setState({duration: e.target.value})
+            if (e.target.value !== -1) {
+                let errors = this.state.errors;
+                errors.duration = ''
+                this.setState({duration: e.target.value, errors})
+            }
         }
     }
 
     handleDurationOtherChange = (e) => {
-        if(e.target) 
-            this.setState({duration: Number(e.target.value)})
+        if(e.target) {
+            let errors = this.state.errors;
+            if(/^[0-9]+$/.test(e.target.value)) {
+                errors.duration = '';
+            } else {
+                errors.duration = "Hãy nhập số nguyên dương"
+            }
+            this.setState({duration: e.target.value, errors})
+        }
     }
 
     handleTrialsChange = (e) => {
         if(e.target) {
             this.setState({trialsSelectionValue: e.target.value})
-            if (e.target.value !== -1) 
-                this.setState({trials: e.target.value})
+            if (e.target.value !== -1) {
+                let errors = this.state.errors;
+                errors.trials = ''
+                this.setState({trials: e.target.value, errors})
+            }
         }
     }
 
     handleTrialsOtherChange = (e) => {
-        if(e.target) 
-            this.setState({trials: Number(e.target.value)})
+        let errors = this.state.errors;
+        if(/^[0-9]+$/.test(e.target.value)) {
+            errors.trials = '';
+        } else {
+            errors.trials = "Hãy nhập số nguyên dương"
+        }
+        this.setState({trials: e.target.value, errors})
     }
 
     render() {
         const { classes } = this.props;
         const { errors } = this.state;
         return (
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <MuiPickersUtilsProvider utils={DateFnsUtils} locale={viLocale}>
                 <div>
                     <form noValidate autoComplete="off" onSubmit={this.handleSubmit}>
                         <div className="blue-text">Thông tin cơ bản</div>
@@ -364,15 +485,60 @@ class ExamForm extends Component {
                                 type="text"
                                 name="title"
                                 className={classnames("form-control form-control-lg col s10",{
-                                    "is-invalid": errors.examTitle
+                                    "is-invalid": errors.title
                                 })}
-                                style={{height: 'fit-content'}}
+                                style={{height: 'fit-content', marginBottom: 0}}
                                 value={this.state.title}
                                 onChange={this.handleChange}
                                 />
-                            {errors.examTitle && (
+                            {errors.title && (
+                                <div className="invalid-feedback col s10" style={{padding: 0}}>
+                                    {errors.title}
+                                </div>
+                            )}
+                        </div>
+                        <div className="row" style={{marginTop: "20px"}}>
+                            <label htmlFor="power" className="col s2 inputLabel" style={{paddingLeft: 0}}>
+                                Điểm hệ số:
+                            </label>
+                            <select
+                                id="power"
+                                name="power"
+                                className="col s10"
+                                style={{display: 'block', width: 'fit-content', height: 'fit-content'}}
+                                // className={classnames("form-control form-control-lg col s10",{
+                                //     "is-invalid": errors.examTitle
+                                // })}
+                                //style={{height: 'fit-content'}}
+                                value={this.state.selectedPower}
+                                onChange={this.handlePowerChange}
+                            >
+                                {this.state.powers && this.state.powers.map( item => <option value={'' + item.value}>{item.name}</option>) }
+                            </select>
+                            {/* {errors.examTitle && (
                                 <div className="invalid-feedback">
                                     {errors.examTitle}
+                                </div>
+                            )} */}
+                        </div>
+                        <div className="row" style={{marginTop: "20px"}}>
+                            <label htmlFor="code" className="col s2 inputLabel" style={{paddingLeft: 0}}>
+                                Mã bài thi:
+                            </label>
+                            <input
+                                id="code"
+                                name="code"
+                                type="text"
+                                className={classnames("form-control form-control-lg col s10",{
+                                    "is-invalid": errors.code
+                                })}
+                                value={this.state.examCode}
+                                onChange={this.handleCodeChange}
+                                style={{height: 'fit-content', width: 'fit-content', marginBottom: 0}}
+                            />
+                            {errors.code && (
+                                <div className="invalid-feedback col s10" style={{padding: 0}}>
+                                    {errors.code}
                                 </div>
                             )}
                         </div>
@@ -387,10 +553,18 @@ class ExamForm extends Component {
                                         name="classes"
                                         disabled
                                         type="text"
-                                        className="col s10 clickable"
+                                        className={classnames("form-control form-control-lg col s10 clickable",{
+                                            "is-invalid": errors.classes
+                                        })}
                                         style={{height: 'fit-content', width: 'fit-content', display: 'flex', borderBottom: 0}}
                                         placeholder="Chọn lớp"
-                                    /></a>
+                                    />
+                                    {errors.classes && (
+                                        <div className="invalid-feedback col s10" style={{padding: 0}}>
+                                            {errors.classes}
+                                        </div>
+                                    )}
+                                    </a>
                                 }
                                 { this.state.selectedClassList.length !== 0 &&
                                     <div className="col s10 no-padding">
@@ -469,7 +643,14 @@ class ExamForm extends Component {
                                         value={this.state.duration} 
                                         onChange={this.handleDurationOtherChange} 
                                         style = {this.state.durationSelectionValue === -1 ? {padding: '4px 0px 7px', marginBottom: 0,  height: 'fit-content', width: 'fit-content', display: 'flex'} : {}}
-                                        className={this.state.durationSelectionValue === -1 ? "show-input col s5" : "hide-input col s5"}/>
+                                        className={classnames(this.state.durationSelectionValue === -1 ? "form-control form-control-lg show-input col s5" : "form-control form-control-lg hide-input col s5",{
+                                            "is-invalid": errors.duration
+                                        })}/>
+                                    {errors.duration && (
+                                        <div className="invalid-feedback col s3">
+                                            {errors.duration}
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="row" style={{marginTop: "20px"}}>
                                     <label htmlFor="title" className="col s3 inputLabel" style={{paddingLeft: 0}}>Số lần làm bài:</label>
@@ -491,7 +672,14 @@ class ExamForm extends Component {
                                         value={this.state.trials} 
                                         style = {this.state.trialsSelectionValue === -1 ? {padding: '4px 0px 7px', marginBottom: 0, height: 'fit-content', width: 'fit-content', display: 'flex'} : {}}
                                         onChange={this.handleTrialsOtherChange} 
-                                        className={this.state.trialsSelectionValue === -1 ? "show-input col s5" : "hide-input col s5"}/>
+                                        className={classnames(this.state.trialsSelectionValue === -1 ? "form-control form-control-lg show-input col s5" : "form-control form-control-lg hide-input col s5",{
+                                            "is-invalid": errors.trials
+                                        })}/>
+                                    {errors.trials && (
+                                        <div className="invalid-feedback col s3">
+                                            {errors.trials}
+                                        </div>
+                                    )}
                                 </div>
                                 <div className="row" style={{marginTop: "20px"}}>
                                     <label htmlFor="title" className="col s3 inputLabel" style={{paddingLeft: 0}}>Thời gian phát:</label>
@@ -508,8 +696,8 @@ class ExamForm extends Component {
                                         </Modal>
                                     </div>
                                 </div>
-                                { this.state.startEntryTime &&
-                                <div className="row" style={{marginTop: "20px"}}>
+                                {/* { this.state.startEntryTime && */}
+                                <div className="row" style={{marginTop: "20px", display: this.state.startEntryTime ? 'block' : 'none'}}>
                                     <label htmlFor="title" className="col s3 inputLabel" style={{paddingLeft: 0}}>Thời gian đóng:</label>
                                     <input type="text" placeholder="hh:mm:ss, dd-mm-yyyy" value={this.state.endEntryTime ? new Date(this.state.endEntryTime).toLocaleString("vi-VN") : ''} readOnly className="col s5" style={{height: 'fit-content', width: 'fit-content',textDecorationLine: 'none'}}/>
                                     <div className="col s5">
@@ -520,6 +708,7 @@ class ExamForm extends Component {
                                                 <h5 className="center" style={{marginTop: 0}}>Cài đặt thời gian đóng</h5>
                                                 <Divider/>
                                                 <DatetimePicker 
+                                                    ref={this.endTimeRef}
                                                     type={"END"} 
                                                     startTime={this.state.startEntryTime} 
                                                     selectedDate={this.state.endEntryTime}
@@ -528,7 +717,7 @@ class ExamForm extends Component {
                                         </Modal>
                                     </div>
                                 </div>
-                                }
+                                {/* } */}
                                 </div>
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
@@ -605,6 +794,11 @@ class ExamForm extends Component {
                                         </div>
                                     </Modal>
                                 </div>
+                                {errors.tests && (
+                                        <div className="invalid-feedback" style={{padding: 0}}>
+                                            {errors.tests}
+                                        </div>
+                                    )}
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
                         <Divider />
@@ -622,13 +816,13 @@ class ExamForm extends Component {
                                         <RadioGroup aria-label="mark" name="isMarkSaved" value={this.state.isMarkSaved} 
                                                     style={{display: 'inline-block'}}
                                                     onChange={this.handleMarkSave}>
-                                            <FormControlLabel value="0" control={<Radio color="primary" />} label="Không" />
-                                            <FormControlLabel value="1" control={<Radio color="primary" />} label="Có" />
+                                            <FormControlLabel value="0" className="exam-radio-primary" control={<Radio color="primary" />} label="Không" />
+                                            <FormControlLabel value="1" className="exam-radio-primary" control={<Radio color="primary" />} label="Có" />
                                         </RadioGroup>
                                     </FormControl>
                                     </div>
                                 </div>
-                                <div className="row" style={{marginTop: "20px"}}>
+                                {/* <div className="row" style={{marginTop: "20px"}}>
                                     <label htmlFor="title" className="col s2 inputLabel" style={{paddingLeft: 0}}>Gửi thông báo sau kiểm tra:</label>
                                     <input
                                         id="title"
@@ -639,26 +833,57 @@ class ExamForm extends Component {
                                         value={this.state.title}
                                         onChange={this.handleChange}
                                     />
-                                </div>
-                                <div className="row" style={{marginTop: "20px"}}>
-                                    <label htmlFor="title" className="col s2 inputLabel" style={{paddingLeft: 0}}>Gửi lời giải sau kiểm tra:</label>
-                                    <FormControl required component="fieldset" className={classes.formControl}>
+                                </div> */}
+                                <div className="row center-content" style={{marginTop: "20px"}}>
+                                    <div className="col s2" style={{padding: 0}}>
+                                        <label htmlFor="title" className="inputLabel" style={{paddingLeft: 0}}>Hiển thị đáp án:</label>
+                                    </div>
+                                    <div className="col s10" style={{padding: 0}}>
+                                        <FormControl component="fieldset">
+                                            <RadioGroup aria-label="mark" name="isMarkSaved" value={this.state.isShowAnswers} 
+                                                        style={{display: 'inline-block'}}
+                                                        onChange={this.handleShowAnswers}>
+                                                <FormControlLabel value="0" className="exam-radio-primary" control={<Radio color="primary" />} label="Không" />
+                                                <FormControlLabel value="1" className="exam-radio-primary" control={<Radio color="primary" />} label="Có" />
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </div>
+                                    {/* <FormControl required component="fieldset" className={classes.formControl}>
                                         <FormGroup>
                                         <FormControlLabel
                                             control={<CustomCheckbox value="send" />}
                                             label="File word qua mail"
                                         />
                                         </FormGroup>
-                                    </FormControl>
+                                    </FormControl> */}
                                 </div>
+                                {this.state.isShowAnswers === '1' && 
+                                    <div className="row center-content" style={{marginTop: "20px"}}>
+                                        <div className="col s2" style={{padding: 0}}>
+                                            <label htmlFor="title" className="inputLabel" style={{paddingLeft: 0}}>Hiển thị lời giải:</label>
+                                        </div>
+                                        <div className="col s10" style={{padding: 0}}>
+                                            <FormControl component="fieldset">
+                                                <RadioGroup aria-label="mark" name="isMarkSaved" value={this.state.isShowExplanation} 
+                                                            style={{display: 'inline-block'}}
+                                                            onChange={this.handleShowExplanation}>
+                                                    <FormControlLabel value="0" className="exam-radio-primary" control={<Radio color="primary" />} label="Không" />
+                                                    <FormControlLabel value="1" className="exam-radio-primary" control={<Radio color="primary" />} label="Có" />
+                                                </RadioGroup>
+                                            </FormControl>
+                                        </div>
+                                    </div>
+                                }
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
                         </div>
                         <div>
                             <Divider/>
                             <a className=" modal-action modal-close black-text lighten-1" style={{ marginTop: "1vw", float: "left", fontSize: "1vw" }}>Hủy thao tác</a>
-                            <button type="submit" className=" modal-action modal-close blue-text lighten-1" 
-                            style={{ marginTop: "1vw", float: "right", background: "none", border: "none", padding: "0", cursor: "pointer", fontSize: "1vw" }}>Hoàn tất</button>
+                            {this.checkValidSubmit() &&
+                                <button type="submit" className=" modal-action modal-close blue-text lighten-1" 
+                                style={{ marginTop: "1vw", float: "right", background: "none", border: "none", padding: "0", cursor: "pointer", fontSize: "1vw" }}>Hoàn tất</button>
+                            }
                         </div>
                     </form>
                 </div>

@@ -151,6 +151,9 @@ const Sidenav = (props) => {
                         <NavLink to="/home" activeClassName="side-nav-active">
                             <i className="material-icons padding-vertical-10" style={iconColor}>home</i>
                         </NavLink>
+                        <NavLink to='/studentExams' activeClassName="side-nav-active">
+                            <i className="material-icons padding-vertical-10" style={iconColor}>check_box</i>
+                        </NavLink>
                     </div>
                     <div className="user-option" style={style.userOption} onMouseLeave={hideObj} >
                         <NavLink to="/user" >
@@ -313,6 +316,32 @@ const Sidenav = (props) => {
                         <NavLink to='/testManagement' className='flex-row' activeClassName="side-nav-active">
                             <i className="material-icons left padding-vertical-10" style={iconColor}>check_box</i>
                             <span style={iconColor}>Quản lí kiểm tra</span>
+                        </NavLink>
+                    </div>
+                    <NavLink className='flex-row' to='/user'>
+                        <i className="material-icons left padding-vertical-10" style={iconColor}>account_circle</i>
+                        <span style={iconColor}>Người dùng</span>
+                    </NavLink>
+                </div>
+            </ul>
+            <ul className="sidenav" id='sideNavUserStudent'>
+                <div className="my-sidenav-big container white">
+                    <Link to='/home'>
+                        <div className='side-nav-logo flex-row' >
+                            <img src={Logo} alt="HGEdu Logo" />
+                        </div>
+                    </Link>
+                    <div className="flex-column">
+                        <Link className="sidenav-trigger" data-target='sidenav'>
+                            <i className="material-icons blue-text text-darken-2 padding-vertical-10">menu</i>
+                        </Link>
+                        <NavLink to="/home" className='flex-row' activeClassName="side-nav-active">
+                            <i className="material-icons left padding-vertical-10" style={iconColor}>home</i>
+                            <span style={iconColor}>Trang chủ</span>
+                        </NavLink>
+                        <NavLink to='/studentExams' className='flex-row' activeClassName="side-nav-active">
+                            <i className="material-icons left padding-vertical-10" style={iconColor}>check_box</i>
+                            <span style={iconColor}>Kiểm tra</span>
                         </NavLink>
                     </div>
                     <NavLink className='flex-row' to='/user'>

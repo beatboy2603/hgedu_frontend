@@ -174,6 +174,7 @@ class TestSelector extends Component {
         if(nextProps.testRoot
             // && this.isEmpty(this.state.testRoot)
             ) {
+            console.log("Root",nextProps.testRoot)
             if(JSON.stringify(nextProps.testRoot) !== JSON.stringify(this.state.testRoot))
                 this.setState({path: [{id: Number(nextProps.testRoot.folderId), name: nextProps.testRoot.folderName}],
                                 testRoot: nextProps.testRoot,

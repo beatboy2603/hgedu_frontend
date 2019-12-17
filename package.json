@@ -19,6 +19,7 @@
     "lodash": "^4.17.15",
     "material-table": "^1.54.1",
     "materialize-css": "^1.0.0",
+    "path-to-regexp": "^6.1.0",
     "prop-types": "^15.7.2",
     "quill-delta-to-html": "^0.10.13",
     "quill-image-resize-module": "^3.0.0",

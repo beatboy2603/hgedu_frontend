@@ -15,6 +15,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Divider from '@material-ui/core/Divider';
 import { withStyles } from '@material-ui/core/styles';
 import classnames from 'classnames';
+import axios from 'axios';
+import {serverUrl} from '../common/common';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -107,12 +109,37 @@ const ExpansionPanel = withStyles({
 export default function ViewExam(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const [selectedClassList, setSelectedClasses] = React.useState([]);
+  const [selectedTestList, setSelectedTests] = React.useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  const getSelectedClasses = (examId) => {
+    axios.get(serverUrl + "api/examClass/classes/" + examId + "/all")
+        .then(res => {
+            let result = [];
+            if(res.data) {
+                res.data.map(item => result.push({id: item.id, name: item.name}))
+            }
+            setSelectedClasses(result);
+        })
+}
+
+  const getSelectedTests = (examId) => {
+      axios.get(serverUrl + "api/examTest/tests/" + examId + "/all")
+          .then(res => {
+            setSelectedTests(res.data)
+          })
+  }
+
   const { exam } = props;
+
+  if(exam) {
+    getSelectedClasses(exam.id);
+    getSelectedTests(exam.id);
+  }
 
   return (
     <div className={classes.root}>
@@ -140,19 +167,31 @@ export default function ViewExam(props) {
                 </label>
                 <div className="col s10">{exam.title}</div>
             </div>
+            <div className="row required" style={{marginTop: "20px"}}>
+                <label htmlFor="title" className="col s2" style={{paddingLeft: 0, fontSize: '1rem'}}>
+                    Điểm hệ số:
+                </label>
+                <div className="col s10">{exam.powerLevel}</div>
+            </div>
+            <div className="row required" style={{marginTop: "20px"}}>
+                <label htmlFor="title" className="col s2" style={{paddingLeft: 0, fontSize: '1rem'}}>
+                    Mã bài thi:
+                </label>
+                <div className="col s10">{exam.code ? exam.code : 'N/A'}</div>
+            </div>
             <div className="row required">
                 <label htmlFor="forClass" className="col s2" style={{paddingLeft: 0, fontSize: '1rem'}}>Lớp:</label>
-                {/* <div>
-                    { exam.selectedClassList.length !== 0 &&
+                {/* <div> */}
+                    { (selectedClassList && selectedClassList.length !== 0) &&
                         <div className="col s10 no-padding">
                             <div className="col s11 no-padding">
-                            { this.state.selectedClassList.map( (item, index) => 
-                                <span key={item.id}>{item.name}{index !== this.state.selectedClassList.length - 1 ? ", " : ''}</span>
+                            { selectedClassList.map( (item, index) => 
+                                <span key={item.id}>{item.name}{index !== selectedClassList.length - 1 ? ", " : ''}</span>
                             )
                             }</div>
                         </div>
                     }
-                </div> */}
+                {/* </div> */}
             </div>
             <Divider style={{marginBottom: "1vw"}}/>
             <div className="blue-text">Giờ kiểm tra</div>
@@ -213,7 +252,7 @@ export default function ViewExam(props) {
                     </div> */}
                 </ExpansionPanelDetails>
                 <Divider/>
-                {/* { this.state.selectedTestList && this.state.selectedTestList.map((test, index) => 
+                { selectedTestList && selectedTestList.map((test, index) => 
                     <div key={test.id}>
                         <ExpansionPanelDetails className={classes.details} style={{paddingBottom: 0}}>
                             <div className={classes.column} style={{width: '33.33%'}}>
@@ -227,8 +266,8 @@ export default function ViewExam(props) {
                                         <h5 className="center" style={{marginTop: 0}}>Cai dat thoi gian phat</h5>
                                         <Divider style={{marginBottom: "1vw"}}/>
                                 </Modal> */}
-                            {/*  </div>
-                            <div className={classes.column} style={{width: '6.33%'}}>
+                            </div>
+                            {/* <div className={classes.column} style={{width: '6.33%'}}> */}
                                 {/* <input type="text" size="5" style={{height: 'fit-content', width: 'fit-content', display: 'flex'}}/> */}
                             {/* </div>*/} 
                                 {/* <div className={clsx(classes.column, classes.helper)}>
@@ -240,10 +279,10 @@ export default function ViewExam(props) {
                                 </a>
                                 </Typography>
                             </div> */}
-                        {/* </ExpansionPanelDetails>
+                        </ExpansionPanelDetails>
                         <Divider/>
-                    </div> */}
-                {/* )} */}
+                    </div>
+                )}
             </ExpansionPanel>
             <Divider />
             <ExpansionPanel square>
@@ -253,7 +292,15 @@ export default function ViewExam(props) {
                 <ExpansionPanelDetails style={{display: 'block'}}>
                     <div className="row">
                         <label className="col s5 inputLabel" style={{paddingLeft: 0}}>Vào điểm:</label>
-                        <div className="col s7">{exam.isMarked}</div>
+                        <div className="col s7">{exam.isMarked ? 'Có' : 'Không'}</div>
+                    </div>
+                    <div className="row">
+                        <label className="col s5 inputLabel" style={{paddingLeft: 0}}>Hiển thị đáp án:</label>
+                        <div className="col s7">{exam.isShowAnswers ? 'Có' : 'Không'}</div>
+                    </div>
+                    <div className="row">
+                        <label className="col s5 inputLabel" style={{paddingLeft: 0}}>Hiển thị lời giải:</label>
+                        <div className="col s7">{exam.isShowExplanation ? 'Có' : 'Không'}</div>
                     </div>
                     {/* <div className="row" style={{marginTop: "20px"}}>
                         <label htmlFor="title" className="col s2 inputLabel" style={{paddingLeft: 0}}>Gửi thông báo sau kiểm tra:</label>
