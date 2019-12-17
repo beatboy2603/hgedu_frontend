@@ -207,7 +207,7 @@ const Sidenav = (props) => {
                         <NavLink to="/home" activeClassName="side-nav-active">
                             <i className="material-icons padding-vertical-10" style={iconColor}>home</i>
                         </NavLink>
-                        <NavLink to="/classManagement/teacherList" activeClassName="side-nav-active">
+                        <NavLink to="/studentManagement/teacherList" activeClassName="side-nav-active">
                             <i className="material-icons padding-vertical-10" style={iconColor}>people</i>
                         </NavLink>
                         <NavLink to='/studentExams' activeClassName="side-nav-active">
@@ -235,6 +235,9 @@ const Sidenav = (props) => {
                         </Link>
                         <NavLink to="/home" activeClassName="side-nav-active">
                             <i className="material-icons padding-vertical-10" style={iconColor}>home</i>
+                        </NavLink>
+                        <NavLink to='/studentManagement' activeClassName="side-nav-active">
+                            <i className="material-icons left padding-vertical-10" style={iconColor}>group</i>
                         </NavLink>
                     </div>
                     {changeRole(props.user.role, props.user.userRoleId)}
@@ -367,7 +370,7 @@ const Sidenav = (props) => {
                             <i className="material-icons left padding-vertical-10" style={iconColor}>home</i>
                             <span style={iconColor}>Trang chủ</span>
                         </NavLink>
-                        <NavLink to="/classManagement/teacherList" className='flex-row' activeClassName="side-nav-active">
+                        <NavLink to="/studentManagement/teacherList" className='flex-row' activeClassName="side-nav-active">
                             <i className="material-icons padding-vertical-10" style={iconColor}>people</i>
                             <span style={iconColor}>Lớp học</span>
                         </NavLink>
@@ -396,6 +399,10 @@ const Sidenav = (props) => {
                         <NavLink to="/home" className='flex-row' activeClassName="side-nav-active">
                             <i className="material-icons left padding-vertical-10" style={iconColor}>home</i>
                             <span style={iconColor}>Trang chủ</span>
+                        </NavLink>
+                        <NavLink to='/studentManagement' className='flex-row' activeClassName="side-nav-active">
+                            <i className="material-icons left padding-vertical-10" style={iconColor}>group</i>
+                            <span style={iconColor}>Quản lí lớp học</span>
                         </NavLink>
                     </div>
                     <NavLink className='flex-row' to='/user'>

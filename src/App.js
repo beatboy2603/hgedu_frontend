@@ -5,7 +5,7 @@ import NotFoundPage from './components/NotFoundPage';
 import PersonalLibrary from './components/personalLibrary/PersonalLibrary';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import AbbreviationLibrary from './components/abbreviation/AbbreviationLibrary';
-import StudentManagement from './components/StudentManagement';
+import StudentList from './components/StudentClassManagement/StudentList';
 import TestManagement from './components/Exams/TestManagement';
 import DoExam from './components/Exams/DoExam';
 import ExamInfo from './components/Exams/ExamInfo';
@@ -29,6 +29,7 @@ import ViewNews from './components/News/ViewNews';
 import PersonalInfo from './components/UserInfo/PersonalInfo';
 import axios from 'axios';
 import TeacherList from './components/StudentClassManagement/TeacherList';
+import StudentManagement from './components/classManagement/StudentManagement'
 
 import StudentExams from './components/Exams/StudentExams';
 // const persistConfig = {
@@ -125,8 +126,10 @@ class App extends Component {
                     </ProtectedRoute>
                     {/* <Route path='/signin' component={SignIn} /> */}
                     <Route path='/personalLibrary' component={PersonalLibrary} />
-                    <Route path='/personalLibrary/question/:questionId' component={PersonalLibrary} />
+                    {/* <Route path='/personalLibrary/question/:questionId' component={PersonalLibrary} /> */}
                     <Route path='/abbreviationLibrary' component={AbbreviationLibrary} />
+                    <Route path='/studentManagement/studentList' component={StudentList} />
+                    <Route path='/studentManagement/teacherList' component={TeacherList}/>
                     <Route path='/studentManagement' component={StudentManagement} />
                     <Route exact path="/testManagement" render={() => (
                       <Redirect to="/testManagement/examHistory" />
@@ -141,7 +144,6 @@ class App extends Component {
                     <Route path='/examInfo' component={ExamInfo} />
                     <Route path='/studentExams' component={StudentExams} />
                     <Route path='/exam/:examTitle' component={ExamInfo} />
-                    <Route path='/classManagement/teacherList' component={TeacherList}/>
                     <Route path="*" component={NotFoundPage} />
                     {/* <Route path='/userInfo' component={UserInfo}/> */}
                   </Switch>
