@@ -219,6 +219,7 @@ class PersonalLibrary extends Component {
     }
 
     componentDidMount() {
+        console.log(this.props);
         axios.post(serverUrl + "api/folder/getFoldersForNav", null, {
             params: {
                 uid: this.props.user.uid

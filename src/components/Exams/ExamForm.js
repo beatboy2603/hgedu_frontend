@@ -156,6 +156,23 @@ class ExamForm extends Component {
         this.endTimeRef = React.createRef();
     }
 
+    classes = {
+        root: {
+          display: 'flex',
+        },
+        formControl: {
+          margin: '24px',
+        },
+        column: {
+            flexBasis: '33.33%',
+            fontStyle: 'bold'
+            //width: '33.33%'
+          },
+        details: {
+        alignItems: 'center',
+        },
+      };
+
     checkValidSubmit = () => {
         if(this.state.title && this.state.startEntryTime && this.state.selectedClassList.length !== 0 && this.state.selectedTestList.length !== 0) {
             return true;
@@ -469,7 +486,7 @@ class ExamForm extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        //const { classes } = this.props;
         const { errors } = this.state;
         return (
             <MuiPickersUtilsProvider utils={DateFnsUtils} locale={viLocale}>
@@ -617,7 +634,7 @@ class ExamForm extends Component {
                             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1d-content" id="panel1d-header">
                                 <Typography>Cài đặt phát bài</Typography>
                             </ExpansionPanelSummary>
-                            <ExpansionPanelDetails className={classes.details} style={{display: 'block'}}>
+                            <ExpansionPanelDetails className={this.classes.details} style={{display: 'block'}}>
                             <div className="row">
                                 <div className="row" >
                                     <label htmlFor="title" className="col s3 inputLabel" style={{paddingLeft: 0}}>Thời gian làm bài (Phút):</label>
@@ -625,7 +642,7 @@ class ExamForm extends Component {
                                         <Select value={this.state.durationSelectionValue} 
                                         disableEnforceFocus
                                         onChange={this.handleDurationChange} 
-                                        displayEmpty className={classes.selectEmpty}>
+                                        displayEmpty className={this.classes.selectEmpty}>
                                             <MenuItem value={0}>
                                                 <em>Không giới hạn</em>
                                             </MenuItem>
@@ -655,7 +672,7 @@ class ExamForm extends Component {
                                 <div className="row" style={{marginTop: "20px"}}>
                                     <label htmlFor="title" className="col s3 inputLabel" style={{paddingLeft: 0}}>Số lần làm bài:</label>
                                     <FormControl className="col s3" style={{paddingLeft: 0}}>
-                                        <Select value={this.state.trialsSelectionValue} onChange={this.handleTrialsChange} disableEnforceFocus displayEmpty className={classes.selectEmpty}>
+                                        <Select value={this.state.trialsSelectionValue} onChange={this.handleTrialsChange} disableEnforceFocus displayEmpty className={this.classes.selectEmpty}>
                                             <MenuItem value={0}>
                                                 <em>Không giới hạn</em>
                                             </MenuItem>
@@ -726,14 +743,14 @@ class ExamForm extends Component {
                             <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1d-content" id="panel1d-header">
                                 <Typography>Cài đặt đề kiểm tra</Typography>
                             </ExpansionPanelSummary>
-                            <ExpansionPanelDetails className={classes.details} style={{paddingBottom: 0}}>
-                                <div className={classes.column + " blue-text text-darken-3 bold"} style={{width: '33.33%'}}>
+                            <ExpansionPanelDetails className={this.classes.details} style={{paddingBottom: 0}}>
+                                <div className={this.classes.column + " blue-text text-darken-3 bold"} style={{width: '33.33%'}}>
                                     Mã đề thi
                                 </div>
-                                <div className={classes.column + " blue-text text-darken-3 bold"} style={{width: '33.33%'}}>
+                                <div className={this.classes.column + " blue-text text-darken-3 bold"} style={{width: '33.33%'}}>
                                     Tên bài kiểm tra
                                 </div>
-                                <div className={classes.column + " blue-text text-darken-3 bold"} style={{width: '33.33%'}}>
+                                <div className={this.classes.column + " blue-text text-darken-3 bold"} style={{width: '33.33%'}}>
                                 </div>
                                     {/* <div className={clsx(classes.column, classes.helper)}>
                                     <Typography variant="caption">
@@ -748,11 +765,11 @@ class ExamForm extends Component {
                             <Divider/>
                             { this.state.selectedTestList && this.state.selectedTestList.map((test, index) => 
                                 <div key={test.id}>
-                                    <ExpansionPanelDetails className={classes.details} style={{paddingBottom: 0}}>
-                                        <div className={classes.column} style={{width: '33.33%'}}>
+                                    <ExpansionPanelDetails className={this.classes.details} style={{paddingBottom: 0}}>
+                                        <div className={this.classes.column} style={{width: '33.33%'}}>
                                             {test.testCode}
                                         </div>
-                                        <div className={classes.column} style={{width: '60.33%'}}>
+                                        <div className={this.classes.column} style={{width: '60.33%'}}>
                                             {test.title}
                                             {/* <a href="#dateTimePicker" className="modal-trigger" style={{textDecorationLine: 'underline'}}>Cai dat thoi gian phat</a>
                                             <Modal id="dateTimePicker" options={{ preventScrolling: false }} actions={<Button style={{display: 'none'}}></Button>}> 
@@ -761,7 +778,7 @@ class ExamForm extends Component {
                                                     <Divider style={{marginBottom: "1vw"}}/>
                                             </Modal> */}
                                         </div>
-                                        <div className={classes.column} style={{width: '6.33%'}}>
+                                        <div className={this.classes.column} style={{width: '6.33%'}}>
                                             <button value={test.id} onClick={this.handleDeleteTest} 
                                             className="no-background"
                                             style={{float: "right", background: "none", border: "none", padding: "0", cursor: "pointer", color: '#e32', fontWeight: 'bold'}}>Xóa</button>
@@ -893,7 +910,7 @@ class ExamForm extends Component {
 }
 
 ExamForm.propTypes = {
-    classes: PropTypes.object.isRequired,
+    //classes: PropTypes.object.isRequired,
     createExam: PropTypes.func.isRequired,
     updateExam: PropTypes.func.isRequired,
     getSelectedExamTests: PropTypes.func.isRequired,
@@ -916,4 +933,4 @@ const mapStateToProps = state => ({
   export default connect(
       mapStateToProps,
       { createExam, updateExam, getSelectedExamTests, getSelectedExamClasses, deleteExamTests, deleteExamClasses }
-  )(withStyles(styles)(ExamForm));
+  )(ExamForm);

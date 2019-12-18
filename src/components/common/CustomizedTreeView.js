@@ -189,7 +189,8 @@ function CustomizedTreeView(props) {
 
     let rootFoldersFilter = (folders) => {
         return folders.filter(folder => {
-            return folder.parentFolderId == 0;
+            // return folder.parentFolderId == 0;  //include "Nhóm";
+            return folder.parentFolderId == 0 && folder.subGroupId!=3; //not include "Nhóm"
         })
     }
 
@@ -203,6 +204,7 @@ function CustomizedTreeView(props) {
                 // return false;
                 return subfolder.parentFolderId == folder.folderId;
             })
+            
             if (subfolders.length > 0) {
                 return (
                     <StyledTreeItem showAll={showAll} renderEditDelete={renderEditDelete} setCurrentFolder={setCurrentFolder} folder={folder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={Folder} color="#1a73e8"
@@ -211,6 +213,7 @@ function CustomizedTreeView(props) {
                     </StyledTreeItem>
                 )
             } else {
+                
                 if (folder.folderTypeId == 1) {
                     return <StyledTreeItem showAll={showAll} renderEditDelete={renderEditDelete} setCurrentFolder={setCurrentFolder} folder={folder} deleteFolder={props.deleteFolder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={FolderOpenIcon} color="#1a73e8"
                         bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={(e) => setCurrentFolder(e, folder)} />

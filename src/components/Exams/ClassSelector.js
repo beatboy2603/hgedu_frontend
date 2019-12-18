@@ -57,8 +57,9 @@ class ClassSelector extends Component {
         }
     }
 
-    componentDidMount() {
+    componentDidMount() {console.log("hereaaaaaaaaaaaaaaaaa")
         this.props.getClasses(this.props.user.uid);
+        
     }
 
     render() {

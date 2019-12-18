@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Divider from '@material-ui/core/Divider';
 import Quill from 'quill';
-import {serverUrl} from '../common/common'
+import {serverUrl} from '../common/common';
+import {withRouter} from 'react-router-dom';
 
-export default class ViewNews extends Component {
+class ViewNews extends Component {
 
     constructor(props) {
         super(props);
@@ -82,3 +83,5 @@ export default class ViewNews extends Component {
         )
     }
 }
+
+export default withRouter(ViewNews);

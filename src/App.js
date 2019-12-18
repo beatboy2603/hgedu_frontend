@@ -178,9 +178,11 @@ class App extends Component {
                       <UserManagement />
                     </ProtectedRoute>
 
-                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/news/view/:newsTitle'>
+                    {/* <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/news/view/:newsTitle'>
                       <ViewNews />
-                    </ProtectedRoute>
+                    </ProtectedRoute> */}
+                    <Route path='/news/view/:newsTitle' component={ViewNews} />
+
                     <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/doExam'>
                       <DoExam />
                     </ProtectedRoute>

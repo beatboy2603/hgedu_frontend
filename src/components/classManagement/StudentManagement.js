@@ -215,7 +215,7 @@ class StudentManagement extends Component {
   }
 
   onChange(e) {
-    const { id } = this.props.match.params;
+    const  id  = this.props.user.uid;
     this.setState({
       name: e.target.value,
       teacherId: id

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import ExpandableTable from './ExpandableTable';
 import { Modal } from 'react-materialize'
@@ -48,6 +48,7 @@ class StudentExams extends Component {
     }
 
     componentDidMount() {
+        console.log("what the fuck", this.props);
         if(this.props.location.state) {
             this.setState({classId: this.props.location.state.id});
             this.props.getExamsForClass(this.props.location.state.id);
@@ -109,7 +110,7 @@ class StudentExams extends Component {
                         Quảng cáo
                     </div>
                     <div className="col s12 no-padding center">
-                        <StudentExamsTable examList={this.state.examList} studentClass={this.props.location.state ? this.props.location.state : {}}/>
+                        <StudentExamsTable examList={this.state.examList} studentClass={this.props.location&&this.props.location.state ? this.props.location.state : {}}/>
                     </div>
                 </div>
             </div>
@@ -131,4 +132,4 @@ const mapStateToProps = state => ({
     user: state.user
 })
 
-export default connect(mapStateToProps, { getStudentClasses, getExamsForClass })(StudentExams);
+export default connect(mapStateToProps, { getStudentClasses, getExamsForClass })(withRouter(StudentExams));

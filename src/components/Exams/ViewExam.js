@@ -109,6 +109,7 @@ const ExpansionPanel = withStyles({
 export default function ViewExam(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const [executed, setExecuted] = React.useState(false);
   const [selectedClassList, setSelectedClasses] = React.useState([]);
   const [selectedTestList, setSelectedTests] = React.useState([]);
 
@@ -136,9 +137,10 @@ export default function ViewExam(props) {
 
   const { exam } = props;
 
-  if(exam) {
+  if(exam && executed === false) {
     getSelectedClasses(exam.id);
     getSelectedTests(exam.id);
+    setExecuted(true);
   }
 
   return (
