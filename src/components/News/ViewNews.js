@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Divider from '@material-ui/core/Divider';
 import Quill from 'quill';
-import {serverUrl} from '../common/common';
-import {withRouter} from 'react-router-dom';
+import { serverUrl } from '../common/common';
+import { withRouter } from 'react-router-dom';
 
 class ViewNews extends Component {
 
@@ -22,35 +22,37 @@ class ViewNews extends Component {
     }
 
     componentDidMount() {
-        let newsId = this.props.location.state.id;
-        axios.get(serverUrl+'news/' + newsId)
-        .then(res => {
-            if(res.data) {
-                this.setState({news: res.data})
-            } else { 
-                //push to error page
-            }
-        }).catch(error => {
-            //push to error page
-        })
+        if (this.props.location) {
+            let newsId = this.props.location.state.id;
+            axios.get(serverUrl + 'news/' + newsId)
+                .then(res => {
+                    if (res.data) {
+                        this.setState({ news: res.data })
+                    } else {
+                        //push to error page
+                    }
+                }).catch(error => {
+                    //push to error page
+                })
+        }
     }
 
     componentDidUpdate() {
-        if(this.state.news && this.state.isLoading) {
+        if (this.state.news && this.state.isLoading) {
             console.log("loading")
             let newsContent = this.state.news.content;
             this.getHtmlContent(newsContent);
-            this.setState({title: this.state.news.title, isLoading: false});
+            this.setState({ title: this.state.news.title, isLoading: false });
         }
     }
 
     componentWillUnmount() {
-        this.setState({isLoading: true});
+        this.setState({ isLoading: true });
     }
 
     getHtmlContent = (content) => {
         let htmlContent = this.convertDeltaToHtml(JSON.parse(content.replace(/\n/g, "\\n")));
-        this.setState({htmlContent})
+        this.setState({ htmlContent })
     }
 
     convertDeltaToHtml = (delta) => {
@@ -63,22 +65,22 @@ class ViewNews extends Component {
         SizeStyle.whitelist = ['10px', '20px', '40px'];
         Quill.register(SizeStyle, true);
         var FontStyle = Quill.import('attributors/style/font');
-        Quill.register(FontStyle,true);
+        Quill.register(FontStyle, true);
         (new Quill(tempCont)).setContents(delta);
         return tempCont.getElementsByClassName("ql-editor")[0].innerHTML;
         //return this.htmlContent(delta)
     }
 
     render() {
-        return(
+        return (
             <div className="padding-filler-nav">
-                <h5 style={{textAlign: 'center'}}>{this.state.title}</h5>
+                <h5 style={{ textAlign: 'center' }}>{this.state.title}</h5>
                 <Divider />
                 <div style={{
-                        width: 'fit-content',
-                        margin: '0 auto'
-                        }} 
-                    dangerouslySetInnerHTML={{__html: this.state.htmlContent}} />
+                    width: 'fit-content',
+                    margin: '0 auto'
+                }}
+                    dangerouslySetInnerHTML={{ __html: this.state.htmlContent }} />
             </div>
         )
     }
