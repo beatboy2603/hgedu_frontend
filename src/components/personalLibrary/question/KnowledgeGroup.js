@@ -279,7 +279,6 @@ class KnowledgeGroup extends Component {
     render() {
         return (
             <div id="knowledgeGroup" className="knowledgeGroup row">
-                <button onClick={() => { console.log(this.state) }}>Click me</button>
                 <ModalQuestion currentFolder={this.state.currentFolder} updateQuestionList={this.updateQuestionList} />
                 <ModalEditQuestion currentQuestion={this.state.currentQuestion} updateQuestionList={this.updateQuestionList} />
                 <div className="col s4 container min-height-60 knowledgeGroup-header" >

@@ -350,7 +350,6 @@ class ModalTest extends Component {
         return (
             <div>
                 <div style={{ zIndex: "100" }}>
-                    <button onClick={() => { console.log(this.state) }}>click me</button>
                     {/* <a href="#addTest" className="btn-floating btn-large blue modal-trigger">
                         <i className="material-icons" onClick={() => { console.log(this.state) }}>add</i>
                     </a> */}

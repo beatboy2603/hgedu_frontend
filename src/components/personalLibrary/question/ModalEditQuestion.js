@@ -434,8 +434,6 @@ class ModalQuestion extends Component {
 
 
     setCurrentQuestion = () => {
-        console.log(JSON.stringify({ops:[{insert: "\"Tôi nói (1) nghe rõ không\" - (2) nói↵"}]}));
-
         if (this.props.currentQuestion) {
             let currentQuestion = this.props.currentQuestion;
             axios.get(serverUrl + "api/question/getFullQuestionAndAnswers/" + currentQuestion.questionId).then(res => {
@@ -758,7 +756,6 @@ class ModalQuestion extends Component {
 
         return (
             <div>
-                <button onClick={() => { console.log(this.state) }}>Click me edit</button>
                 <Modal id="editQuestion" options={{ preventScrolling: true, onOpenEnd: this.setCurrentQuestion, onCloseEnd: this.resetAllEditors }} style={{ width: "70vw", maxHeight: "80vh", height: "80vh", overflow: "hidden", borderRadius: "25px", border: "4px solid #086bd1" }} actions={[]}>
                     <div style={{ paddingTop: "52.5vh" }}></div>
                     <div className="modal-content" style={{

@@ -212,7 +212,6 @@ class AbbreviationLibrary extends Component {
     render() {
         return (
             <div className="abbreviationLibrary row" style={{ margin: "0" }}>
-                <button onClick={() => { console.log(this.state) }}>click me</button>
                 <div className="row col s8 z-depth-2 grey lighten-4 padding-filler-nav min-height-100vh" style={{ margin: "0", minHeight: "100vh" }}>
                     <div className="col s12 container padding-filler-nav abbreviationLibrary-header">
                         <h5 className="blue-text text-darken-3 bold font-montserrat" style={{ marginTop: "30px" }}>Thư viện viết tắt</h5>

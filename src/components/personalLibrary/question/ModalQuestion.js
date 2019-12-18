@@ -803,8 +803,6 @@ class ModalQuestion extends Component {
                     <a href="#addQuestion" style={{ position: "fixed" }} className="btn-floating btn-large my-floating-btn blue modal-trigger">
                         <i className="material-icons">add</i>
                     </a>}
-                <button onClick={() => { console.log(this.state) }}>Click me yo</button>
-                <button onClick={() => { this.testSend() }}>test axios</button>
                 <Modal id="addQuestion" options={{ preventScrolling: true }} style={{ width: "70vw", maxHeight: "80vh", height: "80vh", overflow: "hidden", borderRadius: "25px", border: "4px solid #086bd1" }} actions={[]}>
                     <div style={{ paddingTop: "52.5vh" }}></div>
                     <div className="modal-content" style={{
