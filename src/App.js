@@ -111,25 +111,99 @@ class App extends Component {
                     <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={false} exact path='/'>
                       <LandingPage checkAuthen={this.checkAuthen} />
                     </ProtectedRoute>
-                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/home'>
-                      <Home />
-                    </ProtectedRoute>
-                    {/* <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} children={Home} path='/home'/> */}
-                    {/* <Route path='/home' component={Home} /> */}
-                    <Route path='/user' component={UserInfo} />
+
                     <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={false} path='/signup'>
                       <SignUp />
                     </ProtectedRoute>
-                    {/* <Route path='/signup' component={SignUp} /> */}
+
                     <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={false} path='/signin'>
                       <SignIn />
                     </ProtectedRoute>
-                    {/* <Route path='/signin' component={SignIn} /> */}
+
+                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/home'>
+                      <Home />
+                    </ProtectedRoute>
+
+                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/user'>
+                      <UserInfo />
+                    </ProtectedRoute>
+
+                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/personalLibrary'>
+                      <PersonalLibrary />
+                    </ProtectedRoute>
+
+                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/abbreviationLibrary'>
+                      <AbbreviationLibrary />
+                    </ProtectedRoute>
+
+                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/studentManagement/studentList'>
+                      <StudentList />
+                    </ProtectedRoute>
+
+                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/studentManagement/teacherList'>
+                      <TeacherList />
+                    </ProtectedRoute>
+
+                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/studentManagement'>
+                      <StudentManagement />
+                    </ProtectedRoute>
+
+                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} exact path='/testManagement'>
+                      <Redirect to="/testManagement/examHistory" />
+                    </ProtectedRoute>
+
+                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/testManagement/examSchedule'>
+                      <TestManagement type={"SCHEDULE"} />
+                    </ProtectedRoute>
+
+                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/testManagement/examHistory'>
+                      <TestManagement type={"HISTORY"} />
+                    </ProtectedRoute>
+
+                    {/* <Route exact path="/testManagement" render={() => (
+                      <Redirect to="/testManagement/examHistory" />
+                    )} />
+                    <Route path='/testManagement/examSchedule' render={() => <TestManagement type="SCHEDULE" />} />
+                    <Route path='/testManagement/examHistory' render={() => <TestManagement type="HISTORY" />} /> */}
+
+                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/newsList'>
+                      <NewsList />
+                    </ProtectedRoute>
+
+                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/testWord'>
+                      <TestWord />
+                    </ProtectedRoute>
+
+                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/userManagement'>
+                      <UserManagement />
+                    </ProtectedRoute>
+
+                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/news/view/:newsTitle'>
+                      <ViewNews />
+                    </ProtectedRoute>
+                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/doExam'>
+                      <DoExam />
+                    </ProtectedRoute>
+
+                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/examInfo'>
+                      <ExamInfo />
+                    </ProtectedRoute>
+
+                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/studentExams'>
+                      <StudentExams />
+                    </ProtectedRoute>
+
+                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/exam/:examTitle'>
+                      <ExamInfo />
+                    </ProtectedRoute>
+
+                    <Route path="*" component={NotFoundPage} />
+
+                    {/* <Route path='/user' component={UserInfo} />
                     <Route path='/personalLibrary' component={PersonalLibrary} />
-                    {/* <Route path='/personalLibrary/question/:questionId' component={PersonalLibrary} /> */}
                     <Route path='/abbreviationLibrary' component={AbbreviationLibrary} />
                     <Route path='/studentManagement/studentList' component={StudentList} />
-                    <Route path='/studentManagement/teacherList' component={TeacherList}/>
+                    <Route path='/studentManagement/teacherList' component={TeacherList} />
                     <Route path='/studentManagement' component={StudentManagement} />
                     <Route exact path="/testManagement" render={() => (
                       <Redirect to="/testManagement/examHistory" />
@@ -143,8 +217,8 @@ class App extends Component {
                     <Route path='/doExam' component={DoExam} />
                     <Route path='/examInfo' component={ExamInfo} />
                     <Route path='/studentExams' component={StudentExams} />
-                    <Route path='/exam/:examTitle' component={ExamInfo} />
-                    <Route path="*" component={NotFoundPage} />
+                    <Route path='/exam/:examTitle' component={ExamInfo} /> */}
+
                     {/* <Route path='/userInfo' component={UserInfo}/> */}
                   </Switch>
                 </div>
