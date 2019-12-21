@@ -36,17 +36,21 @@ const useStyles = makeStyles(theme => ({
 export default function SimpleTable4(props) {
   const classes = useStyles();
 
-  const { data, deleteStudent, parent, getParent, connectedStudent } = props;
+  const { data, deleteStudent, parent, getParent, connectedStudent, filterStudentTeacher } = props;
 
   const [modalName, setName] = useState(0);
 
-  const onUnCheckClick = id => {
+  const onUnCheckClick = (index, id) => {
     document.getElementById(id).querySelector(".addIcon").style.display = "block"; 
     document.getElementById(id).querySelector(".unCheckIcon").style.display = "none";
+    filterStudentTeacher[index].status = false;
+    console.log("Batsu", filterStudentTeacher[index]);
   };
-  const onAddClick = id => {
+  const onAddClick = (index, id) => {
     document.getElementById(id).querySelector(".addIcon").style.display = "none"; 
     document.getElementById(id).querySelector(".unCheckIcon").style.display = "block";
+    filterStudentTeacher[index].status = true;
+    console.log("Plus", filterStudentTeacher[index]);
   };
 
   const studentClickHandle = (index, id, classStudentId) => {
@@ -104,12 +108,12 @@ export default function SimpleTable4(props) {
                 <AddIcon
                   className="addIcon"
                   style={{ display: "block", color: "green" }}
-                  onClick={() => onAddClick(index + "addModal")}
+                  onClick={() => onAddClick(index, index + "addModal")}
                 />
                 <ClearIcon
                   className="unCheckIcon"
                   style={{ display: "none", color: "red" }}
-                  onClick={() => onUnCheckClick(index + "addModal")}
+                  onClick={() => onUnCheckClick(index, index + "addModal")}
                 />
               </TableCell>
             </TableRow>

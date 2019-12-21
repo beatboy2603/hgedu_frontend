@@ -175,12 +175,14 @@ function GmailTreeView(props) {
     classStudent,
     changeTreeStatus,
     role,
-    changeTeacherState
+    changeTeacherState,
+    changeCurrentClassId
   } = props;
   const onItemClick = (id, name, teacherId) => {
     student(id);
     if (role === 1) {
       classStudent(id);
+      changeCurrentClassId(id);
     }
 
     name1(name);
