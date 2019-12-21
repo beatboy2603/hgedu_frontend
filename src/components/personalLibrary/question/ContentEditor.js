@@ -290,6 +290,13 @@ class ContentEditor extends Component {
         });
     }
 
+    setContent = (delta) =>{
+        this.editor.setContents(delta);
+        this.setState({
+            content: delta,
+        });
+    }
+
     /**
      * Function to handle the delete event of the editor
      * by getting all the images which belong to the old data but
@@ -391,6 +398,9 @@ class ContentEditor extends Component {
         }
         if (this.props.setResetAll) {
             this.props.setResetAll(this.resetForm);
+        }
+        if(this.props.setContent){
+            this.props.setContent(this.setContent);
         }
         if (this.props.abbreviation && this.props.abbreviation.abbreviations) {
             this.props.abbreviation.abbreviations.map((el, i) => {

@@ -148,15 +148,15 @@ class App extends Component {
                       <StudentManagement />
                     </ProtectedRoute>
 
-                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} exact path='/testManagement'>
-                      <Redirect to="/testManagement/examHistory" />
+                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} exact path='/examManagement'>
+                      <Redirect to="/examManagement/examHistory" />
                     </ProtectedRoute>
 
-                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/testManagement/examSchedule'>
+                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/examManagement/examSchedule'>
                       <TestManagement type={"SCHEDULE"} />
                     </ProtectedRoute>
 
-                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/testManagement/examHistory'>
+                    <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/examManagement/examHistory'>
                       <TestManagement type={"HISTORY"} />
                     </ProtectedRoute>
 

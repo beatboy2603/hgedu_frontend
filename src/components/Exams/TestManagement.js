@@ -82,10 +82,10 @@ class TestManagement extends Component {
                     {/* filler */}
                     <div className="col s2"></div>
                     <div className="col s10">
-                        <Link to='/testManagement'><h5 className="blue-text text-darken-3 bold">Kiểm tra</h5></Link>
+                        <Link to='/examManagement'><h5 className="blue-text text-darken-3 bold">Kiểm tra</h5></Link>
                         <Divider />
                         <div className="space-top link-event">
-                            <NavLink to='/testManagement/examHistory' activeClassName="link-active">
+                            <NavLink to='/examManagement/examHistory' activeClassName="link-active">
                                 <div className="icon-text-center">
                                     <i className="material-icons icon-space icon-color-black">
                                         description
@@ -97,7 +97,7 @@ class TestManagement extends Component {
                             </NavLink>
                         </div>
                         <div className="space-top link-event">
-                            <NavLink to='/testManagement/examSchedule' activeClassName="link-active">
+                            <NavLink to='/examManagement/examSchedule' activeClassName="link-active">
                                 <div className="icon-text-center">
                                     <i className="material-icons icon-space icon-color-black">
                                         description

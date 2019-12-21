@@ -147,12 +147,12 @@ class SignUp extends Component {
             <div className="signup row">
                 <div className="col s2">
                     <Link to='/'>
-                        <i className="material-icons" style={{ margin: "10vh", color: "#3a3a3a", fontSize: "50px" }}>arrow_back</i>
+                        <i className="material-icons" style={{ margin: "10vh", color: "#3a3a3a", fontSize: "32px" }}>arrow_back</i>
                     </Link>
                 </div>
                 <div className="col s8 container flex-column center">
                     <div style={{ margin: "5vh 0" }}>
-                        <img className="center-align" style={{ width: "7vw" }} src={Logo} alt="Logo" />
+                        <img className="center-align" style={{ width: "6vw" }} src={Logo} alt="Logo" />
                     </div>
                     <div>
                         <h5 className="blue-text text-darken-2 bold font-montserrat" style={{ marginTop: "0" }}>Chào mừng!</h5>
@@ -229,8 +229,8 @@ class SignUp extends Component {
                     this.state.valid && this.props.user.role == 3 &&
                     <div className="col s2">
                         <div style={{ margin: "10vh 0", color: "#086bd1", cursor: "pointer" }} className='flex-row' onClick={() => { this.signup() }}>
-                            <span style={{ fontSize: "25px" }} >Tiếp theo</span>
-                            <i className="material-icons" style={{ fontSize: "50px" }}>arrow_forward</i>
+                            <span style={{ fontSize: "22px" }} >Tiếp theo &nbsp;&nbsp;&nbsp;</span>
+                            <i className="material-icons" style={{ fontSize: "32px" }}> arrow_forward</i>
                         </div>
                     </div>
                 }

@@ -6,7 +6,7 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import axios from 'axios';
-import { Link, Prompt } from 'react-router-dom';
+import { Link, Prompt, withRouter } from 'react-router-dom';
 import {serverUrl} from '../common/common'
 
   const ExpansionPanelDetails = withStyles(theme => ({
@@ -154,7 +154,7 @@ class ExamInfo extends Component {
     }
 
     componentDidMount() {
-        if(this.props.location.state) {
+        if(this.props.location&&this.props.location.state) {
             let examId = this.props.location.state.id;
             console.log("examId", examId);
             console.log("class", this.props.location.state.studentClass)
@@ -281,4 +281,4 @@ const mapStateToProps = state => ({
     }
 })
 
-export default connect(mapStateToProps)(ExamInfo);
+export default connect(mapStateToProps)(withRouter(ExamInfo));

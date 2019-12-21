@@ -101,7 +101,7 @@ class TestQuestions extends Component {
                 this.props.history.push("/personalLibrary");
             }
         })
-        axios.get(serverUrl + "api/question/" + this.props.user.uid + "/" + folderId).then(res => {
+        axios.get(serverUrl + "api/question/" + folderId).then(res => {
             let questionList = res.data.map(question => {
                 question.content = question.content.slice(0, question.content.length - 2) + "]";
                 question.content = JSON.parse(question.content);

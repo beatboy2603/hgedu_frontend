@@ -242,13 +242,13 @@ class AbbreviationLibrary extends Component {
                         </form>
                         <div className="line col s12" style={{ borderColor: "#F1F1F1" }}></div>
                         <div className="col s12" style={{ paddingLeft: "40px" }}>
-                            <Toggle customStyle={{ minHeight: "45px" }} label="Công cụ toán học" handleToggleChange={this.handleToggleChange} checked={this.state.abbreviation.isKatex} />
+                            <Toggle customStyle={{ minHeight: "45px" }} label="Công thức" handleToggleChange={this.handleToggleChange} checked={this.state.abbreviation.isKatex} />
                         </div>
                     </div>
                     <div className="col s12 container padding-filler-nav" style={{ minHeight: "70vh" }}>
                         <p className="blue-text text-darken-2" style={{ fontSize: "18px" }}>Tổ hợp của bạn</p>
                         {this.state.abbreviationList.length > 0 ? (
-                            <table style={{ width: "94%", tableLayout: "fixed", marginBottom: "5vh" }}>
+                            <table style={{ width: "94%", tableLayout: "fixed", marginBottom: "5vh", overflow:"hidden" }}>
                                 {this.renderAbbreviationList()}
                             </table>
                         ) : (
@@ -266,6 +266,7 @@ class AbbreviationLibrary extends Component {
                         <div className="col s12 container abbreviationLibrary-header">
                             <h5 className="blue-text text-darken-3 bold font-montserrat" style={{ margin: "30px 5% 0 5%" }}>Nhập thử nhé!</h5>
                             <p style={{ fontSize: "18px", margin: "20px 5% ", color: "#444444" }}>Hãy nhập một công thức bất kì theo mã LaTeX để xem trước chuyển đổi tương ứng!</p>
+                            <p style={{ fontSize: "12px", margin: "0 5% ", color: "#444444" }}>Bạn có thể click vào <a href="https://katex.org/docs/supported.html" target="_blank">đây</a> để tham khảo cách viết mã LaTeX!</p>
                         </div>
                         <div className="col s12 line" style={{ width: "86%", margin: "0 7% 20px 7%" }}></div>
                         <div className="col s12 z-depth-1 white" style={{ width: "86%", margin: "0 7%", minHeight: "100px", }}>

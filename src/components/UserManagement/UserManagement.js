@@ -565,7 +565,7 @@ class UserManagemnt extends Component {
                 marginLeft: "35px"
               }}
             >
-              create
+              remove_red_eye
             </i>
           </td>
         );
@@ -578,7 +578,7 @@ class UserManagemnt extends Component {
                 marginLeft: "35px"
               }}
             >
-              create
+              remove_red_eye
             </i>
           </td>
         );
@@ -636,7 +636,7 @@ class UserManagemnt extends Component {
                 <div className="inline-block">
                   <a href="#addMod" className="modal-trigger">
                     <i className="material-icons grey-text text-darken-3">
-                      how_to_reg
+                      person_add
                     </i>
                   </a>
                   {/* actions = {[]} with no element to get rid of default "close" button */}

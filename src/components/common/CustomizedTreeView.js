@@ -103,7 +103,7 @@ function StyledTreeItem(props) {
             label={
                 <div className={classes.labelRoot}>
                     <LabelIcon color="inherit" className={classes.labelIcon} />
-                    <Typography variant="body2" className={classes.labelText}>
+                    <Typography variant="body2" className={classes.labelText} style={{wordWrap:"break-word"}}>
                         {labelText}
                     </Typography>
                     <Typography variant="caption" color="inherit">

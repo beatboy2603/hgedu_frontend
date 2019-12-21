@@ -188,7 +188,7 @@ const Sidenav = (props) => {
 
                         {link("/studentManagement", "group")}
 
-                        {link("/testManagement", "check_box")}
+                        {link("/examManagement", "check_box")}
                     </div>
                     {changeRole(props.user.role, props.user.userRoleId)}
                 </div>
@@ -344,7 +344,7 @@ const Sidenav = (props) => {
                             <i className="material-icons left padding-vertical-10" style={iconColor}>group</i>
                             <span style={iconColor}>Quản lí học sinh</span>
                         </NavLink>
-                        <NavLink to='/testManagement' className='flex-row' activeClassName="side-nav-active">
+                        <NavLink to='/examManagement' className='flex-row' activeClassName="side-nav-active">
                             <i className="material-icons left padding-vertical-10" style={iconColor}>check_box</i>
                             <span style={iconColor}>Quản lí kiểm tra</span>
                         </NavLink>
