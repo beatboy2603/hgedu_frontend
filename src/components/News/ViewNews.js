@@ -22,19 +22,17 @@ class ViewNews extends Component {
     }
 
     componentDidMount() {
-        if (this.props.location) {
-            let newsId = this.props.location.state.id;
-            axios.get(serverUrl + 'news/' + newsId)
-                .then(res => {
-                    if (res.data) {
-                        this.setState({ news: res.data })
-                    } else {
-                        //push to error page
-                    }
-                }).catch(error => {
-                    //push to error page
-                })
-        }
+        let newsId = this.props.location.state.id;
+        axios.get(serverUrl+'api/news/' + newsId)
+        .then(res => {
+            if(res.data) {
+                this.setState({news: res.data})
+            } else { 
+                //push to error page
+            }
+        }).catch(error => {
+            //push to error page
+        })
     }
 
     componentDidUpdate() {
@@ -72,15 +70,19 @@ class ViewNews extends Component {
     }
 
     render() {
-        return (
-            <div className="padding-filler-nav">
-                <h5 style={{ textAlign: 'center' }}>{this.state.title}</h5>
+        return(
+            <div style={{width: '710px', minHeight: '100vh', padding: '0 30px', margin: '0 auto', backgroundColor: '#FFFFFF'}}>
+                <div style={{
+                    fontSize: '34px',
+                    padding: '20px 0',
+                    lineHeight: '38px',
+                    color: '#222'}}>{this.state.title}</div>
                 <Divider />
                 <div style={{
-                    width: 'fit-content',
-                    margin: '0 auto'
-                }}
-                    dangerouslySetInnerHTML={{ __html: this.state.htmlContent }} />
+                        width: 'fit-content',
+                        marginBottom: '-20px'
+                        }} 
+                    dangerouslySetInnerHTML={{__html: this.state.htmlContent}} />
             </div>
         )
     }

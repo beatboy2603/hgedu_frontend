@@ -608,6 +608,22 @@ i{
   display: none;
 }
 
+#addNews .modal-footer {
+  display: none;
+}
+
+#addNews .modal-content h4 {
+  display: none;
+}
+
+.modal-no-footer-header .modal-footer {
+  display: none
+} 
+
+.modal-no-footer-header .modal-content h4 {
+  display: none
+} 
+
 .exam-tabs button:focus {
   background-color: transparent !important;
 }
@@ -673,6 +689,56 @@ i{
 
 .radio-primary .MuiFormControlLabel-label .exam-content .ql-container .ql-editor p {
   cursor: pointer !important;
+}
+
+.search-input .MuiInput-underline::before{
+  content: none;
+}
+
+.search-input .MuiInput-underline::after{
+  content: none;
+}
+
+.search-input #input-with-icon-grid {
+  height: fit-content;
+  border-bottom: 0;
+  min-width: 25vw;
+}
+
+.search-input label {
+  line-height: 0;
+}
+
+.search-box {
+  border-bottom: 1px solid rgba(224, 224, 224, 1);
+  border-top: 1px solid rgba(224, 224, 224, 1);
+  padding: 6px;
+}
+
+.search-icon {
+  margin-left: 24px;
+  margin-right: 10px;
+}
+
+.search-box .MuiGrid-container .MuiGrid-item {
+  margin-left: 12px;
+}
+
+.ql-editor strong{
+  font-weight:bold !important;
+}
+
+strong {
+  font-weight: 1000 !important;
+}
+
+.small-post-img .responsive-img {
+  max-height: 150px !important;
+  height: min-content !important;
+}
+
+.hidden-text {
+  visibility: hidden;
 }
 
 /* width */

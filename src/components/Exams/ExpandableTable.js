@@ -144,10 +144,10 @@ export default function ExpandableTable(props) {
                 <Table className={classes.table}>
                     <TableHead className={classes.tableHead}>
                         <TableRow>
-                            <TableCell className="table-col-width-35"><span className="blue-text bold font-effra font-size-16 text-darken-3">Chủ đề</span></TableCell>
-                            <TableCell className="table-col-width-10"><span className="blue-text bold font-effra font-size-16 text-darken-3">Tiến độ</span></TableCell>
-                            <TableCell className="table-col-width-20"><span className="blue-text bold font-effra font-size-16 text-darken-3">Thời gian mở</span></TableCell>
-                            <TableCell className="table-col-width-20"><span className="blue-text bold font-effra font-size-16 text-darken-3">Thời lượng (phút)</span></TableCell>
+                            <TableCell className="table-col-width-35"><span className="blue-text bold font-effra font-size-16 text-darken-3 font-montserrat">Chủ đề</span></TableCell>
+                            <TableCell className="table-col-width-10"><span className="blue-text bold font-effra font-size-16 text-darken-3 font-montserrat">Tiến độ</span></TableCell>
+                            <TableCell className="table-col-width-20"><span className="blue-text bold font-effra font-size-16 text-darken-3 font-montserrat">Thời gian mở</span></TableCell>
+                            <TableCell className="table-col-width-20"><span className="blue-text bold font-effra font-size-16 text-darken-3 font-montserrat">Thời lượng (phút)</span></TableCell>
                             <TableCell><span className="blue-text bold font-effra font-size-16 "></span></TableCell>
                         </TableRow>
                     </TableHead>
@@ -185,7 +185,7 @@ export default function ExpandableTable(props) {
                                                             <a href={"#editExam" + item.exam.id} className="modal-trigger">
                                                                 <i className="material-icons" style={{ marginRight: "10px" }}>edit</i>
                                                             </a>
-                                                            <Modal id={"editExam" + item.exam.id} options={{ preventScrolling: false }} actions={<Button style={{ display: 'none' }}></Button>}>
+                                                            <Modal id={"editExam" + item.exam.id} options={{ preventScrolling: false }} className="modal-no-footer-header" actions={<Button style={{ display: 'none' }}></Button>}>
                                                                 <div>
                                                                     <h5 className="center" style={{ marginTop: 0 }}>Sửa thông tin buổi kiểm tra</h5>
                                                                     <Divider style={{ marginBottom: "1vw" }} />
@@ -199,7 +199,7 @@ export default function ExpandableTable(props) {
                                                             <a href={"#deleteExam" + item.exam.id} className="modal-trigger">
                                                                 <i className="material-icons" style={{ color: '#e32' }}>delete</i>
                                                             </a>
-                                                            <Modal id={"deleteExam" + item.exam.id} options={{ preventScrolling: false }} actions={<Button style={{ display: 'none' }}></Button>}>
+                                                            <Modal id={"deleteExam" + item.exam.id} options={{ preventScrolling: false }} className="modal-no-footer-header" actions={<Button style={{ display: 'none' }}></Button>}>
                                                                 <div>
                                                                     <h5 className="center" style={{ marginTop: 0 }}>Tạo buổi kiểm tra</h5>
                                                                     <Divider style={{ marginBottom: "1vw" }} />

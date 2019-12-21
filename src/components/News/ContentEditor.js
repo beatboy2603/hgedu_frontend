@@ -209,7 +209,7 @@ class ContentEditor extends Component {
      */
     getImageData = (delta) => {
         var imageData = []
-        if(delta !== undefined) {
+        if(delta !== undefined && delta.ops) {
             delta.ops.map((deltaPart) => {
                 if(deltaPart.insert !== undefined && deltaPart.insert.image) {
                     imageData.push(deltaPart.insert.image)
@@ -248,7 +248,7 @@ class ContentEditor extends Component {
     resetEditorOnUpdate = () => {
         const currentImageData = this.state.imageData;
         // console.log("original:", this.state.originalImageData);
-        if(currentImageData !== this.state.originalImageData) {
+        if(currentImageData && this.state.originalImageData && currentImageData !== this.state.originalImageData) {
             let removedImageFromOriginal = this.state.originalImageData.filter(item => currentImageData.includes(item) === false);
             console.log("removed:", removedImageFromOriginal)
             this.deleteImage(removedImageFromOriginal);
@@ -270,7 +270,7 @@ class ContentEditor extends Component {
      */
     resetEditor = () => {
         const originalImageData = this.state.originalImageData;
-        if(originalImageData !== this.state.currentImageData) {
+        if(originalImageData && this.state.currentImageData && originalImageData !== this.state.currentImageData) {
             let removedImageNotOriginal = this.state.currentImageData.filter(item => originalImageData.includes(item) === false);
             this.deleteImage(removedImageNotOriginal);
         }

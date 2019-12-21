@@ -82,7 +82,7 @@ class TestManagement extends Component {
                     {/* filler */}
                     <div className="col s2"></div>
                     <div className="col s10">
-                        <Link to='/examManagement'><h5 className="blue-text text-darken-3 bold">Kiểm tra</h5></Link>
+                        <Link to='/testManagement'><h5 className="blue-text text-darken-3 bold font-montserrat">Kiểm tra</h5></Link>
                         <Divider />
                         <div className="space-top link-event">
                             <NavLink to='/examManagement/examHistory' activeClassName="link-active">
@@ -118,10 +118,10 @@ class TestManagement extends Component {
                 <div className="row col s9 no-padding">
                     <div className="col s3 container min-height-60 knowledgeGroup-header">
                     { this.state.type && this.state.type === 'SCHEDULE' &&
-                        <h5 className="blue-text text-darken-3 bold">D.S. kiểm tra</h5>
+                        <h5 className="blue-text text-darken-3 bold font-montserrat">D.S. kiểm tra</h5>
                     }
                     { this.state.type && this.state.type === 'HISTORY' &&
-                        <h5 className="blue-text text-darken-3 bold">Nhật kí</h5>
+                        <h5 className="blue-text text-darken-3 bold font-montserrat">Nhật kí</h5>
                     }
                         {/* <p className='grey-text text-darken-1'>08 bài kiểm tra</p> */}
                     </div>
@@ -136,7 +136,7 @@ class TestManagement extends Component {
                     <a href="#addExam" style={{position:"fixed"}} className="btn-floating btn-large blue my-floating-btn modal-trigger">
                         <i className="material-icons">add</i>
                     </a>
-                    <Modal id="addExam" options={{ preventScrolling: false }} actions={<Button style={{display: 'none'}}></Button>}> 
+                    <Modal id="addExam" options={{ preventScrolling: false }} className="modal-no-footer-header" actions={<Button style={{display: 'none'}}></Button>}> 
                         <div>
                             <h5 className="center" style={{marginTop: 0}}>Tạo buổi kiểm tra</h5>
                             <Divider style={{marginBottom: "1vw"}}/>

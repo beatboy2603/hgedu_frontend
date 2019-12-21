@@ -44,7 +44,7 @@ class MainPost extends Component {
                         
                         <div className="col s4 flex-column container modal-trigger clickable" onClick={() => this.getHtmlContent(post.content)} href={"#viewNews" + post.id}>
                             <h6 className="blue-text bold">{title}</h6>
-                            <p>{body}</p>
+                            <div>{body}</div>
                             <a href={"#viewNews" + post.id} onClick={() => this.getHtmlContent(post.content)} className="modal-trigger">Đọc tiếp</a>
                         </div>
 
@@ -68,9 +68,11 @@ class MainPost extends Component {
                 }
                 { view && 
                     <>
-                        <div className="col s8" style={{paddingLeft:"0", height:"100%"}}>
-                            <Link to={{pathname: '/news/view/' + post.title.replace(/\s/g,'-'), state: {id: post.id}}}><img className='responsive-img' src={imgSrc} alt="Main Image" /></Link>
-                        </div>      
+                        <Link to={{pathname: '/news/view/' + post.title.replace(/\s/g,'-'), state: {id: post.id}}}>
+                            <div className="col s8" style={{paddingLeft:"0", height:"100%", width: 'fit-content'}}>
+                                <img className='responsive-img' src={imgSrc} alt="Main Image" />
+                            </div>      
+                        </Link>
                         <div className="col s4 flex-column container">
                             <Link to={{pathname: '/news/view/' + post.title.replace(/\s/g,'-'), state: {id: post.id}}}><h6 className="blue-text bold">{title}</h6></Link>
                             <p>{body}</p>
