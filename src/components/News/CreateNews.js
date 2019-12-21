@@ -110,7 +110,7 @@ class CreateNews extends Component {
         const post = {title: this.state.title, 
             content: JSON.stringify(this.state.content), 
             thumbnail: this.state.thumbnail,
-            shortDescription: this.state.shortDescription,
+            description: this.state.shortDescription,
             dateCreated: new Date().toJSON().slice(0, 19).replace('T', ' '),
             modId: '' + this.props.user.uid}
 
@@ -159,12 +159,13 @@ class CreateNews extends Component {
      * Reset form value when user clicks on save button
      */
     resetForm = () => {
+      console.log( this.contentEditor.current)
       document.getElementById('inputTitle').value = '';
       document.getElementById('inputShortDescription').value = '';
       document.getElementById('thumbFile').value = '';
       document.getElementById('previewThumb').src = '';
-      this.setState({title: '', thumbnail: '', content: ''})
-      this.contentEditor.current.resetForm();
+      this.setState({title: '', thumbnail: '', shortDescription: '', content: ''}, this.contentEditor.current.resetForm())
+      //this.contentEditor.current.resetForm();
     }
 
     render() {
