@@ -54,13 +54,15 @@ class StudentManagement extends Component {
       exams: [],
       studentByParentId: [],
       parentGetTeacher: [],
-      filteredStudentTeacher:[]
+      filteredStudentTeacher:[],
+      currentClassId: ""
     };
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onClickABC = this.onClickABC.bind(this);
     this.onClickABC2 = this.onClickABC2.bind(this);
+    this.submidAddStudent = this.submidAddStudent.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -165,6 +167,12 @@ class StudentManagement extends Component {
     });
   };
 
+  changeCurrentClassId = value => {
+    this.setState({
+      currentClassId: value
+    });
+  };
+
   
 
   changeTeacherState = value => {
@@ -256,6 +264,36 @@ class StudentManagement extends Component {
       }
     }
   }
+
+  submidAddStudent = e => {
+    console.log("ABC", this.state.filteredStudentTeacher);
+    console.log(".zzzz")
+    e.preventDefault();
+
+    let classStudent = this.state.classStudent;
+    let list = this.state.filteredStudentTeacher.filter(student => {
+      return student.status == true;
+    });
+    list.map(item => {
+      let newElement = {
+        classId: this.state.currentClassId,
+        studentId: item.studentId
+      };
+      console.log("newStudent", newElement);
+      this.setState({
+        classStudent: 
+        [...classStudent, newElement]
+      })
+      classStudent.push(newElement);
+    });
+    axios
+      .post("http://localhost:8084/api/classManagement/addStudent/", classStudent)
+      .then(res => {
+        console.log("leu leu");
+        this.props.getStudents(this.state.currentClassId);
+        console.log(this.state.classStudent);
+      });
+  };
 
   render() {
     const style = {
@@ -357,6 +395,7 @@ class StudentManagement extends Component {
                 classStudent={this.props.getClassStudents}
                 changeTreeStatus={this.changeTreeStatus}
                 changeTeacherState={this.changeTeacherState}
+                changeCurrentClassId={this.changeCurrentClassId}
               />
             )}
           </div>
@@ -425,6 +464,7 @@ class StudentManagement extends Component {
                       deleteStudent={this.props.deleteStudent}
                       parent={this.state.parent}
                       getParent={this.props.getParent}
+                      currentClassId={this.state.currentClassId}
                     />
                   )}
                 </div>
@@ -577,7 +617,21 @@ class StudentManagement extends Component {
                 deleteStudent={this.props.deleteStudentTeacher}
                 parent={this.state.parent}
                 getParent={this.props.getParent}
+                filterStudentTeacher={this.state.filteredStudentTeacher}
               />
+              <a
+                className="modal-action modal-close black-text lighten-1"
+                style={{ margin: "0 1.5vw", float: "left", marginTop: "30px" }}
+              >
+                Hủy thao tác
+              </a>
+              <a
+                className="modal-action modal-close blue-text lighten-1"
+                style={{ margin: "0 1.5vw", float: "right", marginTop: "30px" }}
+                onClick={this.submidAddStudent}
+              >
+                Hoàn tất
+              </a>
             </div>
           </Modal>
         </div>

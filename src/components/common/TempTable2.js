@@ -69,9 +69,9 @@ export default function SimpleTable(props) {
         return exam[5] == classId;
       })
       .map(item => {
-        if ((item[2] - currentDate) < 432000000) {
+        if (item[2] - currentDate < 432000000) {
           check++;
-          if ((item[2] - currentDate) < 172800000) {
+          if (item[2] - currentDate < 172800000) {
             check2++;
           }
         }
@@ -79,11 +79,10 @@ export default function SimpleTable(props) {
       });
     if (check > 0) {
       if (check2 > 0) {
-        return (<WarningRoundedIcon style={{color: "red"}}/>);
+        return <WarningRoundedIcon style={{ color: "red" }} />;
       } else {
-        return (<WarningRoundedIcon style={{color: "orange"}}/>);
+        return <WarningRoundedIcon style={{ color: "orange" }} />;
       }
-      
     }
   };
 
@@ -107,6 +106,8 @@ export default function SimpleTable(props) {
     e.stopPropagation();
     deleteStudent(id);
   };
+
+  
 
   return (
     <Paper className={classes.root}>
@@ -463,9 +464,7 @@ export default function SimpleTable(props) {
                       : "Chưa rõ"}
                   </span>
                 </TableCell>
-                <TableCell>
-                  {examCheck(classStudent[index].classId)}
-                </TableCell>
+                <TableCell>{examCheck(classStudent[index].classId)}</TableCell>
               </TableRow>
             ))}
             <Modal
