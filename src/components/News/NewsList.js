@@ -12,15 +12,23 @@ import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import Search from './Search'
 import {serverUrl} from '../common/common'
+import Button from 'react-materialize/lib/Button';
+import ListFilter from '../common/ListFilter'
 
 class NewsList extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            newsList: []
+            newsList: [],
+            searchResult: []
         }
         this.handleUpdateList = this.handleUpdateList.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
+    }
+
+    handleSearch = (list) => {
+        this.setState({searchResult: list});
     }
 
     handleUpdateList(object, type) {
@@ -48,7 +56,7 @@ class NewsList extends Component {
     }
 
     componentWillMount() {
-        axios.get(serverUrl + this.props.user.uid + "/all")
+        axios.get(serverUrl + "api/news/" + this.props.user.uid + "/all")
             .then(res => {
                 console.log(res);
                 this.setState({ newsList: res.data })
@@ -67,19 +75,23 @@ class NewsList extends Component {
                         </h6>
                     </div>
                     <div className="col s12 container-fluid">
-                        <div className="row" >
-                            <div className="col s6">
-                                <div style={{ paddingLeft: "62px" }}>Thể loại</div>
-                            </div>
-                            {/* <Divider orientation="vertical"/> */}
-                            <div className="col s6" >
-                                <Search />
-                            </div>
-                        </div>
+                        <ListFilter searchList={this.state.newsList} updateSearchResult={this.handleSearch} />
                     </div>
                     <div className="col s12 center padding-filler-nav posts">
                         {
-                            this.state.newsList.map(post =>
+                            (this.state.searchResult.length === 0 && this.state.newsList) && this.state.newsList.map(post =>
+                                <div key={post.id} className="col s4 small-post">
+                                    <SmallPost
+                                        id={post.id}
+                                        body={post.description}
+                                        post={post}
+                                        title={post.title}
+                                        updateList={this.handleUpdateList}
+                                        imgSrc={serverUrl + post.thumbnail} />
+                                </div>
+                            )}
+                        {
+                            this.state.searchResult.length !== 0 && this.state.searchResult.map(post =>
                                 <div key={post.id} className="col s4 small-post">
                                     <SmallPost
                                         id={post.id}
@@ -97,19 +109,11 @@ class NewsList extends Component {
                     <a href="#addNews" className="btn-floating btn-large blue my-floating-btn modal-trigger">
                         <i className="material-icons">add</i>
                     </a>
-                    <Modal id="addNews" fixedFooter style={{ width: "40vw", minHeight: "50vh", overflow: "hidden" }}
-                        options={{ preventScrolling: true, dismissible: false }}>
-                        <div className="modal-content"
-                            style={{
-                                position: "absolute",
-                                top: "0",
-                                bottom: "0",
-                                left: "0",
-                                right: "-17px", /* Increase/Decrease this value for cross-browser compatibility */
-                                overflowY: "scroll"
-                            }}>
-                            <h4 >Thêm bài đăng</h4>
-                            <div className="line"></div>
+                    <Modal id="addNews"style={{position:"fixed"}} actions={<Button style={{display: 'none'}}></Button>}
+                        options={{ preventScrolling: true}}>
+                        <div>
+                            <h5 className="center" style={{marginTop: 0}}>Thêm bài đăng</h5>
+                            <Divider style={{marginBottom: "1vw"}}/>
                             <CreateNews updateList={this.handleUpdateList} />
                         </div>
                     </Modal>

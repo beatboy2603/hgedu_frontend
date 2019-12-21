@@ -20,7 +20,7 @@ class Home extends Component {
     }
 
     componentWillMount() {
-        axios.get(serverUrl+'news')
+        axios.get(serverUrl+'api/news')
             .then(res => {
                 console.log(res);
                 this.setState({newsList: res.data})

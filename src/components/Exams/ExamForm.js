@@ -427,10 +427,10 @@ class ExamForm extends Component {
         // } else {
         if(e.target) {
             let errors = this.state.errors;
-            if(/^([A-Za-z0-9]{1,}([.,]|[-]| )?)+[A-Za-z0-9]*$/.test(e.target.value)) {
+            if(e.target.value.trim()) {
                 errors.title = ''
             } else {
-                errors.title = 'Chủ đề phải là chữ cái, số hoặc ký tự khác như: . , -'
+                errors.title = 'Chủ đề không được bỏ trống'
             }
             this.setState({
                 title: e.target.value,
@@ -599,15 +599,9 @@ class ExamForm extends Component {
                                 <div>
                                     <Modal id={"chooseClasses" + this.state._id}  options={{ preventScrolling: true}}  
                                     actions={<Button style={{display: 'none'}}></Button>}
-                                    style={{ width: "20vw", minHeight: "30vh", overflow: "hidden" }}  >
-                                        <div className="modal-content" style={{
-                                                position: "absolute",
-                                                top: "0",
-                                                bottom: "0",
-                                                left: "0",
-                                                right: "-17px", /* Increase/Decrease this value for cross-browser compatibility */
-                                                overflowY: "scroll"
-                                            }}>
+                                    className="modal-no-footer-header"
+                                    style={{ width: "20vw", height: "fit-content", overflow: "hidden" }}  >
+                                        <div>
                                             <h5 className="center" style={{marginTop: 0}}>Chọn lớp</h5>
                                             <Divider style={{marginBottom: "1vw"}}/>
                                             <div>
@@ -800,7 +794,12 @@ class ExamForm extends Component {
                             <ExpansionPanelDetails>
                                 <div>
                                     <a href={"#testSelector" + this.state._id} className="modal-trigger">+ Chọn đề / bộ đề</a>
-                                    <Modal id={"testSelector" + this.state._id}  options={{ preventScrolling: false}}  actions={<Button style={{display: 'none'}}></Button>}> 
+                                    {errors.tests && (
+                                        <div className="invalid-feedback" style={{padding: 0}}>
+                                            {errors.tests}
+                                        </div>
+                                    )}
+                                    <Modal id={"testSelector" + this.state._id} className="modal-no-footer-header"  options={{ preventScrolling: false}}  actions={<Button style={{display: 'none'}}></Button>}> 
                                         <div>
                                             <h5 className="center" style={{marginTop: 0}}>Chọn đề / bộ đề</h5>
                                             <Divider style={{marginBottom: "1vw"}}/>
@@ -811,11 +810,6 @@ class ExamForm extends Component {
                                         </div>
                                     </Modal>
                                 </div>
-                                {errors.tests && (
-                                        <div className="invalid-feedback" style={{padding: 0}}>
-                                            {errors.tests}
-                                        </div>
-                                    )}
                             </ExpansionPanelDetails>
                         </ExpansionPanel>
                         <Divider />
@@ -896,10 +890,10 @@ class ExamForm extends Component {
                         </div>
                         <div>
                             <Divider/>
-                            <a className=" modal-action modal-close black-text lighten-1" style={{ marginTop: "1vw", float: "left", fontSize: "1vw" }}>Hủy thao tác</a>
+                            <a className=" modal-action modal-close black-text lighten-1" style={{ marginTop: "1vw", marginBottom: "1vw", float: "left", fontSize: "1vw" }}>Hủy thao tác</a>
                             {this.checkValidSubmit() &&
                                 <button type="submit" className=" modal-action modal-close blue-text lighten-1" 
-                                style={{ marginTop: "1vw", float: "right", background: "none", border: "none", padding: "0", cursor: "pointer", fontSize: "1vw" }}>Hoàn tất</button>
+                                style={{ marginTop: "1vw", marginBottom: "1vw", float: "right", background: "none", border: "none", padding: "0", cursor: "pointer", fontSize: "1vw" }}>Hoàn tất</button>
                             }
                         </div>
                     </form>

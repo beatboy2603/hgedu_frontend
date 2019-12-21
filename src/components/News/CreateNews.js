@@ -5,6 +5,8 @@ import ContentEditor from './ContentEditor';
 import PropTypes from 'prop-types';
 import axios, {post} from 'axios';
 import {serverUrl} from '../common/common'
+import Divider from '@material-ui/core/Divider';
+import classnames from 'classnames';
 
 class CreateNews extends Component {
     constructor(props) {
@@ -12,20 +14,45 @@ class CreateNews extends Component {
         this.state = {
             content: '',
             title: '',
+            errors: {title: '', code: '', content: '', thumbnail: ''},
+            shortDescription: '',
             thumbnail: ''
         }
         this.handlePost = this.handlePost.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.updateShortDescription = this.updateShortDescription.bind(this);
         this.contentEditor = React.createRef();
         this.resetForm = this.resetForm.bind(this);
     }
+
+    checkValidSubmit = () => {
+      if(this.state.title && this.state.content && this.state.thumbnail) {
+          return true;
+      }
+      return false;
+  }
 
     handlePost (postContent) {
         this.setState({content: postContent})
     }
 
     updateTitle(e) {
-        this.setState({title: e.target.value})
+      if(e.target) {
+        let errors = this.state.errors;
+        if(e.target.value.trim()) {
+            errors.title = ''
+        } else {
+            errors.title = 'Chủ đề không được bỏ trống'
+        }
+        this.setState({
+            title: e.target.value,
+            errors
+        })
+      }
+    }
+
+    updateShortDescription(e) {
+        this.setState({shortDescription: e.target.value})
     }
 
     uploadThumbnail(e) {
@@ -79,10 +106,11 @@ class CreateNews extends Component {
     handleSubmit (e) {
         e.preventDefault();
         const host = serverUrl
-        const URL = host + 'create-news'
+        const URL = host + 'api/news'
         const post = {title: this.state.title, 
             content: JSON.stringify(this.state.content), 
             thumbnail: this.state.thumbnail,
+            shortDescription: this.state.shortDescription,
             dateCreated: new Date().toJSON().slice(0, 19).replace('T', ' '),
             modId: '' + this.props.user.uid}
 
@@ -111,6 +139,7 @@ class CreateNews extends Component {
      */
     resetCreateNews = () => {
         document.getElementById('inputTitle').value = '';
+        document.getElementById('inputShortDescription').value = '';
         document.getElementById('thumbFile').value = '';
         document.getElementById('previewThumb').src = '';
         const currentThumbnail = this.state.thumbnail;
@@ -120,6 +149,7 @@ class CreateNews extends Component {
         this.setState({
           title: '',
           thumbnail: '',
+          shortDescription: '',
           content: ''
         })
         this.resetEditor();
@@ -130,6 +160,7 @@ class CreateNews extends Component {
      */
     resetForm = () => {
       document.getElementById('inputTitle').value = '';
+      document.getElementById('inputShortDescription').value = '';
       document.getElementById('thumbFile').value = '';
       document.getElementById('previewThumb').src = '';
       this.setState({title: '', thumbnail: '', content: ''})
@@ -140,14 +171,49 @@ class CreateNews extends Component {
         return (
             <div className="create-news no-border">
                 <form onSubmit={this.handleSubmit}>
-                    <div><input type="text" id="inputTitle" onChange={this.updateTitle.bind(this)} placeholder="Title"/></div>
-                    <ContentEditor ref={this.contentEditor} updateContent={this.handlePost}/> 
-                    <div><input type="file" id="thumbFile" onChange={this.uploadThumbnail.bind(this)} /></div>
-                    <div><img id="previewThumb" src={serverUrl+ this.state.thumbnail} alt="Preview Thumbnail" /></div>
-                    <div className="line"></div>
-                    <a onClick={this.resetCreateNews.bind(this)} className=" modal-action modal-close black-text lighten-1" style={{ marginTop: "1vw", float: "left", fontSize: "1vw" }}>Hủy thao tác</a>
+                    <div className="row required" style={{marginTop: "20px"}}>
+                      <label htmlFor="inputTitle" className="col s2 inputLabel" style={{paddingLeft: 0}}>
+                          Tiêu đề:
+                      </label>
+                      <input 
+                          type="text" 
+                          id="inputTitle" 
+                          name="title"
+                          className={classnames("form-control form-control-lg col s10",{
+                              "is-invalid": this.state.errors.title
+                          })}
+                          style={{height: 'fit-content', marginBottom: 0}} 
+                          value={this.state.title} onChange={this.updateTitle.bind(this)}/>
+                      {this.state.errors.title && (
+                                <div className="invalid-feedback col s10" style={{padding: 0}}>
+                                    {this.state.errors.title}
+                                </div>
+                            )}
+                    </div>
+                    <div className="row" style={{marginTop: "20px"}}>
+                      <label htmlFor="title" className="col s2 inputLabel" style={{paddingLeft: 0}}>
+                          Mô tả ngắn:
+                      </label>
+                      <input type="text" id="inputShortDescription" className="col s10" style={{height: 'fit-content', marginBottom: 0}} value={this.state.shortDescription} onChange={this.updateShortDescription}/>
+                    </div>
+                    <div className="row" style={{marginTop: "20px"}}>
+                      <ContentEditor ref={this.contentEditor} updateContent={this.handlePost}/> 
+                    </div>
+                    <div className="row required" style={{marginTop: "20px"}}>
+                      <label htmlFor="title" className="col s2 inputLabel" style={{paddingLeft: 0}}>
+                          Thumbnail:
+                      </label>
+                      <div className="col s10">
+                        <div><input type="file" id="thumbFile" onChange={this.uploadThumbnail.bind(this)} /></div>
+                        <div><img id="previewThumb" src={serverUrl+ this.state.thumbnail} alt="Preview Thumbnail" /></div>
+                      </div>
+                    </div>
+                    <Divider/>
+                    <a onClick={this.resetCreateNews.bind(this)} className=" modal-action modal-close black-text lighten-1" style={{ marginTop: "1vw", marginBottom: "1vw", float: "left", fontSize: "1vw" }}>Hủy thao tác</a>
+                    {this.checkValidSubmit() &&
                     <button type="submit" className=" modal-action modal-close blue-text lighten-1" 
-                    style={{ marginTop: "1vw", float: "right", background: "none", border: "none", padding: "0", cursor: "pointer", fontSize: "1vw" }}>Hoàn tất</button>
+                    style={{ marginTop: "1vw", float: "right", background: "none", border: "none", padding: "0", cursor: "pointer", marginBottom: "1vw", fontSize: "1vw" }}>Hoàn tất</button>
+                    }
                 </form>
             </div>
         )

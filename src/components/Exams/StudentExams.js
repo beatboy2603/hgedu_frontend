@@ -10,6 +10,7 @@ import { getStudentClasses } from '../../actions/classAction';
 import { getExamsForClass } from '../../actions/examAction';
 import PropTypes from 'prop-types';
 import StudentExamsTable from './StudentExamsTable';
+import ListFilter from '../../components/common/ListFilter'
 
 class StudentExams extends Component {
     constructor(props) {
@@ -102,12 +103,17 @@ class StudentExams extends Component {
                 <div className="col s3 z-depth-3 grey lighten-5"></div>
                 {/* main content */}
                 <div className="row col s9 no-padding">
-                    <div className="col s3 container min-height-60 knowledgeGroup-header">
-                        <h5 className="blue-text text-darken-3 bold">D.S. kiểm tra</h5>
-                        <p className='grey-text text-darken-1'>{this.state.examList ? this.getStandardNumberString(this.state.examList.length) : '00'} bài kiểm tra</p>
+                    <div className="row col s12 no-padding">
+                        <div className="col s3 container min-height-60 knowledgeGroup-header">
+                            <h5 className="blue-text text-darken-3 bold">D.S. kiểm tra</h5>
+                            <p className='grey-text text-darken-1'>{this.state.examList ? this.getStandardNumberString(this.state.examList.length) : '00'} bài kiểm tra</p>
+                        </div>
+                        <div className="col s9 container z-depth-1">
+                            Quảng cáo
+                        </div>
                     </div>
-                    <div className="col s9 container z-depth-1">
-                        Quảng cáo
+                    <div className="col s12 no-padding center">
+                        <ListFilter/>
                     </div>
                     <div className="col s12 no-padding center">
                         <StudentExamsTable examList={this.state.examList} studentClass={this.props.location&&this.props.location.state ? this.props.location.state : {}}/>

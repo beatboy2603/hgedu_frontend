@@ -11,6 +11,7 @@ import ContentEditor from './ContentEditor'
 import Button from 'react-materialize/lib/Button';
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html'; 
 import {serverUrl} from '../common/common'
+import Divider from '@material-ui/core/Divider';
 
 class SmallPost extends Component {
     constructor(props) {
@@ -21,6 +22,7 @@ class SmallPost extends Component {
             originalContent: {},
             title: '',
             originalTitle: '',
+            originalDescription: '',
             thumbnail: '',
             originalThumbnail: '',
             shortDescription: '',
@@ -37,12 +39,24 @@ class SmallPost extends Component {
         this.contentEditor = React.createRef();
         this.getHtmlContent = this.getHtmlContent.bind(this);
         this.handleEditButton = this.handleEditButton.bind(this);
+        this.updateShortDescription = this.updateShortDescription.bind(this);
+    }
+
+    checkValidSubmit = () => {
+        if(this.state.title && this.state.content && this.state.thumbnail) {
+            return true;
+        }
+        return false;
+    }
+
+    updateShortDescription(e) {
+        this.setState({shortDescription: e.target.value})
     }
 
     handleEditButton = (e) => {
         e.preventDefault();
  //       if(this.state.post) {
-             axios.get(serverUrl+'news/' + this.state.id)
+             axios.get(serverUrl+'api/news/' + this.state.id)
             .then(res => {
                 this.setState({id: res.data.id,
                     content: res.data.content,
@@ -64,13 +78,14 @@ class SmallPost extends Component {
 
     componentDidMount() {
         //this.state.id = this.props.id
-        axios.get(serverUrl+'news/' + this.props.id)
+        axios.get(serverUrl+'api/news/' + this.props.id)
             .then(res => {
                 this.setState({id: res.data.id,
                     content: JSON.parse(res.data.content.replace(/\n/g, "\\n")),
                     originalContent: JSON.parse(res.data.content.replace(/\n/g, "\\n")),
                     title: res.data.title,
                     originalTitle: res.data.title,
+                    originalDescription: res.data.description,
                     thumbnail: res.data.thumbnail,
                     originalThumbnail: res.data.thumbnail,
                     shortDescription: res.data.description,
@@ -151,10 +166,11 @@ class SmallPost extends Component {
         e.preventDefault();
         console.log("here content", this.state.content)
         const host = serverUrl
-        const URL = host + 'news/' + this.state.id
+        const URL = host + 'api/news/' + this.state.id
         const post = {
             id: this.state.id,
             title: this.state.title, 
+            shortDescription: this.state.shortDescription,
             content: JSON.stringify(this.state.content), 
             thumbnail: this.state.thumbnail,
             dateCreated: new Date().toJSON().slice(0, 19).replace('T', ' '),
@@ -180,7 +196,7 @@ class SmallPost extends Component {
         e.preventDefault();
         console.log("id", this.state.id)
         const host = serverUrl
-        const URL = host + 'news/' + this.state.id
+        const URL = host + "api/news/" + this.state.id
 
         this.updateOnDelete();
         //this.resetCreateNews(e);
@@ -248,6 +264,7 @@ class SmallPost extends Component {
           this.deleteThumbnail(currentThumbnail);
         }
         this.setState({title: this.state.originalTitle})
+        this.setState({shortDescription: this.state.originalDescription})
         this.setState({content: this.state.originalContent})
         this.setState({thumbnail: this.state.originalThumbnail})
         this.resetEditor();
@@ -255,6 +272,7 @@ class SmallPost extends Component {
 
     resetForm = () => {
       document.getElementById('inputTitle').value = '';
+      document.getElementById('inputShortDescription').value = '';
       document.getElementById('thumbFile').value = '';
       document.getElementById('previewThumb').src = '';
       this.contentEditor.current.resetForm();
@@ -300,13 +318,13 @@ class SmallPost extends Component {
         const { imgSrc, title, body} = this.props;
         return (
             <div className="sub-post post-margin white z-depth-1 border-20 center">
-                <div href={"#viewNews" + this.state.id} onClick={this.getHtmlContent} className="clickable center modal-trigger">
-                    <img className='responsive-img' src={imgSrc} alt="" />
+                <div href={"#viewNews" + this.state.id} onClick={this.getHtmlContent} className="clickable center modal-trigger small-post-img">
+                    <img className='responsive-img' src={imgSrc} alt="" style={{maxHeight: '30vh'}} />
                 </div>
 
                 <div className="container flex-column width-flex">
-                    <p href={"#viewNews" + this.state.id} onClick={this.getHtmlContent} className="clickable blue-text bold small-post-title modal-trigger">{title}</p>
-                    <p className='truncate'>{body}</p>
+                    <p href={"#viewNews" + this.state.id} onClick={this.getHtmlContent} className="clickable blue-text bold small-post-title modal-trigger truncate">{title}</p>
+                    <p className={body ? 'truncate' : 'hidden-text'}>{body ? body : "something"}</p>
                     <div className="post-buttons">
                         <div className="edit-post">
                             {/* <a href={"#editNews" + this.state.id} 
@@ -316,37 +334,49 @@ class SmallPost extends Component {
                                 Sửa
                             </a> */}
                             <Modal id={"editNews" + this.state.id} 
-                            //className="scroll-content" 
-                            style={{ width: "40vw", minHeight: "50vh", overflow: "hidden" }} 
-                            fixedFooter
+                            className="modal-no-footer-header" 
+                            actions={<Button style={{display: 'none'}}></Button>}
                              options={{ preventScrolling: false }} trigger={<a 
                            // onClick={this.handleEditButton} 
                             className=" left clickable" >
                                 Sửa
                             </a>}>
-                                <div className="modal-content" style={{
-                                        position: "absolute",
-                                        top: "0",
-                                        bottom: "0",
-                                        left: "0",
-                                        right: "-17px", /* Increase/Decrease this value for cross-browser compatibility */
-                                        overflowY: "scroll"
-                                    }}>
-                                    <h4>Sửa bài đăng</h4>
-                                    <div className="line">
-                                    </div>
+                                <div>
+                                    <h5 className="center" style={{marginTop: 0}}>Sửa bài đăng</h5>
+                                    <Divider style={{marginBottom: "1vw"}}/>
                                     {/* //<EditNews post={post} /> */}
                                     <div className="create-news no-border">
                                         <form onSubmit={this.handleSubmit}>
-                                            <div className="row"></div>
-                                            <div><input type="text" value={this.state.title} id="inputTitle" onChange={this.updateTitle.bind(this)} placeholder="Title"/></div>
-                                            <ContentEditor ref={this.contentEditor} updateContent={this.handlePost} content={this.state.content} id={this.state.id} /> 
-                                            <div><input type="file" id="thumbFile" onChange={this.uploadThumbnail.bind(this)} /></div>
-                                            <div className="thumbnail-preview"><img id="previewThumb" src={serverUrl + this.state.thumbnail} alt="Preview Thumbnail" /></div>
-                                            <div className="line"></div>
-                                            <a onClick={this.resetEditNews.bind(this)} className=" modal-action modal-close black-text lighten-1" style={{ marginTop: "1vw", float: "left", fontSize: "1vw" }}>Hủy thao tác</a>
-                                            <button type="submit" className=" modal-action modal-close blue-text lighten-1" 
-                                            style={{ marginTop: "1vw", float: "right", background: "none", border: "none", padding: "0", cursor: "pointer", fontSize: "1vw" }}>Hoàn tất</button>
+                                            <div className="row required" style={{marginTop: "20px"}}>
+                                                <label htmlFor="title" className="col s2 inputLabel" style={{paddingLeft: 0}}>
+                                                    Tiêu đề:
+                                                </label>
+                                                <input type="text" id="inputTitle" className="col s10" style={{height: 'fit-content', marginBottom: 0}} value={this.state.title} onChange={this.updateTitle.bind(this)}/>
+                                            </div>
+                                            <div className="row" style={{marginTop: "20px"}}>
+                                                <label htmlFor="title" className="col s2 inputLabel" style={{paddingLeft: 0}}>
+                                                    Mô tả ngắn:
+                                                </label>
+                                                <input type="text" id="inputShortDescription" className="col s10" style={{height: 'fit-content', marginBottom: 0}} value={this.state.shortDescription} onChange={this.updateShortDescription}/>
+                                            </div>
+                                            <div className="row" style={{marginTop: "20px"}}>
+                                                <ContentEditor ref={this.contentEditor} updateContent={this.handlePost} content={this.state.content} id={this.state.id} /> 
+                                            </div>
+                                            <div className="row required" style={{marginTop: "20px"}}>
+                                                <label htmlFor="title" className="col s2 inputLabel" style={{paddingLeft: 0}}>
+                                                    Thumbnail:
+                                                </label>
+                                                <div className="col s10">
+                                                    <div><input type="file" id="thumbFile" onChange={this.uploadThumbnail.bind(this)} /></div>
+                                                    <div className="thumbnail-preview"><img id="previewThumb" src={serverUrl + this.state.thumbnail} alt="Preview Thumbnail" /></div>
+                                                </div>
+                                            </div>
+                                            <Divider/>
+                                            <a onClick={this.resetEditNews.bind(this)} className=" modal-action modal-close black-text lighten-1" style={{ marginTop: "1vw", marginBottom: "1vw", float: "left", fontSize: "1vw" }}>Hủy thao tác</a>
+                                            {this.checkValidSubmit() &&
+                                                <button type="submit" className=" modal-action modal-close blue-text lighten-1" 
+                                                style={{ marginTop: "1vw", marginBottom: "1vw", float: "right", background: "none", border: "none", padding: "0", cursor: "pointer", fontSize: "1vw" }}>Hoàn tất</button>
+                                            }
                                         </form>
                                     </div>
                                 </div>
@@ -356,45 +386,30 @@ class SmallPost extends Component {
                             {/* <a href={"#deleteNews" + this.state.id}  className="right red-text modal-trigger">
                                 Xóa
                             </a> */}
-                            <Modal id={"deleteNews" + this.state.id}  options={{ preventScrolling: true }} style={{ width: "40vw", minHeight: "50vh", overflow: "hidden" }}
+                            <Modal id={"deleteNews" + this.state.id} className="modal-no-footer-header" options={{ preventScrolling: true }} style={{ width: "40vw", overflow: "hidden" }}
                              trigger={<a className="right red-text clickable">
                                 Xóa
                             </a>}>
-                                <div className="modal-content" style={{
-                                        position: "absolute",
-                                        top: "0",
-                                        bottom: "0",
-                                        left: "0",
-                                        right: "-17px", /* Increase/Decrease this value for cross-browser compatibility */
-                                        overflowY: "scroll"
-                                    }}>
-                                    <h5 className="center">Xóa bài đăng</h5>
-                                    <div className="line">
-                                    </div>
+                                <div>
+                                    <h5 className="center" style={{marginTop: 0}}>Xóa bài đăng</h5>
+                                    <Divider/>
                                     <div>
                                         <form onSubmit={this.handleDelete}>
                                             <a 
                                                 className=" modal-action modal-close black-text lighten-1" 
-                                                style={{ marginTop: "1vw", float: "left", fontSize: "1vw" }}>Hủy thao tác</a>
+                                                style={{ marginTop: "1vw", marginBottom: "1vw", float: "left", fontSize: "1vw" }}>Hủy thao tác</a>
                                             <button type="submit" className=" modal-action modal-close blue-text lighten-1" 
-                                            style={{ marginTop: "1vw", float: "right", background: "none", border: "none", padding: "0", cursor: "pointer", fontSize: "1vw" }}>Đồng ý</button>
+                                            style={{ marginTop: "1vw", marginBottom: "1vw", float: "right", background: "none", border: "none", padding: "0", cursor: "pointer", fontSize: "1vw" }}>Đồng ý</button>
                                         </form>
                                     </div>
                                 </div>
                             </Modal>
                         </div>
                         <div>
-                            <Modal id={"viewNews" + this.state.id} fixedFooter options={{ preventScrolling: true, dismissible: false }} style={{ width: "40vw", minHeight: "50vh", overflow: "hidden" }}  >
-                                <div className="modal-content" style={{
-                                        position: "absolute",
-                                        top: "0",
-                                        bottom: "0",
-                                        left: "0",
-                                        right: "-17px", /* Increase/Decrease this value for cross-browser compatibility */
-                                        overflowY: "scroll"
-                                    }}>
-                                    <h4>{this.state.title}</h4>
-                                    <hr></hr>
+                            <Modal id={"viewNews" + this.state.id} fixedFooter options={{ preventScrolling: false}} >
+                                <div>
+                                    <h5 className="center" style={{marginTop: 0}}>{this.state.title}</h5>
+                                    <Divider/>
                                     <div dangerouslySetInnerHTML={{__html: this.state.htmlContent}} />
                                 </div>
                             </Modal>

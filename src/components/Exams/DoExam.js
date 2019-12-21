@@ -16,6 +16,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import axios from 'axios';
 import ContentContainer from './ContentContainer';
 import {serverUrl} from '../common/common';
+import {CustomCheckbox} from '../common/CustomCheckbox'
 
 class DoExam extends Component {
     constructor(props) {
@@ -34,6 +35,8 @@ class DoExam extends Component {
             counterSet: false,
             examResult: {},
             submitMessage: '',
+            mark: '',
+            isSubmit: false
         }
 
         this.handler = this.handler.bind(this);
@@ -47,6 +50,10 @@ class DoExam extends Component {
     }
 
     executed = false;
+
+    handleDisplaySubmit = () => {
+        this.setState({isSubmit: !this.state.isSubmit});
+    }
 
     handleChangeAnswer = (e) => {
         if(e.target) {
@@ -104,7 +111,9 @@ class DoExam extends Component {
                 if(res.data) {
                     console.log(res.data);
                     localStorage.setItem("reloadResult", 1);
-                    this.setState({submitMessage: 'Nộp bài thành công!', questionList: []})
+                    if(!isNaN(Number(res.data))) {
+                        this.setState({submitMessage: 'Nộp bài thành công!', questionList: []})
+                    }
                 }
             }).catch(error => {
                 console.log(error);
@@ -305,14 +314,26 @@ class DoExam extends Component {
                     <div className="col s2 z-depth-3 grey lighten-5"></div>
                     <div className="col s2 z-depth-2 grey lighten-4" style={{height: '100vh', position: 'sticky', top: 0}}>
                         {/* filler */}
-                            <div className="blue-text" style={{marginTop: "20px"}}>Điều hướng câu hỏi</div>
-                            <div className="QuizNavigation" style={{maxHeight: '40%', padding: '10px', overflow: 'auto'}}>
-                                {this.state.questionList && this.state.questionList.map((question, parentIndex) =>
-                                    <Button href={"#cau-" + (parentIndex + 1)} style={{minWidth: '40px'}}>
-                                        {parentIndex + 1}
-                                    </Button>
-                                )}
-                            </div>
+                            {!this.state.mark && 
+                                <>
+                                    <div className="blue-text" style={{marginTop: "20px"}}>Điều hướng câu hỏi</div>
+                                    <div className="QuizNavigation" style={{maxHeight: '40%', padding: '10px', overflow: 'auto'}}>
+                                        {this.state.questionList && this.state.questionList.map((question, parentIndex) =>
+                                            <Button href={"#cau-" + (parentIndex + 1)} style={{minWidth: '40px'}}>
+                                                {parentIndex + 1}
+                                            </Button>
+                                        )}
+                                    </div>
+                                </>
+                            }
+                            {this.state.mark && 
+                                <>
+                                    <div className="blue-text" style={{marginTop: "20px"}}>Điểm số</div>
+                                    <div className="QuizNavigation">
+                                        <h1 className="blue-text text-darken-3 bold" style={{textAlign: 'center'}}>{this.state.mark}</h1>
+                                    </div>
+                                </>
+                            }
                             <Divider />
                             <div className="space-top">
                                 <div className="blue-text">Thời gian còn lại</div>
@@ -350,7 +371,14 @@ class DoExam extends Component {
                                 </div>
                             </div>
                             <div className="space-top button-primary" >
-                                <Button variant="contained" size="large" color="primary" style={{minWidth: '100%'}} onClick={this.handleSubmit}>Nộp bài</Button>
+                                <FormControl component="fieldset">
+                                    <FormControlLabel
+                                        control={<CustomCheckbox />}
+                                        label="Tôi muốn nộp bài"
+                                        onChange={this.handleDisplaySubmit}
+                                    />
+                                </FormControl>
+                                <Button variant="contained" disabled={this.state.isSubmit ? false : true} size="large" color="primary" style={{minWidth: '100%'}} onClick={this.handleSubmit}>Nộp bài</Button>
                             </div>
                             <div className="space-top" >
                                 <h6 className="blue-text text-darken-3 bold" style={{textAlign: 'center'}}>

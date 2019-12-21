@@ -83,10 +83,10 @@ class ClassSelector extends Component {
                     {/* <FormHelperText></FormHelperText> */}
                 <div>
                     <Divider/>
-                    <a className=" modal-action modal-close black-text lighten-1" style={{ marginTop: "1vw", float: "left", fontSize: "1vw" }} onClick={this.handleCancel}>Hủy thao tác</a>
+                    <a className=" modal-action modal-close black-text lighten-1" style={{ marginTop: "1vw",marginBottom: "1vw", float: "left", fontSize: "1vw" }} onClick={this.handleCancel}>Hủy thao tác</a>
                     <button type="submit" className=" modal-action modal-close blue-text lighten-1" 
                     onClick={this.handleSubmit}
-                    style={{ marginTop: "1vw", float: "right", background: "none", border: "none", padding: "0", cursor: "pointer", fontSize: "1vw" }}>Tiếp theo</button>
+                    style={{ marginTop: "1vw",marginBottom: "1vw", float: "right", background: "none", border: "none", padding: "0", cursor: "pointer", fontSize: "1vw" }}>Tiếp theo</button>
                 </div>       
             </div>
         )
