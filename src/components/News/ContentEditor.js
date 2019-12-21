@@ -289,6 +289,7 @@ class ContentEditor extends Component {
      * and set the state of current states to original
      */
     resetForm = () => {
+        this.editor.setContents('');
         this.setState({
             comments: '',
             content: '',
