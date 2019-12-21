@@ -251,7 +251,7 @@ class PersonalLibrary extends Component {
                 {this.state.isRendered &&
                     <div className="personalLibrary row">
                         {/* folder navigation bar and modals*/}
-                        <div className="row col s3 z-depth-2 grey lighten-4 personalLibrary-nav">
+                        <div className="row col s3 z-depth-2 grey lighten-4 personalLibrary-nav" style={{wordWrap:"break-word"}}>
                             {/* filler */}
                             <div className="col s2"></div>
                             <div className="col s10">

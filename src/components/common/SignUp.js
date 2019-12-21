@@ -19,6 +19,7 @@ class SignUp extends Component {
         school: "",
         errorText: "Bạn chưa điền số điện thoại!",
         valid: false,
+        submited: false,
     }
 
     validatePhone = () => {
@@ -89,55 +90,62 @@ class SignUp extends Component {
 
     signup = () => {
         console.log(this.props.user);
-        if (this.state.valid) {
-            axios.post(serverUrl + 'api/authen/signup', {
-                token: this.props.user.googleJwt,
-                phoneNumber: this.state.phone,
-                dob: this.state.dob,
-                gender: this.state.gender,
-                school: this.state.school,
-                roleId: this.props.user.role,
-            }).then(res => {
-                if (res.data.message) {
-                    if (res.data.message === "signup succeeded") {
-                        axios.post(serverUrl + 'api/authen', {
-                            token: this.props.user.googleJwt,
-                        }).then(res => {
-                            let user = res.data.user;
-                            let jwt = res.data.jwt;
-                            this.decodeToken(this.props.user.googleJwt).then(res => {
-                                let googleToken = res.data;
-                                let user = {
-                                    email: googleToken.email,
-                                    name: googleToken.name,
-                                    picture: googleToken.picture,
-                                    sub: googleToken.sub,
+        if (this.state.valid && !this.state.submited) {
+            this.setState({
+                submited: true,
+            }, () => {
+                axios.post(serverUrl + 'api/authen/signup', {
+                    token: this.props.user.googleJwt,
+                    phoneNumber: this.state.phone,
+                    dob: this.state.dob,
+                    gender: this.state.gender,
+                    school: this.state.school,
+                    roleId: this.props.user.role,
+                }).then(res => {
+                    if (res.data.message) {
+                        if (res.data.message === "signup succeeded") {
+                            axios.post(serverUrl + 'api/authen', {
+                                token: this.props.user.googleJwt,
+                            }).then(res => {
+                                let user = res.data.user;
+                                let jwt = res.data.jwt;
+                                this.decodeToken(this.props.user.googleJwt).then(res => {
+                                    let googleToken = res.data;
+                                    let user = {
+                                        email: googleToken.email,
+                                        name: googleToken.name,
+                                        picture: googleToken.picture,
+                                        sub: googleToken.sub,
+                                    }
+                                    this.props.dispatch({ type: "UPDATE_USER", payload: user });
+                                })
+                                this.props.dispatch({
+                                    type: "UPDATE_USER", payload: {
+                                        uid: user.userId,
+                                        phone: user.phoneNumber,
+                                        gender: user.gender,
+                                        role: user.roleId,
+                                        dob: user.dob,
+                                        school: user.school,
+                                    }
+                                });
+                                this.props.dispatch({ type: "UPDATE_JWT", payload: jwt });
+                                if (user.roleId == 3) {
+                                    this.props.history.push('/signin');
+                                } else {
+                                    setCookie("authenticated", "true", 1);
+                                    this.props.history.push('/home');
                                 }
-                                this.props.dispatch({ type: "UPDATE_USER", payload: user });
                             })
-                            this.props.dispatch({
-                                type: "UPDATE_USER", payload: {
-                                    uid: user.userId,
-                                    phone: user.phoneNumber,
-                                    gender: user.gender,
-                                    role: user.roleId,
-                                    dob: user.dob,
-                                    school: user.school,
-                                }
-                            });
-                            this.props.dispatch({ type: "UPDATE_JWT", payload: jwt });
-                            if (user.roleId == 3) {
-                                this.props.history.push('/signin');
-                            } else {
-                                setCookie("authenticated", "true", 1);
-                                this.props.history.push('/home');
-                            }
-                        })
 
-                    } else {
-                        alert("Đăng kí thất bại");
+                        } else {
+                            alert("Đăng kí thất bại");
+                            this.setState({
+                                submited: false,
+                            })
+                        }
                     }
-                }
+                })
             })
         }
     }
@@ -229,8 +237,18 @@ class SignUp extends Component {
                     this.state.valid && this.props.user.role == 3 &&
                     <div className="col s2">
                         <div style={{ margin: "10vh 0", color: "#086bd1", cursor: "pointer" }} className='flex-row' onClick={() => { this.signup() }}>
-                            <span style={{ fontSize: "22px" }} >Tiếp theo &nbsp;&nbsp;&nbsp;</span>
-                            <i className="material-icons" style={{ fontSize: "32px" }}> arrow_forward</i>
+                            {this.state.submited ? (
+                                <div className='flex-row'>
+                                    <span style={{ fontSize: "22px", color: "grey" }} >Tiếp theo &nbsp;&nbsp;&nbsp;</span>
+                                    <i className="material-icons" style={{ fontSize: "32px", color: "grey" }}> arrow_forward</i>
+                                </div>
+                            ) : (
+                                    <div className='flex-row'>
+                                        <span style={{ fontSize: "22px" }} >Tiếp theo &nbsp;&nbsp;&nbsp;</span>
+                                        <i className="material-icons" style={{ fontSize: "32px" }}> arrow_forward</i>
+                                    </div>
+                                )}
+
                         </div>
                     </div>
                 }
@@ -238,7 +256,7 @@ class SignUp extends Component {
                     this.state.valid && this.props.user.role == 2 &&
                     <div className="col s2">
                         <div style={{ margin: "10vh 0", color: "#086bd1", cursor: "pointer" }} className='flex-row' onClick={() => { this.signup() }}>
-                            <span style={{ fontSize: "25px" }} >Tiếp theo</span>
+                            <span style={{ fontSize: "25px" }} >Tiếp theo &nbsp;&nbsp;&nbsp;</span>
                             <i className="material-icons" style={{ fontSize: "50px" }}>arrow_forward</i>
                         </div>
                     </div>

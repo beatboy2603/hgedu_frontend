@@ -78,7 +78,7 @@ function EnhancedTableHead(props) {
       <TableRow>
         {props.headCells.map((headCell, i) => (
           <TableCell
-            className={headCell.id == "content" ? ("table-col-width-40") : ("table-col-width-15")}
+            className={headCell.id == "content" ? ("table-col-width-70") : (headCell.id == "questionCode" ? ("table-col-width-20") : ("table-col-width-10"))}
             key={headCell.id}
             align={headCell.numeric ? 'right' : 'left'}
             padding={headCell.disablePadding ? 'none' : 'default'}
@@ -202,7 +202,7 @@ const ExpansionPanelDetails = withStyles(theme => ({
   },
 }))(MuiExpansionPanelDetails);
 
-export default function EnhancedTable({ headCells, rows, setCurrentQuestion }) {
+export default function EnhancedTable({ headCells, rows, addQuestionToTest, testQuestionList }) {
   const classes = useStyles();
   const [order, setOrder] = React.useState('desc');
   const [orderBy, setOrderBy] = React.useState('questionId');
@@ -302,50 +302,41 @@ export default function EnhancedTable({ headCells, rows, setCurrentQuestion }) {
                         {/* <div onClick={()=>{
                           test(row.questionId);
                         }}>nani</div> */}
-                        <TableCell colSpan={5} style={{ padding: "0" }}>
+                        <TableCell colSpan={3} style={{ padding: "0" }}>
                           <ExpansionPanel square className="row-hover" >
-                            <ExpansionPanelSummary title={row.description} onClick={()=>{setCurrentQuestion(row)}} style={{ padding: "0" }} aria-controls="panel1d-content" id="panel1d-header">
-                              <TableCell className="table-col-width-15" component="th" id={labelId} scope="row">
+                            <ExpansionPanelSummary title={row.description} style={{ padding: "0", backgroundColor: "#BBBBBB" }} aria-controls="panel1d-content" id="panel1d-header">
+                              <TableCell className="table-col-width-10" component="th" id={labelId} scope="row">
+                                {testQuestionList.filter((el, i) => el.questionId == row.questionId).length > 0 ? (
+                                  <i className="material-icons green-text text-darken-3">done</i>
+                                ) : (
+                                    <i className="material-icons red-text text-darken-2">add</i>
+                                  )}
+                              </TableCell>
+                              <TableCell className="table-col-width-20" component="th" id={labelId} scope="row">
                                 <span className="font-effra font-size-18 grey-text text-darken-3">{row.questionCode}</span>
                               </TableCell>
-                              <TableCell className="table-col-width-40"><span className="font-effra font-size-18 grey-text text-darken-3">{row.content&&row.content.ops&&row.content.ops.map(
+                              <TableCell className="table-col-width-70"><span className="font-effra font-size-18 grey-text text-darken-3">{row.content && row.content.ops && row.content.ops.map(
                                 obj => obj.insert.formula ? (<InlineMath math={obj.insert.formula} />) : (obj.insert.image ? (<img src={obj.insert.image} alt="image" width={obj.attributes && obj.attributes.width} />) : (<span> {obj.insert} </span>)))
                               }</span></TableCell>
-                              <TableCell className="table-col-width-15">
-                                <span className="-effra font-size-18 grey-text text-darken-3">{row.difficultyId == 1 && "Nhận biết"}
-                                {row.difficultyId == 2 && "Thông hiểu"}
-                                {row.difficultyId == 3 && "Vận dụng"}
-                                {row.difficultyId == 4 && "Vận dụng cao"}</span>
-                              </TableCell>
-                              <TableCell className="table-col-width-15"><span className="font-effra font-size-18 grey-text text-darken-3">{row.gradeLevelId != 0 ? ("Lớp " + row.gradeLevelId) : ("Khác")}</span></TableCell>
-                              <TableCell className="table-col-width-15" onClick={(e) => {
-                                e.stopPropagation();
-                                alert(row.questionCode)
-                              }}><span className="font-effra font-size-18 grey-text text-darken-3">{row.questionTypeId == 1 && "Lý thuyết"}
-                                  {row.questionTypeId == 2 && "Bài tập"}
-                                  {row.questionTypeId == 3 && "Câu hỏi chùm"}</span>
-                              </TableCell>
 
                             </ExpansionPanelSummary>
                             <ExpansionPanelDetails className={classes.details} style={{ paddingBottom: 0 }}>
 
                               {row.childQuestions && row.childQuestions.map((item, index) => (
-                                <TableRow onClick={()=>{setCurrentQuestion(row)}} title={item.description} key={item.questionId} style={{backgroundColor:"#EEEEEE", cursor: "pointer"}} href="#editQuestion" className="modal-trigger">
-                                  <TableCell className="table-col-width-15" id={labelId} scope="row">
+                                <TableRow title={item.description} key={item.questionId} style={{ backgroundColor: "#EEEEEE", cursor: "pointer" }} onClick={() => { addQuestionToTest(row) }}>
+                                  <TableCell className="table-col-width-10">
+                                    {/* {testQuestionList.filter((el, i) => el.questionId == item.questionId).length > 0 ? (
+                                      <span>added</span>
+                                    ) : (
+                                        <span>add</span>
+                                      )} */}
+                                  </TableCell>
+                                  <TableCell className="table-col-width-20" id={labelId} scope="row">
                                     <span className="font-effra font-size-18 grey-text text-darken-3">{item.questionCode}</span>
                                   </TableCell>
-                                  <TableCell className="table-col-width-40"><span className="font-effra font-size-18 grey-text text-darken-3">{item.content&&item.content.ops&&item.content.ops.map(
+                                  <TableCell className="table-col-width-70"><span className="font-effra font-size-18 grey-text text-darken-3">{item.content && item.content.ops && item.content.ops.map(
                                     obj => obj.insert.formula ? (<InlineMath math={obj.insert.formula} />) : (obj.insert.image ? (<img src={obj.insert.image} alt="image" width={obj.attributes && obj.attributes.width} />) : (<span> {obj.insert} </span>)))
                                   }</span></TableCell>
-                                  <TableCell className="table-col-width-15"><span className="font-effra font-size-18 grey-text text-darken-3">{item.difficultyId == 1 && "Nhận biết"}
-                                    {item.difficultyId == 2 && "Thông hiểu"}
-                                    {item.difficultyId == 3 && "Vận dụng"}
-                                    {item.difficultyId == 4 && "Vận dụng cao"}</span></TableCell>
-                                  <TableCell className="table-col-width-15"><span className="font-effra font-size-18 grey-text text-darken-3">{item.gradeLevelId != 0 ? ("Lớp " + item.gradeLevelId) : ("Khác")}</span></TableCell>
-                                  <TableCell className="table-col-width-15"><span className="font-effra font-size-18 grey-text text-darken-3">{item.questionTypeId == 1 && "Lý thuyết"}
-                                    {item.questionTypeId == 2 && "Bài tập"}
-                                    {item.questionTypeId == 3 && "Câu hỏi chùm"}</span>
-                                  </TableCell>
                                 </TableRow>
                               ))}
                             </ExpansionPanelDetails>
@@ -355,31 +346,28 @@ export default function EnhancedTable({ headCells, rows, setCurrentQuestion }) {
                     ) : (
                         <TableRow
                           hover
-                          onClick={()=>{setCurrentQuestion(row)}}
+                          onClick={() => { addQuestionToTest(row) }}
                           role="checkbox"
                           aria-checked={isItemSelected}
                           tabIndex={-1}
                           key={row.questionCode}
                           selected={isItemSelected}
-                          href="#editQuestion" className="modal-trigger"
-                          style={{cursor: "pointer"}}
+                          style={{ cursor: "pointer" }}
                           title={row.description}
                         >
                           <TableCell component="th" id={labelId} scope="row">
+                            {testQuestionList.filter((el, i) => el.questionId == row.questionId).length > 0 ? (
+                              <i className="material-icons green-text text-darken-3">done</i>
+                            ) : (
+                                <i className="material-icons red-text text-darken-2">add</i>
+                              )}
+                          </TableCell>
+                          <TableCell component="th" id={labelId} scope="row">
                             <span className="font-effra font-size-18 grey-text text-darken-3">{row.questionCode}</span>
                           </TableCell>
-                          <TableCell><span className="font-effra font-size-18 grey-text text-darken-3">{row.content&&row.content.ops&&row.content.ops.map(
+                          <TableCell><span className="font-effra font-size-18 grey-text text-darken-3">{row.content && row.content.ops && row.content.ops.map(
                             obj => obj.insert.formula ? (<InlineMath math={obj.insert.formula} />) : (obj.insert.image ? (<img src={obj.insert.image} alt="image" width={obj.attributes && obj.attributes.width} />) : (<span> {obj.insert} </span>)))
                           }</span></TableCell>
-                          <TableCell><span className="font-effra font-size-18 grey-text text-darken-3">{row.difficultyId == 1 && "Nhận biết"}
-                            {row.difficultyId == 2 && "Thông hiểu"}
-                            {row.difficultyId == 3 && "Vận dụng"}
-                            {row.difficultyId == 4 && "Vận dụng cao"}</span></TableCell>
-                          <TableCell><span className="font-effra font-size-18 grey-text text-darken-3">{row.gradeLevelId != 0 ? ("Lớp " + row.gradeLevelId) : ("Khác")}</span></TableCell>
-                          <TableCell><span className="font-effra font-size-18 grey-text text-darken-3">{row.questionTypeId == 1 && "Lý thuyết"}
-                            {row.questionTypeId == 2 && "Bài tập"}
-                            {row.questionTypeId == 3 && "Câu hỏi chùm"}</span>
-                          </TableCell>
                         </TableRow>
                       )
                   );

@@ -658,7 +658,7 @@ class ModalQuestion extends Component {
                                 </div>
                                 <div className="col s2">Câu hỏi<span className='red-text'>*</span>:</div>
                                 <div className="col s10">
-                                    <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionList[i].question.content} updateContent={this.handleQuillChange} quillSource="question" index={i} toolbarModules={[['image'],
+                                    <ContentEditor customStyle={{ minHeight: "150px", marginBottom: "50px" }} content={this.state.questionList[i].question.content} updateContent={this.handleQuillChange} quillSource="question" index={i} toolbarModules={[['image'],
                                     ['formula'],]} setResetAll={resetForm => {
                                         this.setState(prevState => ({
                                             resetAll: [...prevState.resetAll, resetForm],
@@ -667,7 +667,7 @@ class ModalQuestion extends Component {
                                 </div>
                                 <div className="col s2" style={lineSpacing}>Đáp án<span className='red-text'>*</span>:</div>
                                 <div className="col s10" style={lineSpacing}>
-                                    <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionList[i].tempAnswer.content} updateContent={this.handleQuillChange} quillSource="answer" index={i} toolbarModules={[['image'],
+                                    <ContentEditor customStyle={{ minHeight: "150px", marginBottom: "50px" }} content={this.state.questionList[i].tempAnswer.content} updateContent={this.handleQuillChange} quillSource="answer" index={i} toolbarModules={[['image'],
                                     ['formula'],]} setClick={click => this.state.questionList[i].resetContentEditor = click} setContent={click => this.state.questionList[i].setContent = click} setResetAll={resetForm => {
                                         this.setState(prevState => ({
                                             resetAll: [...prevState.resetAll, resetForm],
@@ -780,7 +780,7 @@ class ModalQuestion extends Component {
                                 </div>
                                 <div className="col s2" style={lineSpacing}>Hướng dẫn giải:</div>
                                 <div className="col s10" style={lineSpacing}>
-                                    <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionList[i].question.explanation} updateContent={this.handleQuillChange} quillSource="explanation" index={i} toolbarModules={[['image'],
+                                    <ContentEditor customStyle={{ minHeight: "150px", marginBottom: "50px" }} content={this.state.questionList[i].question.explanation} updateContent={this.handleQuillChange} quillSource="explanation" index={i} toolbarModules={[['image'],
                                     ['formula'],]} setResetAll={resetForm => {
                                         this.setState(prevState => ({
                                             resetAll: [...prevState.resetAll, resetForm],
@@ -833,7 +833,7 @@ class ModalQuestion extends Component {
                                         </div>
                                         <div className="col s2">Nội dung chung<span className='red-text'>*</span>:</div>
                                         <div className="col s10">
-                                            <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionDetail.content} updateContent={this.handleQuestionSeriesContent} quillSource="questionSeries" index={0} toolbarModules={[['image'],
+                                            <ContentEditor customStyle={{ minHeight: "150px", marginBottom: "50px" }} content={this.state.questionDetail.content} updateContent={this.handleQuestionSeriesContent} quillSource="questionSeries" index={0} toolbarModules={[['image'],
                                             ['formula'],]} setResetAll={resetForm => {
                                                 this.setState(prevState => ({
                                                     resetAll: [...prevState.resetAll, resetForm],
@@ -855,7 +855,7 @@ class ModalQuestion extends Component {
                                             </div>
                                             <div className="col s2">Câu hỏi<span className='red-text'>*</span>:</div>
                                             <div className="col s10">
-                                                <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionList[0].question.content} updateContent={this.handleQuillChange} quillSource="question" index={0} toolbarModules={[['image'],
+                                                <ContentEditor customStyle={{ minHeight: "150px", marginBottom: "50px" }} content={this.state.questionList[0].question.content} updateContent={this.handleQuillChange} quillSource="question" index={0} toolbarModules={[['image'],
                                                 ['formula'],]} setResetAll={resetForm => {
                                                     this.setState(prevState => ({
                                                         resetAll: [...prevState.resetAll, resetForm],
@@ -873,7 +873,7 @@ class ModalQuestion extends Component {
                                     <div>
                                         <div className="col s2" style={lineSpacing}>Đáp án<span className='red-text'>*</span>:</div>
                                         <div className="col s10" style={lineSpacing}>
-                                            <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionList[0].tempAnswer.content} updateContent={this.handleQuillChange} quillSource="answer" index={0} toolbarModules={[['image'],
+                                            <ContentEditor customStyle={{ minHeight: "150px", marginBottom: "50px" }} content={this.state.questionList[0].tempAnswer.content} updateContent={this.handleQuillChange} quillSource="answer" index={0} toolbarModules={[['image'],
                                             ['formula'],]} setClick={click => this.state.questionList[0].resetContentEditor = click} setContent={click => this.state.questionList[0].setContent = click}
                                             setResetAll={resetForm => {
                                                 this.setState(prevState => ({
@@ -964,7 +964,7 @@ class ModalQuestion extends Component {
                                         </div>
                                         <div className="col s2" style={lineSpacing}>Hướng dẫn giải:</div>
                                         <div className="col s10" style={lineSpacing}>
-                                            <ContentEditor customStyle={{ height: "150px", marginBottom: "50px" }} content={this.state.questionList[0].question.explanation} updateContent={this.handleQuillChange} quillSource="explanation" index={0} toolbarModules={[['image'],
+                                            <ContentEditor customStyle={{ minHeight: "150px", marginBottom: "50px" }} content={this.state.questionList[0].question.explanation} updateContent={this.handleQuillChange} quillSource="explanation" index={0} toolbarModules={[['image'],
                                             ['formula'],]} setResetAll={resetForm => {
                                                 this.setState(prevState => ({
                                                     resetAll: [...prevState.resetAll, resetForm],

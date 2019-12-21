@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { Modal, Collapsible, CollapsibleItem } from 'react-materialize';
 import CustomizedSlider from '../../common/CustomizedSlider';
 import Divider from '@material-ui/core/Divider';
-import CustomizedTreeView from './CustomizedTreeView';
-import CustomizedTable from './CustomizedTable';
+import CustomizedModalTreeView from './CustomizedModalTreeView';
+import CustomizedModalTable from './CustomizedModalTable';
 import axios from 'axios';
 import { serverUrl } from '../../common/common';
 
@@ -319,7 +319,7 @@ class ModalTest extends Component {
     componentDidMount() {
         setTimeout(() => {
             if (this.props.folder.folders) {
-                console.log("nani")
+                console.log("modaltest nani")
                 let questionFolders = this.props.folder.folders.filter((el, i) => {
                     return el.subGroupId == 1;
                 })
@@ -495,13 +495,13 @@ class ModalTest extends Component {
                                         <div className="row" style={{ marginBottom: "0" }}>
                                             <div className="row col s4">
                                                 <p className="blue-text lighten-3">Thư viện câu hỏi</p>
-                                                <CustomizedTreeView folders={this.state.questionFolders} setCurrentFolder={this.setCurrentModalFolder} source={"question"} />
+                                                <CustomizedModalTreeView folders={this.state.questionFolders} setCurrentFolder={this.setCurrentModalFolder} source={"question"} />
                                             </div>
 
                                             <div className="row col s8" style={{ height: "100%", borderLeft: "2px solid #BDBDBD" }}>
                                                 <div className='col s12'>
                                                     <h5 className="blue-text text-darken-3 font-montserrat">{this.state.currentModalFolder && this.state.currentModalFolder.folderName}</h5>
-                                                    <CustomizedTable
+                                                    <CustomizedModalTable
                                                         headCells={[
                                                             { id: 'padding', numeric: false, disablePadding: false, label: '' },
                                                             { id: 'questionCode', numeric: false, disablePadding: false, label: 'Mã câu' },
