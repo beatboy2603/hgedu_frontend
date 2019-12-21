@@ -267,7 +267,7 @@ export default function EnhancedTable({ headCells, rows }) {
         }
         if (time) {
             let modDate = new Date(time)
-            return addZeroBefore(modDate.getDate()) + "/" + addZeroBefore(modDate.getMonth()) + "/" + addZeroBefore(modDate.getFullYear())
+            return addZeroBefore(modDate.getDate()) + "/" + addZeroBefore(modDate.getMonth()+1) + "/" + addZeroBefore(modDate.getFullYear())
         } else
             return "Chưa đặt"
     }
