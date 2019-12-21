@@ -15,7 +15,7 @@ class PersonalInfo extends Component {
         parentRequest: [],
         error: 'Email không được để trống!',
         valid: false,
-        responseMessage:'',
+        responseMessage: '',
 
     }
 
@@ -37,8 +37,8 @@ class PersonalInfo extends Component {
     }
 
     dateFormat = (text) => {
-        if(text != null){
-            return text.slice(8,10)+"/"+text.slice(5,7)+"/"+text.slice(0,4);
+        if (text != null) {
+            return text.slice(8, 10) + "/" + text.slice(5, 7) + "/" + text.slice(0, 4);
         }
         else return '';
         // console.log(text.slice(8,10)+"/"+text.slice(5,7)+"/"+text.slice(0,4))
@@ -49,7 +49,7 @@ class PersonalInfo extends Component {
         axios.post(serverUrl + 'api/user', {
             studentMail: this.state.request.studentMail,
             parentMail: this.props.user.email
-        }).then(res =>{
+        }).then(res => {
             console.log(res.data);
             this.setState({
                 responseMessage: res.data,
@@ -94,7 +94,7 @@ class PersonalInfo extends Component {
         console.log(this.state.request.studentMail);
     }
 
-    acceptRequest = (e, text, index) => {
+    acceptRequest = (e, text, position) => {
         e.preventDefault();
         axios.post(serverUrl + 'api/user/requestResponse',
             {
@@ -104,10 +104,15 @@ class PersonalInfo extends Component {
             }
         )
         console.log(this.state.parentRequest)
-        this.state.parentRequest.splice(index, 1); //delete at [nth-element] [num of element] in arr
+        let newList = this.state.parentRequest.filter((item, index) =>
+            index !== position
+        )
+        this.setState({
+            parentRequest: newList
+        }) //delete at [nth-element] [num of element] in arr
         console.log(this.state.parentRequest)
     }
-    refuseRequest = (e, text, index) => {
+    refuseRequest = (e, text, position) => {
         e.preventDefault();
         axios.post(serverUrl + 'api/user/requestResponse',
             {
@@ -115,7 +120,12 @@ class PersonalInfo extends Component {
                 parentEmail: text,
                 studentEmail: this.props.user.email
             })
-        this.state.parentRequest.splice(index, 1);
+        let newList = this.state.parentRequest.filter((item, index) =>
+            index !== position
+        )
+        this.setState({
+            parentRequest: newList
+        })
     }
 
     render() {
@@ -163,24 +173,23 @@ class PersonalInfo extends Component {
             }
         }
 
-        const sendButton = () =>{
-            if(this.state.valid == true)
-            {
+        const sendButton = () => {
+            if (this.state.valid == true) {
                 return (
-                    <Link className="modal-action modal-close" style = {{float: "right"}} onClick={this.requestLink}>Xác nhận</Link>
-                ) 
+                    <Link className="modal-action modal-close" style={{ float: "right" }} onClick={this.requestLink}>Xác nhận</Link>
+                )
             }
             else {
-                return(
+                return (
                     null
                 )
             }
         }
 
         const showResponseMsg = () => {
-            if (this.state.responseMessage){
+            if (this.state.responseMessage) {
                 return (
-                    <span style = {{color:'#f44336'}}>{this.state.responseMessage.mess}</span>
+                    <span style={{ color: '#f44336' }}>{this.state.responseMessage.mess}</span>
                 )
             }
         }
@@ -201,7 +210,7 @@ class PersonalInfo extends Component {
                             <p>Từ email {parentRequest.email}</p>
                             <p>Của người dùng {parentRequest.fullName}</p>
                             <div>
-                                <Button style={{ alignSelf: 'flex-end' }} onClick={(e) => { this.acceptRequest(e, parentRequest.email, this.state.parentRequest.indexOf(parentRequest)) }}
+                                <Button style={{ alignSelf: 'flex-end' }} color="primary" className ="button-primary" onClick={(e) => { this.acceptRequest(e, parentRequest.email, this.state.parentRequest.indexOf(parentRequest)) }}
                                     variant="outlined" color="primary">Xác nhận</Button>
                                 <Button style={{ float: 'right' }} onClick={(e) => { this.refuseRequest(e, parentRequest.email, this.state.parentRequest.indexOf(parentRequest)) }}
                                     variant="outlined" color="secondary">Từ chối</Button>
@@ -244,9 +253,9 @@ class PersonalInfo extends Component {
                         </div>
                         <div style={style.field}>
                             <p style={style.detail.title}>Ngày sinh:</p>
-                        {this.props.user.dob &&
-                            <p style={style.detail.content}>{this.dateFormat(this.props.user.dob)}</p>
-                        }
+                            {this.props.user.dob &&
+                                <p style={style.detail.content}>{this.dateFormat(this.props.user.dob)}</p>
+                            }
                         </div>
                         <div style={style.field}>
                             <p style={style.detail.title}>Trường:</p>
@@ -274,9 +283,9 @@ class PersonalInfo extends Component {
                         <label style={{ fontSize: '20px', color: '#000' }} htmlFor="">Email học sinh:</label>
                         <input pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" className="validate" type="tel" name="studentMail" id="studentMail" value={this.state.request.studentMail} onChange={e => { this.fillLinkMail(e) }} required />
                         <span className='helper-text' data-error={this.state.error}></span>
-                        <div style ={{marginTop:'50px'}}>
-                        <span className = "modal-action modal-close">Hủy thao tác</span>
-                        {sendButton()}
+                        <div style={{ marginTop: '50px' }}>
+                            <span className="modal-action modal-close">Hủy thao tác</span>
+                            {sendButton()}
                         </div>
                         <div style={{ clear: 'both' }}></div>
                     </Modal>

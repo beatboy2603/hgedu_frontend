@@ -24,7 +24,8 @@ class StudentManagement extends Component {
         error: "Email không được để trống",
         studentEmail: '',
         setDisplay: '',
-        valid: false
+        valid: false,
+        response: "",
 
     }
 
@@ -70,9 +71,15 @@ class StudentManagement extends Component {
     loadData = () => {
         axios.get(serverUrl + 'api/enrollment/teacher/studentInfo/' + this.props.user.uid)
             .then(res => {
-                this.setState({
-                    student: res.data,
-                })
+                if (res.data) {
+                    let nameList = this.state.displayName
+                    res.data.map(item => nameList["student" + item.userId] = '')
+                    this.setState({
+                        student: res.data,
+                        displayName: nameList
+                    })
+                }
+                console.log(this.state.student)
             });
         axios.get(serverUrl + "api/enrollment/teacher/studentInfo/note/" + this.props.user.uid)
             .then(res => {
@@ -106,17 +113,24 @@ class StudentManagement extends Component {
     componentDidMount() {
         this.loadData();
     }
-    acceptRequest = (teacherId, studentId, studentName, index) => {
+    acceptRequest = (teacherId, studentId, studentName, position) => {
         if (this.state.displayName["student" + studentId]) {
             axios.post(serverUrl + "api/enrollment/teacher/studentInfo/requestHandle", {
                 status: "accept",
                 teacherId: teacherId,
                 studentId: studentId,
                 displayName: this.state.displayName["student" + studentId]
-            }, ()=>{
+            }, () => {
                 this.loadData();
             })
-            this.state.student.splice(index, 1)
+            let newList = this.state.student.filter((item, index) =>
+                index !== position
+            )
+            let names = this.state.displayName;
+            this.setState({
+                student: newList,
+                displayName: names
+            })
         }
         else {
             axios.post(serverUrl + "api/enrollment/teacher/studentInfo/requestHandle", {
@@ -124,21 +138,31 @@ class StudentManagement extends Component {
                 teacherId: teacherId,
                 studentId: studentId,
                 displayName: studentName
-            }, ()=>{
+            }, () => {
                 this.loadData();
             })
-            this.state.student.splice(index, 1)
+            let newList = this.state.student.filter((item, index) =>
+                index !== position
+            )
+            this.setState({
+                student: newList
+            })
         }
     }
 
-    refuseRequest = (teacherId, studentId, index) => {
+    refuseRequest = (teacherId, studentId, position) => {
         axios.post(serverUrl + "api/enrollment/teacher/studentInfo/requestHandle",
             {
                 status: "refuse",
                 teacherId: teacherId,
                 studentId: studentId
             })
-        this.state.student.splice(index, 1)
+        let newList = this.state.student.filter((item, index) =>
+            index !== position
+        )
+        this.setState({
+            student: newList
+        })
     }
 
 
@@ -152,17 +176,17 @@ class StudentManagement extends Component {
         console.log(this.state.displayName)
     }
 
-    setStudentDisplayedName = (e, id) => {
+    // setStudentDisplayedName = (e, id) => {
 
-        if (this.state.sss[id]) {
-            const { sss } = this.state;
-            sss[id] = e.target.value;
-            this.setState({
-                sss
-            })
-        }
-        console.log(this.state.student)
-    }
+    //     if (this.state.sss[id]) {
+    //         const { sss } = this.state;
+    //         sss[id] = e.target.value;
+    //         this.setState({
+    //             sss
+    //         })
+    //     }
+    //     console.log(this.state.student)
+    // }
 
     fillInput = (e) => {
         if (e.target.name === "studentEmail") {
@@ -208,22 +232,54 @@ class StudentManagement extends Component {
                 teacherEmail: this.props.user.email,
                 displayedName: this.state.setDisplay.trim()
             })
+                .then(response => {
+                    this.setState({
+                        response: response.data
+                    })
+                })
         } else {
             axios.post(serverUrl + "api/enrollment/teacher/request", {
                 studentEmail: this.state.studentEmail,
                 teacherEmail: this.props.user.email,
                 displayedName: null
             })
+            .then(response => {
+                this.setState({
+                    response: response.data
+                })
+            })
         }
     }
 
     render() {
         const countStudent = () => {
-            if (this.state.student.length > 0) {
+            if (this.state.student && this.state.student.length > 0) {
                 return (
                     <span style={this.style.countBadge}>{this.state.student.length}</span>
                 )
             }
+        }
+
+        const showResponseMsg = () => {
+            if (this.state.response) {
+                console.log(this.state.response)
+                if (this.state.response.error) {
+                    return (
+                        <div className="col 12" style={{ borderRadius: '12px', border: '1px solid #FE3433', backgroundColor: '#FFEEEE', padding: '10px 0 10px 10px' }}>
+                            <span style={{ color: '#f44336' }}>{this.state.response.error}</span>
+                        </div>
+                    )
+                }
+                if (this.state.response.success) {
+                    return (
+                        <div className="col 12" style={{ borderRadius: '12px', border: '1px solid #6ABF5A', backgroundColor: '#CCEBC9', padding: '10px 0 10px 10px' }}>
+                            <span style={{ color: '#2F7211' }}>{this.state.response.success}</span>
+                        </div>
+                    )
+                }
+            }
+            else console.log("nothing")
+
         }
 
         const loadStudentInfo = () => {
@@ -261,7 +317,7 @@ class StudentManagement extends Component {
                                 </div>
                                 <div className='col s12' style={this.style.column}>
                                     <div className="col s5">Tên hiển thị: </div>
-                                    <div className="col s7"><input type="text" placeholder="Điền tên hiển thị" style={{ height: '25px', fontFamily: 'iCiel Effra' }} name={"student" + studentInfo.userId} onChange={this.displayStudentName} /></div>
+                                    <div className="col s7"><input type="text" placeholder="Điền tên hiển thị" style={{ height: '25px', fontFamily: 'iCiel Effra' }} value={this.state.displayName["student" + studentInfo.userId]} name={"student" + studentInfo.userId} onChange={this.displayStudentName} /></div>
                                 </div>
                                 <div className='col s12' style={this.style.column}>
                                     <Link style={{ alignSelf: 'flex-end', color: '#f44336', fontSize: '18px', paddingLeft: '11.25px' }} onClick={(e) => { this.refuseRequest(this.props.user.uid, studentInfo.userId, this.state.student.indexOf(studentInfo)) }}>Từ chối</Link>
@@ -305,7 +361,7 @@ class StudentManagement extends Component {
                     {/* filler */}
                     <div className="col s2"></div>
                     <div className="col s10">
-                        <Link to='/personalLibrary'><h5 className="blue-text text-darken-3 bold font-montserrat">Học sinh</h5></Link>
+                        <Link to='/personalLibrary'><h5 className="blue-text text-darken-3 bold font-montserrat">Giáo viên</h5></Link>
                         {/* modals */}
                         <div>
                             {/* modal for addFolder */}
@@ -385,7 +441,7 @@ class StudentManagement extends Component {
                             right: "-17px", /* Increase/Decrease this value for cross-browser compatibility */
                             overflowY: "scroll"
                         }}>
-                            {/* {showResponseMsg()} */}
+                            {showResponseMsg()}
                             <h5 className="center">Thêm học sinh</h5>
                             <div className="line"></div>
                             <label name='label-email' style={{ fontSize: '20px', color: '#000' }} htmlFor="">Email học sinh: </label>
