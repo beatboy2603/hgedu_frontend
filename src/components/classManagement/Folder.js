@@ -227,9 +227,9 @@ function GmailTreeView(props) {
             nodeId="1"
             labelText="Danh sách học sinh"
             labelIcon={FolderSharedIcon}
-            // onClick={setFalse}
+            onClick={setFalse}
             // href="http://localhost:3000/studentManagement/studentList"
-            onClick={()=>{props.history.push('/studentManagement/studentList')}}
+           // onClick={()=>{props.history.push('/studentManagement/studentList')}}
           />
           <StyledTreeItem
             nodeId="2"
