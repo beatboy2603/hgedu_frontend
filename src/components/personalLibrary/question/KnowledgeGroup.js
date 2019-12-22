@@ -187,12 +187,6 @@ class KnowledgeGroup extends Component {
 
     componentDidMount() {
         let folderId = this.props.match.params.folderId;
-        console.log("test", folderId);
-        // if (folderId != 0) {
-        // let found = false;
-        // if (this.props.folder.folders) {
-        //     found = true;
-        //     this.waitUpdate = true;
         axios.get(serverUrl + "api/folder/" + folderId).then(res => {
             if (res.data) {
                 this.setState({
@@ -234,46 +228,7 @@ class KnowledgeGroup extends Component {
                 this.waitUpdate = false;
             })
         });
-        // }
-        // if (!found) {
-        //     console.log("wut");
-        //     this.props.history.push("/personalLibrary/knowledgeGroup/0");
-        // }
-        // } else {
-        //     this.waitUpdate = true;
-        //     axios.get(serverUrl + "api/question/" + this.props.user.uid).then(res => {
-        //         let questionList = res.data.map(question => {
-        //             // question.content = question.content.slice(0, question.content.length - 2) + "]";
-        //             question.content = JSON.parse(question.content);
-        //             return question;
-        //         });
-
-        //         let linkedQuestionList = questionList.map((el, i) => {
-        //             if (el.questionTypeId == 3) {
-        //                 let childQuestions = questionList.filter((child, i) => el.questionId == child.questionParentId);
-        //                 el.childQuestions = childQuestions;
-        //                 let meanDifficulty = 0;
-        //                 childQuestions.map((child, i) => {
-        //                     meanDifficulty += child.difficultyId;
-        //                 })
-        //                 meanDifficulty = meanDifficulty / childQuestions.length;
-        //                 el.difficultyId = meanDifficulty;
-        //             }
-        //             if (el.questionParentId == 0) {
-        //                 return el;
-        //             }
-        //         })
-
-        //         linkedQuestionList = linkedQuestionList.filter(el => el);
-
-        //         this.setState({
-        //             questionList,
-        //             linkedQuestionList,
-        //         }, ()=>{
-        //             this.waitUpdate =false;
-        //         })
-        //     });
-        // }
+        
     }
 
     render() {

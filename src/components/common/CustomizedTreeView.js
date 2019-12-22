@@ -179,7 +179,7 @@ function CustomizedTreeView(props) {
             props.history.push('/personalLibrary/knowledgeGroup/0')
         }
         if (subGroupId == 2) {
-            props.history.push('/personalLibrary/test/0')
+            props.history.push('/personalLibrary/testList')
         }
     };
 

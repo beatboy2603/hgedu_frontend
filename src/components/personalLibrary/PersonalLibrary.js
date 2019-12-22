@@ -11,6 +11,7 @@ import 'katex/dist/katex.min.css';
 import CustomizedTable from './question/CustomizedTable';
 import TestQuestions from './test/TestQuestions';
 import ModalTest from './test/ModalTest'
+import TestList from './test/TestList'
 
 
 // const useStyles = makeStyles(theme => ({
@@ -370,6 +371,7 @@ class PersonalLibrary extends Component {
                                     {...props}
                                 />} />
                                 <Route path={'/personalLibrary/test/:folderId'} render={(props) => <TestQuestions {...props} />} />
+                                <Route path={'/personalLibrary/testList'} render={(props) => <TestList {...props} />} />
                                 <Route path={'/personalLibrary/table'} render={(props) => <CustomizedTable {...props} headCells={[
                                     { id: 'questionCode', numeric: false, disablePadding: false, label: 'Mã câu' },
                                     { id: 'question', numeric: false, disablePadding: false, label: 'Câu hỏi' },

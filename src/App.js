@@ -30,7 +30,7 @@ import PersonalInfo from './components/UserInfo/PersonalInfo';
 import axios from 'axios';
 import TeacherList from './components/StudentClassManagement/TeacherList';
 import StudentManagement from './components/classManagement/StudentManagement'
-
+import { browserHistory } from 'react-router';
 import StudentExams from './components/Exams/StudentExams';
 // const persistConfig = {
 //   key: 'root',
@@ -51,6 +51,9 @@ class App extends Component {
     isAuthenticated: false,
     isRender: false,
   }
+
+  
+   
 
   checkAuthen = () => {
     let isAuthenticated = getAuthenCookie();
@@ -92,6 +95,7 @@ class App extends Component {
         isRender: true,
       })
     }, 500);
+
   }
 
   render() {

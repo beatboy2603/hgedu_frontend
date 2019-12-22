@@ -108,62 +108,64 @@ class TestQuestions extends Component {
         })
     }
 
-    // componentDidUpdate() {
-    //     let folderId = this.props.match.params.folderId;
-    //     if (this.state.currentFolder && folderId !== this.state.currentFolder.folderId && !this.waitUpdate) {
-    //         let found = false;
-    //         if (this.props.folder.folders) {
-    //             this.waitUpdate = true;
-    //             this.props.folder.folders.map((folder, index) => {
-    //                 if (folder.folderId == folderId) {
-    //                     found = true;
-    //                     let currentFolder = folder;
-    //                     if (currentFolder !== this.state.currentFolder) {
-    //                         this.setState({
-    //                             currentFolder,
-    //                         }, () => {
-    //                             this.waitUpdate = false;
-    //                             axios.get(serverUrl + "api/question/" + this.props.user.uid + "/" + folderId).then(res => {
-    //                                 let questionList = res.data.map(question => {
-    //                                     question.content = question.content.slice(0, question.content.length - 2) + "]";
-    //                                     question.content = JSON.parse(question.content);
-    //                                     return question;
-    //                                 });
-    //                                 let linkedQuestionList = questionList.map((el, i) => {
-    //                                     if (el.questionTypeId == 3) {
-    //                                         let childQuestions = questionList.filter((child, i) => el.questionId == child.questionParentId);
-    //                                         el.childQuestions = childQuestions;
-    //                                         let meanDifficulty = 0;
-    //                                         childQuestions.map((child, i) => {
-    //                                             meanDifficulty += child.difficultyId;
-    //                                         })
-    //                                         meanDifficulty = meanDifficulty / childQuestions.length;
-    //                                         el.difficultyId = meanDifficulty;
-    //                                     }
-    //                                     if (el.questionParentId == 0) {
-    //                                         return el;
-    //                                     }
-    //                                 })
-
-    //                                 linkedQuestionList = linkedQuestionList.filter(el => el);
-    //                                 this.setState(prevState => ({
-    //                                     ...prevState,
-    //                                     questionList,
-    //                                     linkedQuestionList,
-    //                                 }))
-    //                             })
-    //                         })
-    //                     } else {
-    //                         this.waitUpdate = false;
-    //                     }
-    //                 }
-    //             })
-    //         }
-    //         if (!found) {
-    //             this.props.history.push("/personalLibrary");
-    //         }
-    //     }
-    // }
+    componentDidUpdate() {
+        let folderId = this.props.match.params.folderId;
+        if (this.state.currentFolder && folderId !== this.state.currentFolder.folderId && !this.waitUpdate) {
+            let found = false;
+            if (this.props.folder.folders) {
+                this.waitUpdate = true;
+                this.props.folder.folders.map((folder, index) => {
+                    if (folder.folderId == folderId) {
+                        found = true;
+                        let currentFolder = folder;
+                        if (currentFolder !== this.state.currentFolder) {
+                            this.setState({
+                                currentFolder,
+                            }, () => {
+                                this.waitUpdate = false;
+                                axios.get(serverUrl + "api/test/" + folderId).then(res => {
+                                    console.log("testContent",res)
+                                    let questionList = res.data.map(question => {
+                                        // question.content = question.content.slice(0, question.content.length - 2) + "]";
+                                        question.content = JSON.parse(question.content);
+                                        return question;
+                                    });
+                        
+                                    let linkedQuestionList = questionList.map((el, i) => {
+                                        if (el.questionTypeId == 3) {
+                                            let childQuestions = questionList.filter((child, i) => el.questionId == child.questionParentId);
+                                            el.childQuestions = childQuestions;
+                                            let meanDifficulty = 0;
+                                            childQuestions.map((child, i) => {
+                                                meanDifficulty += child.difficultyId;
+                                            })
+                                            meanDifficulty = meanDifficulty / childQuestions.length;
+                                            el.difficultyId = meanDifficulty;
+                                        }
+                                        if (el.questionParentId == 0) {
+                                            return el;
+                                        }
+                                    })
+                        
+                                    linkedQuestionList = linkedQuestionList.filter(el => el);
+                        
+                                    this.setState({
+                                        questionList,
+                                        linkedQuestionList,
+                                    }, ()=>{this.updateTestQuality()})
+                                });
+                            })
+                        } else {
+                            this.waitUpdate = false;
+                        }
+                    }
+                })
+            }
+            if (!found) {
+                this.props.history.push("/personalLibrary/testList");
+            }
+        }
+    }
 
     componentDidMount() {
         // let { setQuestionFolderId } = this.props;
@@ -190,7 +192,7 @@ class TestQuestions extends Component {
                     currentFolder: res.data,
                 })
             } else {
-                this.props.history.push("/personalLibrary");
+                this.props.history.push("/personalLibrary/testList");
             }
         })
         axios.get(serverUrl + "api/test/" + folderId).then(res => {

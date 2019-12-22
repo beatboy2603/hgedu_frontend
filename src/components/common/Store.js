@@ -45,7 +45,6 @@ const midlleware = [thunk]
 
 export const store = createStore(
     persistedReducer,
-    compose(applyMiddleware(...midlleware), window.__REDUX_DEVTOOLS_EXTENSION__ &&
-    window.__REDUX_DEVTOOLS_EXTENSION__())
+    compose(applyMiddleware(...midlleware)),
 );
 export const persistor = persistStore(store);
