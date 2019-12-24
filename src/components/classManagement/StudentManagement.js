@@ -293,6 +293,7 @@ class StudentManagement extends Component {
       .then(res => {
         console.log("leu leu");
         this.props.getStudents(this.state.currentClassId);
+        this.props.getClassStudents(this.state.currentClassId);
         console.log(this.state.classStudent);
       });
   };
@@ -462,8 +463,8 @@ class StudentManagement extends Component {
                   {this.state.students.length > 0 && (
                     <SimpleTable
                       role={this.props.user.userRoleId}
-                      classStudent={this.state.classStudent}
-                      data={this.state.students}
+                      data={this.state.classStudent}
+                      classStudent={this.state.students}
                       getGrade={this.props.getGrade}
                       grade={this.state.grade}
                       deleteStudent={this.props.deleteStudent}

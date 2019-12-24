@@ -88,11 +88,13 @@ function StyledTreeItem(props) {
     }
   };
 
-  const onClick1 = () => {
+  const onEdit = (e) => {
+    e.stopPropagation();
     console.log("edit");
   };
 
-  const onDeleteClick = id => {
+  const onDeleteClick = (id, e) => {
+    e.stopPropagation();
     if (props.nodeId > 2) {
       props.delete2(id);
     }
@@ -115,8 +117,8 @@ function StyledTreeItem(props) {
           <div className="deleteBtn" style={{ display: "none", color: "red" }}>
             {/* De */}
             <i
-              onClick={() => {
-                onDeleteClick(id);
+              onClick={(e) => {
+                onDeleteClick(id, e);
               }}
               className="material-icons md-18"
             >
@@ -126,7 +128,7 @@ function StyledTreeItem(props) {
 
           <div className="editBtn" style={{ display: "none", color: "blue" }}>
             {/* Ed */}
-            <i onClick={onClick1} className="material-icons md-18">
+            <i onClick={(e) => {onEdit(e)}} className="material-icons md-18">
               edit
             </i>
           </div>

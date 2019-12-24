@@ -88,8 +88,8 @@ export default function (state = initialState, action) {
     case DELETE_STUDENT:
       return {
         ...state,
-        students: state.students.filter(
-          student => student.userId != action.payload
+        classStudent: state.classStudent.filter(
+          item => item.id != action.payload
         )
       };
     case GET_GRADE:

@@ -51,13 +51,19 @@ export default function SimpleTable(props) {
   const [modalName, setName] = useState(0);
 
   const over = test => {
-    document.getElementById(test).querySelector(".deleteBtn").style.visibility =
+    if (test) {
+      document.getElementById(test).querySelector(".deleteBtn").style.visibility =
       "visible";
+    }
+    
   };
 
   const out = test => {
-    document.getElementById(test).querySelector(".deleteBtn").style.visibility =
+    if (test) {
+      document.getElementById(test).querySelector(".deleteBtn").style.visibility =
       "hidden";
+    }
+    
   };
 
   const examCheck = classId => {
@@ -88,9 +94,9 @@ export default function SimpleTable(props) {
 
   const studentClickHandle = (index, id, classStudentId) => {
     // console.log("GRADE", grade[0].value)
-    getGrade(classStudentId);
+    getGrade(id);
     if (role === 1) {
-      getParent(id);
+      getParent(classStudentId);
     }
 
     document
@@ -143,17 +149,18 @@ export default function SimpleTable(props) {
               <TableRow
                 key={index}
                 onMouseOver={() => {
-                  over(row.userId);
+                  over(row.id);
                 }}
                 onMouseOut={() => {
-                  out(row.userId);
+                  out(row.id);
                 }}
-                id={row.userId}
+                id={row.id}
                 onClick={e => {
                   studentClickHandle(
                     index,
-                    row.userId,
-                    classStudent[index].id,
+                    row.id,
+                    classStudent[index].userId,
+                    //row.id,
 
                     e
                   );
@@ -172,19 +179,19 @@ export default function SimpleTable(props) {
                 </TableCell>
                 <TableCell>
                   <span className="font-effra font-size-18 grey-text text-darken-3">
-                    {row.fullName}
+                    {classStudent[index] && classStudent[index].fullName}
                   </span>
                 </TableCell>
                 <TableCell>
                   <span className="font-effra font-size-18 grey-text text-darken-3">
-                    {row.dob
-                      ? new Date(row.dob).toLocaleString("vi-VN").split(" ")[1]
+                    {classStudent[index] && classStudent[index].dob
+                      ? new Date(classStudent[index].dob).toLocaleString("vi-VN").split(" ")[1]
                       : "Chưa rõ"}
                   </span>
                 </TableCell>
                 <TableCell>
                   <span className="font-effra font-size-18 grey-text text-darken-3">
-                    {row.phoneNumber}
+                    {classStudent[index] && classStudent[index].phoneNumber}
                   </span>
                 </TableCell>
                 <TableCell>
@@ -193,7 +200,7 @@ export default function SimpleTable(props) {
                       style={{ textTransform: "none", visibility: "hidden" }}
                       className="deleteBtn font-effra font-size-18 red-text text-lighten-1"
                       onClick={e => {
-                        deleteStudentHandle(row.userId, e);
+                        deleteStudentHandle(data[index].id, e);
                       }}
                     >
                       Xóa khỏi lớp
@@ -224,7 +231,7 @@ export default function SimpleTable(props) {
                   overflowY: "scroll"
                 }}
               >
-                <h5 className="center">{data[modalName].fullName}</h5>
+                <h5 className="center">{data[modalName] && data[modalName].fullName}</h5>
                 <div style={{ marginTop: "30px" }} className="line"></div>
                 <div>
                   <p className="blue-text bold font-effra font-size-15 text-darken-3">
@@ -239,13 +246,17 @@ export default function SimpleTable(props) {
                     </tr>
                     <tr>
                       <td className={classes.table1}>
-                        {grade && grade[0] ? grade[0].value : ""}
+                        {grade && grade[0] && grade[0].powerId == 14 ? grade[0].value : ""}
+                        
                       </td>
                       <td className={classes.table1}>
-                        {grade && grade[1] ? grade[1].value : ""}
+                        {grade && grade[1] && grade[1].powerId == 15 ? grade[1].value : ""}
+                        {grade && grade[0] && grade[0].powerId == 15 ? grade[0].value : ""}
                       </td>
                       <td className={classes.table1}>
-                        {grade && grade[2] ? grade[2].value : ""}
+                        {grade && grade[2] && grade[2].powerId == 16 ? grade[2].value : ""}
+                        {grade && grade[1] && grade[1].powerId == 16 ? grade[1].value : ""}
+                        {grade && grade[0] && grade[0].powerId == 16 ? grade[0].value : ""}
                       </td>
                     </tr>
                   </table>
@@ -266,7 +277,7 @@ export default function SimpleTable(props) {
                       style={{ padding: "0", margin: "0" }}
                       className="col s7 font-effra font-size-15"
                     >
-                      {data[modalName].fullName}
+                      {classStudent[modalName] && classStudent[modalName].fullName}
                     </p>
                   </div>
                   <div className="row">
@@ -280,7 +291,7 @@ export default function SimpleTable(props) {
                       style={{ padding: "0", margin: "0" }}
                       className="col s7 font-effra font-size-15"
                     >
-                      {data[modalName].email}
+                      {classStudent[modalName] && classStudent[modalName].email}
                     </p>
                   </div>
                   <div className="row">
@@ -294,8 +305,8 @@ export default function SimpleTable(props) {
                       style={{ padding: "0", margin: "0" }}
                       className="col s7 font-effra font-size-15"
                     >
-                      {data[modalName].dob
-                        ? new Date(data[modalName].dob)
+                      {classStudent[modalName] && classStudent[modalName].dob
+                        ? new Date(classStudent[modalName].dob)
                             .toLocaleString("vi-VN")
                             .split(" ")[1]
                         : "Chưa rõ"}
@@ -312,8 +323,8 @@ export default function SimpleTable(props) {
                       style={{ padding: "0", margin: "0" }}
                       className="col s7 font-effra font-size-15"
                     >
-                      {data[modalName].phoneNumber
-                        ? data[modalName].phoneNumber
+                      {classStudent[modalName] && classStudent[modalName].phoneNumber
+                        ? classStudent[modalName].phoneNumber
                         : "Chưa rõ"}
                     </p>
                   </div>
@@ -328,8 +339,8 @@ export default function SimpleTable(props) {
                       style={{ padding: "0", margin: "0" }}
                       className="col s7 font-effra font-size-15"
                     >
-                      {data[modalName].school
-                        ? data[modalName].school
+                      {classStudent[modalName] && classStudent[modalName].school
+                        ? classStudent[modalName].school
                         : "Chưa rõ"}
                     </p>
                   </div>
@@ -344,7 +355,7 @@ export default function SimpleTable(props) {
                       style={{ padding: "0", margin: "0" }}
                       className="col s7 font-effra font-size-15"
                     >
-                      {data[modalName].gender ? "Nam" : "Nữ"}
+                      {classStudent[modalName] && classStudent[modalName] ? "Nam" : "Nữ"}
                     </p>
                   </div>
                 </div>
