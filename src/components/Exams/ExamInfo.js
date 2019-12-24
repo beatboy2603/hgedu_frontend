@@ -6,7 +6,10 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import MuiExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import axios from 'axios';
-import { Link, Prompt } from 'react-router-dom';
+import { Link, Prompt, withRouter } from 'react-router-dom';
+import {CustomCheckbox} from '../common/CustomCheckbox'
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import {serverUrl} from '../common/common'
 
   const ExpansionPanelDetails = withStyles(theme => ({
@@ -27,7 +30,8 @@ class ExamInfo extends Component {
             resultList: [],
             location: this.props.location,
             isBlocking: false,
-            studentClass: {}
+            studentClass: {},
+            isAccept: false
         }
 
         this.getExam = this.getExam.bind(this);
@@ -37,6 +41,13 @@ class ExamInfo extends Component {
 
         this.handleDoExam = this.handleDoExam.bind(this);
         this.showDoExamButton = this.showDoExamButton.bind(this);
+        this.handleAccept = this.handleAccept.bind(this);
+    }
+
+    shouldReload = false;
+
+    handleAccept = () => {
+        this.setState({isAccept: !this.state.isAccept});
     }
 
     showDoExamButton = () => {
@@ -82,8 +93,8 @@ class ExamInfo extends Component {
         }
     }
 
-    getExamResult = async (examId, userId) => {
-        const res = await axios.get(serverUrl + "api/exam/" + examId + "/result/" + userId);
+    getExamResult = async (examId, userId, classId) => {
+        const res = await axios.get(serverUrl + "api/exam/" + examId + "/result/" + classId + "/" + userId);
         if(res.data) {
             this.setState({resultList: res.data});
         }
@@ -135,6 +146,7 @@ class ExamInfo extends Component {
         // this.unlisten();
         //this.unblock();
         //window.onbeforeunload = null;
+        clearInterval(this.reloadPage);
         console.log("unmounting")
     }
 
@@ -147,20 +159,31 @@ class ExamInfo extends Component {
 
     componentDidUpdate() {
         console.log(this.state.resultList);
-        if(localStorage.getItem("reloadResult")) {
-            localStorage.removeItem("reloadResult");
-            window.location.reload();
-        }
     }
 
     componentDidMount() {
+        this.reloadPage = setInterval(() => {
+            window.onblur = () => {
+                this.shouldReload = true;
+            }
+            if(this.shouldReload) {
+                this.shouldReload = false;
+                clearInterval(this.reloadPage)
+                window.location.reload();
+            }
+            if(localStorage.getItem("reloadResult")) {
+                localStorage.removeItem("reloadResult");
+                clearInterval(this.reloadPage);
+                window.location.reload();
+            }
+        }, 1000);
         if(this.props.location.state) {
             let examId = this.props.location.state.id;
             console.log("examId", examId);
             console.log("class", this.props.location.state.studentClass)
             let userId = this.props.user.uid;
             this.getExam(examId);
-            this.getExamResult(examId, userId);
+            this.getExamResult(examId, userId, this.props.location.state.studentClass.id);
             this.setState({studentClass: this.props.location.state.studentClass})
         }
     }
@@ -212,9 +235,31 @@ class ExamInfo extends Component {
                     <div className="col s10">{this.state.exam && this.state.exam.endEntryTime !== '0000-00-00 00:00:00' ? this.state.exam.endEntryTime : 'Không xác định'}</div>
                 </div>
                 <div className="row" style={{marginTop: "20px", display: 'flex', justifyContent: 'center'}}>
-                    {(this.state.exam && this.showDoExamButton())  &&
+                    {((this.state.exam && this.showDoExamButton())  &&
                         // <Link to='/doExam' onClick={() => {localStorage.setItem("exam", this.state.exam); window.close();}} target="_blank" >
-                            <Button variant="contained" color="primary" onClick={this.handleDoExam}>Làm bài thi</Button>
+                        this.state.exam.trials === 1) &&
+                            <>
+                                <div className="invalid-feedback" style={{padding: 0}}>
+                                    Chú ý: Bài thi sẽ kết thúc nếu thí sinh mở tab hay ứng dụng khác trong quá trình làm bài.
+                                </div>
+                                <div className="button-primary">
+                                    <FormControl component="fieldset">
+                                        <FormControlLabel
+                                            control={<CustomCheckbox />}
+                                            label="Tôi đã đọc chú ý trên"
+                                            onChange={this.handleAccept}
+                                        />
+                                    </FormControl>
+                                    <Button variant="contained" color="primary" disabled={this.state.isAccept ? false : true} onClick={this.handleDoExam}>Làm bài thi</Button>
+                                </div>
+                            </>
+                    }
+                    {((this.state.exam && this.showDoExamButton())  &&
+                        // <Link to='/doExam' onClick={() => {localStorage.setItem("exam", this.state.exam); window.close();}} target="_blank" >
+                        this.state.exam.trials !== 1) &&
+                            <div className="button-primary">
+                                <Button variant="contained" color="primary" onClick={this.handleDoExam}>Làm bài thi</Button>
+                            </div>
                         // </Link>
                     }
                 </div>
@@ -281,4 +326,4 @@ const mapStateToProps = state => ({
     }
 })
 
-export default connect(mapStateToProps)(ExamInfo);
+export default connect(mapStateToProps)(withRouter(ExamInfo));

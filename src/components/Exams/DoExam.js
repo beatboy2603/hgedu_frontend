@@ -36,7 +36,8 @@ class DoExam extends Component {
             examResult: {},
             submitMessage: '',
             mark: '',
-            isSubmit: false
+            isSubmit: false,
+            isLoaded: false
         }
 
         this.handler = this.handler.bind(this);
@@ -94,7 +95,7 @@ class DoExam extends Component {
 
             } else {
                 console.log("data", res.data);
-                this.setState({questionList: res.data})
+                this.setState({questionList: res.data, isLoaded: true})
             }
         }
     }
@@ -105,15 +106,15 @@ class DoExam extends Component {
             clearInterval(this.myInterval);
             let examId = this.state.exam.id;
             let userId = this.props.user.uid;
+            let classId = this.state.studentClass.id;
             console.log("answers", this.state.studentAnswers)
-            axios.post(serverUrl + "api/doExam/" + examId + "/" + userId, this.state.studentAnswers)
+            axios.post(serverUrl + "api/doExam/" + examId + "/" + classId + "/" + userId, this.state.studentAnswers)
             .then(res => {
-                if(res.data) {
-                    console.log(res.data);
-                    localStorage.setItem("reloadResult", 1);
-                    if(!isNaN(Number(res.data))) {
-                        this.setState({submitMessage: 'Nộp bài thành công!', questionList: []})
-                    }
+                console.log(res.data);
+                let resStr = '' + res.data;
+                localStorage.setItem("reloadResult", 1);
+                if(!isNaN(Number(resStr))) {
+                    this.setState({submitMessage: 'Nộp bài thành công!', mark: resStr, questionList: []})
                 }
             }).catch(error => {
                 console.log(error);
@@ -128,6 +129,28 @@ class DoExam extends Component {
     }
 
     componentDidMount() {
+        this.checkTab = setInterval(() => {
+            if(this.state.exam) {
+                if(document.hidden && this.state.exam.trials === 1) {
+                    this.handleSubmit();
+                    clearInterval(this.checkTab);
+                } else {
+                    clearInterval(this.checkTab);
+                }
+            }
+        }, 1000);
+        this.checkFocus = setInterval(() => {
+            if(this.state.exam) {
+                if(this.state.exam.trials === 1) {
+                    window.onblur = () => {
+                        this.handleSubmit();
+                        clearInterval(this.checkFocus);
+                    }
+                } else {
+                    clearInterval(this.checkFocus);
+                }
+            }
+        }, 1000);
         if(localStorage.getItem("exam") === undefined || 
             localStorage.getItem("studentClass") === undefined || 
             localStorage.getItem("nthTrial") === undefined) {
@@ -227,6 +250,8 @@ class DoExam extends Component {
 
     componentWillUnmount() {
         clearInterval(this.myInterval);
+        clearInterval(this.checkTab);
+        clearInterval(this.checkFocus);
         window.removeEventListener("beforeunload", this.handler);
     }
 
@@ -330,7 +355,7 @@ class DoExam extends Component {
                                 <>
                                     <div className="blue-text" style={{marginTop: "20px"}}>Điểm số</div>
                                     <div className="QuizNavigation">
-                                        <h1 className="blue-text text-darken-3 bold" style={{textAlign: 'center'}}>{this.state.mark}</h1>
+                                        <h1 className="blue-text text-darken-3 bold" style={{textAlign: 'center', margin: '0'}}>{this.state.mark}</h1>
                                     </div>
                                 </>
                             }
@@ -373,12 +398,13 @@ class DoExam extends Component {
                             <div className="space-top button-primary" >
                                 <FormControl component="fieldset">
                                     <FormControlLabel
+                                        disabled={this.state.isLoaded ? false : true}
                                         control={<CustomCheckbox />}
                                         label="Tôi muốn nộp bài"
                                         onChange={this.handleDisplaySubmit}
                                     />
                                 </FormControl>
-                                <Button variant="contained" disabled={this.state.isSubmit ? false : true} size="large" color="primary" style={{minWidth: '100%'}} onClick={this.handleSubmit}>Nộp bài</Button>
+                                <Button variant="contained" disabled={this.state.isSubmit && this.state.isLoaded ? false : true} size="large" color="primary" style={{minWidth: '100%'}} onClick={this.handleSubmit}>Nộp bài</Button>
                             </div>
                             <div className="space-top" >
                                 <h6 className="blue-text text-darken-3 bold" style={{textAlign: 'center'}}>
