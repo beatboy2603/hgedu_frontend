@@ -818,21 +818,23 @@ class ExamForm extends Component {
                                 <Typography>Cài đặt thu bài</Typography>
                             </ExpansionPanelSummary>
                             <ExpansionPanelDetails style={{display: 'block'}}>
-                                <div className="row center-content">
-                                    <div className="col s2" style={{padding: 0}}>
-                                        <label htmlFor="title" className="inputLabel" style={{paddingLeft: 0}}>Vào điểm:</label>
+                                {this.state.trials === 1 &&  
+                                    <div className="row center-content">
+                                        <div className="col s2" style={{padding: 0}}>
+                                            <label htmlFor="title" className="inputLabel" style={{paddingLeft: 0}}>Vào điểm:</label>
+                                        </div>
+                                        <div className="col s10" style={{padding: 0}}>
+                                        <FormControl component="fieldset">
+                                            <RadioGroup aria-label="mark" name="isMarkSaved" value={this.state.isMarkSaved} 
+                                                        style={{display: 'inline-block'}}
+                                                        onChange={this.handleMarkSave}>
+                                                <FormControlLabel value="0" className="exam-radio-primary" control={<Radio color="primary" />} label="Không" />
+                                                <FormControlLabel value="1" className="exam-radio-primary" control={<Radio color="primary" />} label="Có" />
+                                            </RadioGroup>
+                                        </FormControl>
+                                        </div>
                                     </div>
-                                    <div className="col s10" style={{padding: 0}}>
-                                    <FormControl component="fieldset">
-                                        <RadioGroup aria-label="mark" name="isMarkSaved" value={this.state.isMarkSaved} 
-                                                    style={{display: 'inline-block'}}
-                                                    onChange={this.handleMarkSave}>
-                                            <FormControlLabel value="0" className="exam-radio-primary" control={<Radio color="primary" />} label="Không" />
-                                            <FormControlLabel value="1" className="exam-radio-primary" control={<Radio color="primary" />} label="Có" />
-                                        </RadioGroup>
-                                    </FormControl>
-                                    </div>
-                                </div>
+                                }
                                 {/* <div className="row" style={{marginTop: "20px"}}>
                                     <label htmlFor="title" className="col s2 inputLabel" style={{paddingLeft: 0}}>Gửi thông báo sau kiểm tra:</label>
                                     <input
