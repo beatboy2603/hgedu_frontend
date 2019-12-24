@@ -193,7 +193,7 @@ class LandingPage extends Component {
                     <div className="flex-column" style={{ width: "60vw", position: "absolute", top: "35vh", left: "20vw", color: "#ffffff", fontSize: "43px" }}>
                         <p align="center" className="font-montserrat" style={{ margin: "0", padding: "0", color: "#ffffff", fontSize: "43px" }}>MỘT NỀN GIÁO DỤC THÔNG MINH</p>
                         <p align="center" className="font-montserrat" style={{ margin: "0", padding: "0", color: "#ffffff", fontSize: "43px" }}>LÀ MỘT NỀN GIÁO DỤC LINH HOẠT</p>
-                        <p align="center" style={{ color: "#ffffff", fontSize: "30px" }}>Cùng nhau tham gia vào cuộc cách mạng giáo dục Việt Nam!</p>
+                        <p align="center" style={{ color: "#ffffff", fontSize: "30px" }}>Kết nối giáo viên, học sinh và phụ huynh không giới hạn!</p>
                     </div>
                     <a href="" onClick={this.goToNews}>
                         <i className="material-icons" style={{ position: "absolute", top: "90vh", left: "47vw", color: "#ffffff", fontSize: "50px" }}>arrow_drop_down_circle</i>

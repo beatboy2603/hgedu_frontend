@@ -109,19 +109,19 @@ class App extends Component {
                         <SignIn />
                       </ProtectedRoute>
 
-                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/home'>
+                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} userRole={store.getState().user.role} roleReq={[1,2,3]} path='/home'>
                         <Home />
                       </ProtectedRoute>
 
-                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/user'>
+                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} userRole={store.getState().user.role} roleReq={[1,2,3]} path='/user'>
                         <UserInfo />
                       </ProtectedRoute>
 
-                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/personalLibrary'>
+                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} userRole={store.getState().user.role} roleReq={[1,3]} path='/personalLibrary'>
                         <PersonalLibrary />
                       </ProtectedRoute>
 
-                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/abbreviationLibrary'>
+                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} userRole={store.getState().user.role} roleReq={[1,3]} path='/abbreviationLibrary'>
                         <AbbreviationLibrary />
                       </ProtectedRoute>
 
@@ -133,19 +133,19 @@ class App extends Component {
                         <TeacherList />
                       </ProtectedRoute> */}
 
-                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/studentManagement'>
+                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} userRole={store.getState().user.role} roleReq={[1,3]} path='/studentManagement'>
                         <StudentManagement />
                       </ProtectedRoute>
 
-                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} exact path='/examManagement'>
+                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} userRole={store.getState().user.role} roleReq={[1,3]} exact path='/examManagement'>
                         <Redirect to="/examManagement/examHistory" />
                       </ProtectedRoute>
 
-                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/examManagement/examSchedule'>
+                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} userRole={store.getState().user.role} roleReq={[1,3]} path='/examManagement/examSchedule'>
                         <TestManagement type={"SCHEDULE"} />
                       </ProtectedRoute>
 
-                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/examManagement/examHistory'>
+                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} userRole={store.getState().user.role} roleReq={[1,3]} path='/examManagement/examHistory'>
                         <TestManagement type={"HISTORY"} />
                       </ProtectedRoute>
 
@@ -155,15 +155,15 @@ class App extends Component {
                     <Route path='/testManagement/examSchedule' render={() => <TestManagement type="SCHEDULE" />} />
                     <Route path='/testManagement/examHistory' render={() => <TestManagement type="HISTORY" />} /> */}
 
-                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/newsList'>
+                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} userRole={store.getState().user.role} roleReq={[1,2]} path='/newsList'>
                         <NewsList />
                       </ProtectedRoute>
 
-                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/testWord'>
+                      {/* <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true}  path='/testWord'>
                         <TestWord />
-                      </ProtectedRoute>
+                      </ProtectedRoute> */}
 
-                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/userManagement'>
+                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} userRole={store.getState().user.role} roleReq={[1]} path='/userManagement'>
                         <UserManagement />
                       </ProtectedRoute>
 
@@ -172,19 +172,19 @@ class App extends Component {
                     </ProtectedRoute> */}
                       <Route path='/news/view/:newsTitle' component={ViewNews} />
 
-                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/doExam'>
+                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} userRole={store.getState().user.role} roleReq={[1,3]} path='/doExam'>
                         <DoExam />
                       </ProtectedRoute>
 
-                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/examInfo'>
+                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} userRole={store.getState().user.role} roleReq={[1,3]} path='/examInfo'>
                         <ExamInfo />
                       </ProtectedRoute>
 
-                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/studentExams'>
+                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} userRole={store.getState().user.role} roleReq={[1,3]} path='/studentExams'>
                         <StudentExams />
                       </ProtectedRoute>
 
-                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} path='/exam/:examTitle'>
+                      <ProtectedRoute isAuthenticated={this.state.isAuthenticated} authenReq={true} userRole={store.getState().user.role} roleReq={[1,3]} path='/exam/:examTitle'>
                         <ExamInfo />
                       </ProtectedRoute>
 

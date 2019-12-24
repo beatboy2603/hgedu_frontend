@@ -84,37 +84,46 @@ const Sidenav = (props) => {
     }
 
     const signOut = () => {
-        var auth2 = gapi.auth2.getAuthInstance();
-        if (!auth2) {
-            gapi.client.init({
-                'clientId': '1072039829865-jc2jf9cv96ifoph4ptpg1840s8n5gg5b.apps.googleusercontent.com',
-                // 'scope': 'https://www.googleapis.com/auth/drive.metadata.readonly',
-                'scope': 'https://www.googleapis.com/auth/userinfo.profile'
-            }).then(() => {
-                var auth2 = gapi.auth2.getAuthInstance();
-                if (auth2) {
-                    setCookie("authenticated", "false", -1);
-                    axios.defaults.headers.common['Authorization'] = null;
-                    if (props.checkAuthen) {
-                        props.checkAuthen();
-                    }
-                    auth2.signOut().then(() => {
-                        props.dispatch({ type: "SIGN_OUT", payload: null });
-                        props.history.push('/');
-                    });
-                }
-            });
-        } else {
-            setCookie("authenticated", "false", -1);
-            axios.defaults.headers.common['Authorization'] = null;
-            if (props.checkAuthen) {
-                props.checkAuthen();
-            }
-            auth2.signOut().then(() => {
-                props.dispatch({ type: "SIGN_OUT", payload: null });
-                props.history.push('/');
-            });
+        setCookie("authenticated", "false", -1);
+        axios.defaults.headers.common['Authorization'] = null;
+        if (props.checkAuthen) {
+            props.checkAuthen();
         }
+
+        props.dispatch({ type: "SIGN_OUT", payload: null });
+        props.history.push('/');
+
+        // var auth2 = gapi.auth2.getAuthInstance();
+        // if (!auth2) {
+        //     gapi.client.init({
+        //         'clientId': '1072039829865-jc2jf9cv96ifoph4ptpg1840s8n5gg5b.apps.googleusercontent.com',
+        //         // 'scope': 'https://www.googleapis.com/auth/drive.metadata.readonly',
+        //         'scope': 'https://www.googleapis.com/auth/userinfo.profile'
+        //     }).then(() => {
+        //         var auth2 = gapi.auth2.getAuthInstance();
+        //         if (auth2) {
+        //             setCookie("authenticated", "false", -1);
+        //             axios.defaults.headers.common['Authorization'] = null;
+        //             if (props.checkAuthen) {
+        //                 props.checkAuthen();
+        //             }
+        //             auth2.signOut().then(() => {
+        //                 props.dispatch({ type: "SIGN_OUT", payload: null });
+        //                 props.history.push('/');
+        //             });
+        //         }
+        //     });
+        // } else {
+        //     setCookie("authenticated", "false", -1);
+        //     axios.defaults.headers.common['Authorization'] = null;
+        //     if (props.checkAuthen) {
+        //         props.checkAuthen();
+        //     }
+        //     auth2.signOut().then(() => {
+        //         props.dispatch({ type: "SIGN_OUT", payload: null });
+        //         props.history.push('/');
+        //     });
+        // }
     }
 
 

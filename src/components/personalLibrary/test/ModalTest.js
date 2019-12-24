@@ -22,6 +22,7 @@ class ModalTest extends Component {
 
         allKnowledgeGroups: [],
 
+        //common
         testDetail: {
             testCode: "",
             teacherId: 0,
@@ -30,6 +31,8 @@ class ModalTest extends Component {
             noOfTests: "",
             noOfPermutations: "",
         },
+
+        //custom
         testQuestionList: [],
         testQuality: {
             noOfQuestions: 0,
@@ -39,6 +42,18 @@ class ModalTest extends Component {
             difficultyDistribution: "-:-:-:-",
         },
         customValid: false,
+
+        //auto
+
+        testCriteria: {
+            difficultiesAuto: ["0", "0", "0", "0"],
+            meanDifficulty: 0,
+            noOfQuestions: 0,
+            questionTypes: ["0", "0"],
+        },
+        difficultyWidth: ["0%", "0%", "0%", "0%"],
+        meanDifficultyColor: "#9e9e9e",
+        questionTypeWidth: ["0%", "0%"],
     }
 
     //C1: not recommended?
@@ -88,6 +103,191 @@ class ModalTest extends Component {
                 }
             }))
         }
+        if (source == "difficulty1") {
+            let difficultiesAuto = this.state.testCriteria.difficultiesAuto.map((el, i) => {
+                if (i == 0) {
+                    el = value;
+                }
+                return el;
+            })
+            this.setState(prevState => ({
+                ...prevState,
+                testCriteria: {
+                    ...prevState.testCriteria,
+                    difficultiesAuto,
+                }
+            }), () => { this.updateTestCriteria() })
+        }
+        if (source == "difficulty2") {
+            let difficultiesAuto = this.state.testCriteria.difficultiesAuto.map((el, i) => {
+                if (i == 1) {
+                    el = value;
+                }
+                return el;
+            })
+            this.setState(prevState => ({
+                ...prevState,
+                testCriteria: {
+                    ...prevState.testCriteria,
+                    difficultiesAuto,
+                }
+            }), () => { this.updateTestCriteria() })
+        }
+        if (source == "difficulty3") {
+            let difficultiesAuto = this.state.testCriteria.difficultiesAuto.map((el, i) => {
+                if (i == 2) {
+                    el = value;
+                }
+                return el;
+            })
+            this.setState(prevState => ({
+                ...prevState,
+                testCriteria: {
+                    ...prevState.testCriteria,
+                    difficultiesAuto,
+                }
+            }), () => { this.updateTestCriteria() })
+        }
+        if (source == "difficulty4") {
+            let difficultiesAuto = this.state.testCriteria.difficultiesAuto.map((el, i) => {
+                if (i == 3) {
+                    el = value;
+                }
+                return el;
+            })
+            this.setState(prevState => ({
+                ...prevState,
+                testCriteria: {
+                    ...prevState.testCriteria,
+                    difficultiesAuto,
+                }
+            }), () => { this.updateTestCriteria() })
+        }
+        if (source == "questionType1") {
+            let questionTypes = this.state.testCriteria.questionTypes.map((el, i) => {
+                if (i == 0) {
+                    el = value;
+                }
+                return el;
+            })
+            this.setState(prevState => ({
+                ...prevState,
+                testCriteria: {
+                    ...prevState.testCriteria,
+                    questionTypes,
+                }
+            }), () => { this.updateQuestionTypes(1) })
+        }
+        if (source == "questionType2") {
+            let questionTypes = this.state.testCriteria.questionTypes.map((el, i) => {
+                if (i == 1) {
+                    el = value;
+                }
+                return el;
+            })
+            this.setState(prevState => ({
+                ...prevState,
+                testCriteria: {
+                    ...prevState.testCriteria,
+                    questionTypes,
+                }
+            }), () => { this.updateQuestionTypes(2) })
+        }
+    }
+
+    //for Auto
+    updateTestCriteria = () => {
+        let error = false;
+        let difficultiesAuto = this.state.testCriteria.difficultiesAuto.map((el, i) => {
+            let parsedInt = parseInt(el);
+
+            if ((parsedInt != 0 && !parsedInt) || parsedInt < 0 || parsedInt > 99) {
+                error = true;
+            }
+            return parsedInt;
+        })
+        if (error) {
+            return;
+        }
+        let noOfQuestions = 0;
+        let meanDifficulty = 0;
+        difficultiesAuto.map((el, i) => {
+            noOfQuestions += el;
+            meanDifficulty += (i + 1) * el;
+        })
+        if (noOfQuestions != 0) {
+            meanDifficulty = meanDifficulty / noOfQuestions;
+            meanDifficulty = meanDifficulty.toFixed(2);
+        } else {
+            meanDifficulty = 0;
+        }
+        let difficultyWidth = this.state.difficultyWidth.map((el, i) => {
+            if (noOfQuestions == 0) {
+                return "0%";
+            } else {
+                return (this.state.testCriteria.difficultiesAuto[i] / noOfQuestions) * 100 + "%";
+            }
+        })
+        let meanDifficultyColor = "#9e9e9e"
+        if (meanDifficulty >= 1 && meanDifficulty <= 1.75) {
+            meanDifficultyColor = "#28d55c";
+        } else if (meanDifficulty <= 2.5) {
+            meanDifficultyColor = "#eb992d";
+        } else if (meanDifficulty <= 3.25) {
+            meanDifficultyColor = "#832adb";
+        } else if (meanDifficulty <= 4) {
+            meanDifficultyColor = "#f61c6e";
+        }
+        this.setState(prevState => ({
+            ...prevState,
+            testCriteria: {
+                ...prevState.testCriteria,
+                noOfQuestions,
+                meanDifficulty,
+                questionTypes: ["0", "0"],
+            },
+            difficultyWidth,
+            meanDifficultyColor
+        }), () => {
+            this.updateQuestionTypes(1);
+        })
+    }
+
+    updateQuestionTypes = (type) => {
+        let error = false;
+        let questionTypes = this.state.testCriteria.questionTypes.map((el, i) => {
+            let parsedInt = parseInt(el);
+
+            if ((parsedInt != 0 && !parsedInt) || parsedInt < 0 || parsedInt > this.state.testCriteria.noOfQuestions) {
+                error = true;
+            }
+            return parsedInt;
+        })
+        if (error) {
+            return;
+        }
+        let type1 = 0; let type2 = 0;
+        if (this.state.testCriteria.noOfQuestions != 0) {
+            if (type == 1) {
+                type1 = questionTypes[0];
+                type2 = this.state.testCriteria.noOfQuestions - type1;
+            } else {
+                type2 = questionTypes[1];
+                type1 = this.state.testCriteria.noOfQuestions - type2;
+            }
+        } else {
+            return;
+        }
+        let questionTypeWidth = [(type1 / this.state.testCriteria.noOfQuestions) * 100 + "%", (type2 / this.state.testCriteria.noOfQuestions) * 100 + "%"]
+
+        this.setState(prevState => ({
+            ...prevState,
+            testCriteria: {
+                ...prevState.testCriteria,
+                questionTypes: [type1 + "", type2 + ""],
+            },
+            questionTypeWidth,
+        }))
     }
 
     addQuestionToTest = (question) => {
@@ -112,6 +312,7 @@ class ModalTest extends Component {
 
     }
 
+    //for Custom
     updateTestQuality = () => {
         let testQuality = {
             noOfQuestions: 0,
@@ -199,7 +400,7 @@ class ModalTest extends Component {
         if (this.props.folder && this.props.folder.folders) {
             let hasSameTestCode = false;
             this.props.folder.folders.map((subEl, j) => {
-                if ((this.state.testDetail.testCode.trim() == subEl.folderName && this.state.currentFolder.folderId==subEl.parentFolderId)||(subEl.folderTypeId==3&&this.state.testDetail.testCode.trim() == subEl.folderName)) {
+                if ((this.state.testDetail.testCode.trim() == subEl.folderName && this.state.currentFolder.folderId == subEl.parentFolderId) || (subEl.folderTypeId == 3 && this.state.testDetail.testCode.trim() == subEl.folderName)) {
                     hasSameTestCode = true;
                 }
             })
@@ -213,7 +414,7 @@ class ModalTest extends Component {
         return customValid;
     }
 
-    addCustomTest = ()=>{
+    addCustomTest = () => {
         let testFolder = {
             teacherId: this.props.user.uid,
             folderName: this.state.testDetail.testCode,
@@ -230,30 +431,30 @@ class ModalTest extends Component {
         console.log("test", test);
         console.log("testQuestionList", this.state.testQuestionList);
         let childQuestions = [];
-        this.state.testQuestionList.map((el, i)=>{
-            if(el.childQuestions){
-                el.childQuestions.map((subEl, k)=>{
+        this.state.testQuestionList.map((el, i) => {
+            if (el.childQuestions) {
+                el.childQuestions.map((subEl, k) => {
                     childQuestions.push(subEl);
                 })
             }
         });
         let testQuestionList = [...this.state.testQuestionList, ...childQuestions];
-        testQuestionList = testQuestionList.map((el, i)=>{
+        testQuestionList = testQuestionList.map((el, i) => {
             el.testQuestionIdentity = {
                 testId: 0,
                 questionId: el.questionId,
             }
             return el;
         });
-        let testContentPlaceholder ={
+        let testContentPlaceholder = {
             testFolder,
             test,
             testQuestionList
         }
         console.log(testContentPlaceholder);
-        axios.post(serverUrl+"api/test/addTest", testContentPlaceholder).then(res=>{
+        axios.post(serverUrl + "api/test/addTest", testContentPlaceholder).then(res => {
             console.log(res);
-            if(this.props.updateTreeFolder){
+            if (this.props.updateTreeFolder) {
                 this.props.updateTreeFolder();
             }
         })
@@ -341,17 +542,56 @@ class ModalTest extends Component {
             this.setState(prevState => ({
                 ...prevState,
                 allKnowledgeGroups,
-                questionDetail: {
-                    ...prevState.questionDetail,
-                    folderId: res.data.folderId,
-                }
             }))
         })
+    }
+
+    resetState = () => {
+        this.setState(prevState => ({
+            ...prevState,
+            currentModalFolder: null, //current folder of tree in modal
+            modalQuestionList: [],
+            modalLinkedQuestionList: [],
+
+            //common
+            testDetail: {
+                testCode: "",
+                teacherId: 0,
+                folderId: 0,
+                title: "",
+                noOfTests: "",
+                noOfPermutations: "",
+            },
+
+            //custom
+            testQuestionList: [],
+            testQuality: {
+                noOfQuestions: 0,
+                testCoverage: "-",
+                meanDifficulty: 0,
+                typeRatio: "-:-",
+                difficultyDistribution: "-:-:-:-",
+            },
+            customValid: false,
+
+            //auto
+
+            testCriteria: {
+                difficultiesAuto: ["0", "0", "0", "0"],
+                meanDifficulty: 0,
+                noOfQuestions: 0,
+                questionTypes: ["0", "0"],
+            },
+            difficultyWidth: ["0%", "0%", "0%", "0%"],
+            meanDifficultyColor: "#9e9e9e",
+            questionTypeWidth: ["0%", "0%"],
+        }))
     }
 
     render() {
         return (
             <div>
+                <button onClick={() => { console.log(this.state) }}>click me</button>
                 <div style={{ zIndex: "100" }}>
                     {/* <a href="#addTest" className="btn-floating btn-large blue modal-trigger">
                         <i className="material-icons" onClick={() => { console.log(this.state) }}>add</i>
@@ -400,7 +640,7 @@ class ModalTest extends Component {
 
 
                     {/* Modal to for Custom generation */}
-                    <Modal id="customGen" options={{ preventScrolling: true }} style={{ width: "60vw", height: "80vh", maxHeight: "80vh", overflow: "hidden" }} actions={[]}
+                    <Modal id="customGen" options={{ preventScrolling: true }} style={{ width: "70vw", height: "80vh", maxHeight: "80vh", overflow: "hidden" }} actions={[]}
                         onClick={() => { this.checkCustomValid() }}>
                         <div style={{ paddingTop: "52.5vh" }}></div>
                         <div className="modal-content" style={{
@@ -435,9 +675,6 @@ class ModalTest extends Component {
                             </div>
                             <div className="line" style={{ width: "96%", marginLeft: "2%", marginBottom: "30px" }}></div>
                             <div className="row">
-                                <div className='col s12'>
-                                    <p className="blue-text lighten-3">Chất lượng đề</p>
-                                </div>
                                 {/* <div className="col s3">
                                     <h3 className="blue-text text-darken-2 font-montserrat center">0</h3>
                                     <p className="center">Tổng số câu hỏi</p>
@@ -493,30 +730,30 @@ class ModalTest extends Component {
                                 <div className='col s12'>
                                     <p className="blue-text lighten-3">Soạn câu hỏi</p>
                                 </div>
-                                <Collapsible className="z-depth-0" style={{ border: "none" }}>
-                                    <CollapsibleItem header="Danh sách câu hỏi" icon={<i className="material-icons">code</i>}>
-                                        <div className="row" style={{ marginBottom: "0" }}>
-                                            <div className="row col s4">
-                                                <p className="blue-text lighten-3">Thư viện câu hỏi</p>
-                                                <CustomizedModalTreeView folders={this.state.questionFolders} setCurrentFolder={this.setCurrentModalFolder} source={"question"} />
-                                            </div>
+                                {/* <Collapsible className="z-depth-0" style={{ border: "none" }}>
+                                    <CollapsibleItem header="Danh sách câu hỏi" icon={<i className="material-icons">code</i>}> */}
+                                <div className="row" style={{ marginBottom: "0" }}>
+                                    <div className="row col s3">
+                                        <p className="blue-text lighten-3">Thư viện câu hỏi</p>
+                                        <CustomizedModalTreeView folders={this.state.questionFolders} setCurrentFolder={this.setCurrentModalFolder} source={"question"} />
+                                    </div>
 
-                                            <div className="row col s8" style={{ height: "100%", borderLeft: "2px solid #BDBDBD" }}>
-                                                <div className='col s12'>
-                                                    <h5 className="blue-text text-darken-3 font-montserrat">{this.state.currentModalFolder && this.state.currentModalFolder.folderName}</h5>
-                                                    <CustomizedModalTable
-                                                        headCells={[
-                                                            { id: 'padding', numeric: false, disablePadding: false, label: '' },
-                                                            { id: 'questionCode', numeric: false, disablePadding: false, label: 'Mã câu' },
-                                                            { id: 'content', numeric: false, disablePadding: false, label: 'Câu hỏi' },
-                                                        ]}
-                                                        rows={this.state.modalLinkedQuestionList}
-                                                        addQuestionToTest={this.addQuestionToTest}
-                                                        testQuestionList={this.state.testQuestionList} />
-                                                </div>
-                                            </div>
+                                    <div className="row col s9" style={{ height: "100%", borderLeft: "2px solid #BDBDBD" }}>
+                                        <div className='col s12'>
+                                            <h5 className="blue-text text-darken-3 font-montserrat">{this.state.currentModalFolder && this.state.currentModalFolder.folderName}</h5>
+                                            <CustomizedModalTable
+                                                headCells={[
+                                                    { id: 'padding', numeric: false, disablePadding: false, label: '' },
+                                                    { id: 'questionCode', numeric: false, disablePadding: false, label: 'Mã câu' },
+                                                    { id: 'content', numeric: false, disablePadding: false, label: 'Câu hỏi' },
+                                                ]}
+                                                rows={this.state.modalLinkedQuestionList}
+                                                addQuestionToTest={this.addQuestionToTest}
+                                                testQuestionList={this.state.testQuestionList} />
                                         </div>
-                                    </CollapsibleItem>
+                                    </div>
+                                </div>
+                                {/* </CollapsibleItem>
                                     <CollapsibleItem header="Loại trừ câu hỏi trong đề thi khác" icon={<i className="material-icons">code</i>}>
                                         <table>
                                             <thead className="blue-text text-darken-3 font-montserrat">
@@ -533,12 +770,12 @@ class ModalTest extends Component {
                                             </tbody>
                                         </table>
                                     </CollapsibleItem>
-                                </Collapsible>
+                                </Collapsible> */}
                             </div>
                             <div className="line" style={{ width: "96%", marginLeft: "2%", marginBottom: "30px" }}></div>
                             <a className="modal-action modal-close black-text lighten-1" style={{ margin: "0 1.5vw", float: "left" }}>Hủy thao tác</a>
                             {this.state.customValid &&
-                                <a className="modal-action modal-close blue-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }} onClick={()=>{this.addCustomTest()}}>Hoàn tất</a>
+                                <a className="modal-action modal-close blue-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }} onClick={() => { this.addCustomTest() }}>Hoàn tất</a>
                             }
                             <a href="#addTest" className="modal-action modal-close black-text lighten-1 modal-trigger" style={{ margin: "0 1.5vw", float: "right" }}>Quay lại</a>
                         </div>
@@ -546,7 +783,7 @@ class ModalTest extends Component {
 
 
                     {/* Modal to for Auto generation */}
-                    <Modal id="autoGen" options={{ preventScrolling: true }} style={{ width: "60vw", height: "80vh", overflow: "hidden" }} actions={[]}>
+                    <Modal id="autoGen" options={{ preventScrolling: true }} style={{ width: "70vw", height: "80vh", maxHeight: "80vh", overflow: "hidden" }} actions={[]}>
                         <div style={{ paddingTop: "52.5vh" }}></div>
                         <div className="modal-content" style={{
                             position: "absolute",
@@ -567,13 +804,19 @@ class ModalTest extends Component {
                                     <div className="col s12">
                                         Mã đề thi<span className='red-text'>*</span>:
                                         <div className="input-field inline" style={{ width: '10vw', margin: '0 0 0 5vw' }}>
-                                            <input id='testCode' type="text" className="validate" />
+                                            <input id='testCode' type="text" className="validate" value={this.state.testDetail.testCode} onChange={(e) => { this.handleInputChange("testCode", e) }} />
                                         </div>
                                     </div>
                                     <div className="col s12">
                                         Tên đề thi<span className='red-text'>*</span>:
                                         <div className="input-field inline" style={{ width: '30vw', margin: '0 0 0 5vw' }}>
-                                            <input id='testName' type="text" className="validate" />
+                                            <input id='testName' type="text" className="validate" value={this.state.testDetail.title} onChange={(e) => { this.handleInputChange("title", e) }} />
+                                        </div>
+                                    </div>
+                                    <div className="col s12">
+                                        Số lượng đề:
+                                        <div className="input-field inline" style={{ width: '10vw', margin: '0 0 0 5vw' }}>
+                                            <input id='noOfTests' type="number" className="validate" value={this.state.testDetail.noOfTests} onChange={(e) => { this.handleInputChange("noOfTests", e) }} />
                                         </div>
                                     </div>
                                 </form>
@@ -584,52 +827,109 @@ class ModalTest extends Component {
                                     <p className="blue-text lighten-3">Soạn câu hỏi</p>
                                 </div>
                                 <div className="col s12">
-                                    <h3 className="blue-text darken-4 font-montserrat center">0</h3>
-                                    <p className="center">Tổng số câu hỏi</p>
-                                </div>
-
-                                <div className="col s12">
                                     <Collapsible className="z-depth-0" style={{ border: "none" }}>
-                                        <CollapsibleItem header="Phân phối nhóm chia theo mảng kiến thức" icon={<i className="material-icons">code</i>}>
-                                            <table>
-                                                <thead className="blue-text text-darken-3 font-montserrat">
-                                                    <tr>
-                                                        <th>Mảng kiến thức</th>
-                                                        <th>Mức khó</th>
-                                                        <th>Thuộc tính</th>
-                                                        <th>Kiến thức đặc thù</th>
-                                                        <th>Số câu hỏi</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <th>
-                                                            <a href="#knowledgeGroupFilter" className="black-text lighten-1 modal-trigger">+ Thêm mảng kiến thức</a>
-                                                        </th>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                        <CollapsibleItem header="Tiêu chí đề" icon={<i className="material-icons">code</i>}>
+                                            <div className="row">
+                                                <div className="col s12">
+                                                    <h3 className="blue-text darken-4 font-montserrat center">{this.state.testCriteria && this.state.testCriteria.noOfQuestions}</h3>
+                                                    <p className="center">Tổng số câu hỏi</p>
+                                                </div>
+                                                <div className="col s12">
+                                                    <p className="blue-text lighten-3">Phân phối mức khó</p>
+                                                </div>
+                                                <div className="col s12">
+                                                    <h3 className="font-montserrat center" style={{ color: this.state.meanDifficultyColor }}>{this.state.testCriteria && this.state.testCriteria.meanDifficulty}</h3>
+                                                    <p className="center">Độ khó trung bình</p>
+                                                </div>
+                                                <div className="col s12 z-depth-1" style={{ width: "100%", height: "10px", borderRadius: "5px", border: "1px solid grey", padding: "0" }}>
+                                                    <div style={{ width: this.state.difficultyWidth[0], height: "10px", backgroundColor: "#28d55c", borderRadius: "5px", display: "inline-block", position: "relative", top: "-5px" }}></div>
+                                                    <div style={{ width: this.state.difficultyWidth[1], height: "10px", backgroundColor: "#eb992d", borderRadius: "5px", display: "inline-block", position: "relative", top: "-5px" }}></div>
+                                                    <div style={{ width: this.state.difficultyWidth[2], height: "10px", backgroundColor: "#832adb", borderRadius: "5px", display: "inline-block", position: "relative", top: "-5px" }}></div>
+                                                    <div style={{ width: this.state.difficultyWidth[3], height: "10px", backgroundColor: "#f61c6e", borderRadius: "5px", display: "inline-block", position: "relative", top: "-5px" }}></div>
+                                                </div>
+                                                <div className="col s3 center">
+                                                    <div className="input-field inline" style={{ width: '100px', margin: "15px 0 0 0" }}>
+                                                        <input type="number" className="validate font-montserrat" style={{ fontSize: "50px", color: "#28d55c", textAlign: "center" }} onChange={(e) => this.handleInputChange("difficulty1", e)} value={this.state.testCriteria.difficultiesAuto[0]} min="0" max="99" step="1" />
+                                                        <span class="helper-text" data-error="*Số nguyên 0-99"></span>
+                                                    </div>
+                                                    <br />
+                                                    <span>Nhận biết</span>
+                                                </div>
+                                                <div className="col s3 center">
+                                                    <div className="input-field inline" style={{ width: '100px', margin: "15px 0 0 0" }}>
+
+                                                        <input type="number" className="validate font-montserrat" style={{ fontSize: "50px", color: "#eb992d", textAlign: "center" }} onChange={(e) => this.handleInputChange("difficulty2", e)} value={this.state.testCriteria.difficultiesAuto[1]} min="0" max="99" step="1" />
+                                                        <span class="helper-text" data-error="*Số nguyên 0-99"></span>
+                                                    </div>
+                                                    <br />
+                                                    <span>Thông hiểu</span>
+                                                </div>
+                                                <div className="col s3 center">
+                                                    <div className="input-field inline" style={{ width: '100px', margin: "15px 0 0 0" }}>
+
+                                                        <input type="number" className="validate font-montserrat" style={{ fontSize: "50px", color: "#832adb", textAlign: "center" }} onChange={(e) => this.handleInputChange("difficulty3", e)} value={this.state.testCriteria.difficultiesAuto[2]} min="0" max="99" step="1" />
+                                                        <span class="helper-text" data-error="*Số nguyên 0-99"></span>
+                                                    </div>
+                                                    <br />
+                                                    <span>Vận dụng</span>
+                                                </div>
+                                                <div className="col s3 center">
+                                                    <div className="input-field inline" style={{ width: '100px', margin: "15px 0 0 0" }}>
+
+                                                        <input type="number" className="validate font-montserrat" style={{ fontSize: "50px", color: "#f61c6e", textAlign: "center" }} onChange={(e) => this.handleInputChange("difficulty4", e)} value={this.state.testCriteria.difficultiesAuto[3]} min="0" max="99" step="1" />
+                                                        <span class="helper-text" data-error="*Số nguyên 0-99"></span>
+                                                    </div>
+                                                    <br />
+                                                    <span>Vận dụng cao</span>
+                                                </div>
+                                                <div className="col s12">
+                                                    <p className="blue-text lighten-3">Thuộc tính</p>
+                                                </div>
+                                                <div className="col s12 z-depth-1" style={{ width: "100%", height: "10px", borderRadius: "5px", border: "1px solid grey", padding: "0" }}>
+                                                    <div style={{ width: this.state.questionTypeWidth[0], height: "10px", backgroundColor: "#0de6c2", borderRadius: "5px", display: "inline-block", position: "relative", top: "-5px" }}></div>
+                                                    <div style={{ width: this.state.questionTypeWidth[1], height: "10px", backgroundColor: "#efe11e", borderRadius: "5px", display: "inline-block", position: "relative", top: "-5px" }}></div>
+                                                </div>
+                                                <div className="col s3"></div>
+                                                <div className="col s3 center">
+                                                    <div className="input-field inline" style={{ width: '100px', margin: "15px 0 0 0" }}>
+
+                                                        <input type="number" className="validate font-montserrat" style={{ fontSize: "50px", color: "#0de6c2", textAlign: "center" }} onChange={(e) => this.handleInputChange("questionType1", e)} value={this.state.testCriteria.questionTypes[0]} min="0" max={this.state.testCriteria.noOfQuestions} step="1" />
+                                                        <span class="helper-text" data-error={"*Số nguyên 0-" + this.state.testCriteria.noOfQuestions}></span>
+                                                    </div>
+                                                    <br />
+                                                    <span>Lý thuyết</span>
+                                                </div>
+                                                <div className="col s3 center">
+                                                    <div className="input-field inline" style={{ width: '100px', margin: "15px 0 0 0" }}>
+
+                                                        <input type="number" className="validate font-montserrat" style={{ fontSize: "50px", color: "#efe11e", textAlign: "center" }} onChange={(e) => this.handleInputChange("questionType2", e)} value={this.state.testCriteria.questionTypes[1]} min="0" max={this.state.testCriteria.noOfQuestions} step="1" />
+                                                        <span class="helper-text" data-error={"*Số nguyên 0-" + this.state.testCriteria.noOfQuestions}></span>
+                                                    </div>
+                                                    <br />
+                                                    <span>Bài tập</span>
+                                                </div>
+                                                <div className="col s3"></div>
+                                            </div>
                                         </CollapsibleItem>
-                                        <CollapsibleItem header="Phân phối nhóm chia ngoài mảng kiến thức" icon={<i className="material-icons">code</i>}>
+                                        <CollapsibleItem header="Nhóm câu hỏi tự chọn" icon={<i className="material-icons">code</i>}>
                                             <table>
                                                 <thead className="blue-text text-darken-3 font-montserrat">
                                                     <tr>
                                                         <th>Nhóm</th>
                                                         <th>Số lượng</th>
-                                                        <th>Ghi chú</th>
                                                         <th>Phân chia trên một đề</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
                                                         <th>
-                                                            <a href="#nonKnowledgeGroupFilter" className="black-text lighten-1 modal-trigger">+ Thêm nhóm chia (tối đa 5)</a>
+                                                            <a href="#certainListPick" className="black-text lighten-1 modal-trigger">+ Thêm nhóm chia</a>
                                                         </th>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </CollapsibleItem>
-                                        <CollapsibleItem header="Loại trừ câu hỏi trong đề thi khác" icon={<i className="material-icons">code</i>}>
+                                        {/* <CollapsibleItem header="Loại trừ câu hỏi trong đề thi khác" icon={<i className="material-icons">code</i>}>
                                             <table>
                                                 <thead className="blue-text text-darken-3 font-montserrat">
                                                     <tr>
@@ -644,11 +944,11 @@ class ModalTest extends Component {
                                                     </tr>
                                                 </tbody>
                                             </table>
-                                        </CollapsibleItem>
+                                        </CollapsibleItem> */}
                                     </Collapsible>
                                 </div>
                             </div>
-                            <div className="line" style={{ width: "96%", marginLeft: "2%", marginBottom: "30px" }}></div>
+                            {/* <div className="line" style={{ width: "96%", marginLeft: "2%", marginBottom: "30px" }}></div>
                             <div className="row">
                                 <form className="row col s12">
                                     <div className="col s12">
@@ -656,18 +956,19 @@ class ModalTest extends Component {
                                     </div>
                                     <div className="col s12">
                                         Số lượng đề:
-                                        <div className="input-field inline" style={{ width: '5vw', margin: '0 0 0 5vw' }}>
-                                            <input id='noOfTests' type="text" className="validate" />
+                                        <div className="input-field inline" style={{ width: '10vw', margin: '0 0 0 5vw' }}>
+                                            <input id='noOfTests' type="number" className="validate" value={this.state.testDetail.noOfTests} onChange={(e) => { this.handleInputChange("noOfTests", e) }} />
                                         </div>
                                     </div>
                                     <div className="col s12">
                                         Số biến thể:
-                                        <div className="input-field inline" style={{ width: '5vw', margin: '0 0 0 5vw' }}>
-                                            <input id='noOfPermutations' type="text" className="validate" />
+                                        <div className="input-field inline" style={{ width: '10vw', margin: '0 0 0 5vw' }}>
+                                            <input id='noOfPermutations' type="number" className="validate" value={this.state.testDetail.noOfPermutations} onChange={(e) => { this.handleInputChange("noOfPermutations", e) }} />
                                         </div>
                                     </div>
+                                    
                                 </form>
-                            </div>
+                            </div> */}
                             <div className="line" style={{ width: "96%", marginLeft: "2%", marginBottom: "30px" }}></div>
                             <a className="modal-action modal-close black-text lighten-1" style={{ margin: "0 1.5vw", float: "left" }}>Hủy thao tác</a>
                             <a className="modal-action modal-close blue-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }}>Hoàn tất</a>
@@ -675,7 +976,9 @@ class ModalTest extends Component {
                         </div>
                     </Modal>
 
-                    <Modal id="knowledgeGroupFilter" options={{ preventScrolling: true }} style={{ width: "40vw", height: "80vh", overflow: "hidden" }} actions={[]}>
+
+                    <Modal id="certainListPick" options={{ preventScrolling: true }} style={{ width: "70vw", height: "80vh", maxHeight: "80vh", overflow: "hidden" }} actions={[]}
+                        onClick={() => { this.checkCustomValid() }}>
                         <div style={{ paddingTop: "52.5vh" }}></div>
                         <div className="modal-content" style={{
                             position: "absolute",
@@ -685,155 +988,65 @@ class ModalTest extends Component {
                             right: "-17px", /* Increase/Decrease this value for cross-browser compatibility */
                             overflowY: "scroll"
                         }}>
-                            <h5 className="center">Chọn mảng kiến thức</h5>
+                            <h5 className="center">Nhóm câu hỏi tự chọn</h5>
                             <div className="line" style={{ width: "96%", marginLeft: "2%", marginTop: "30px" }}></div>
                             <div className="row">
                                 <div className='col s12'>
-                                    <p className="blue-text lighten-3">Thư viện câu hỏi</p>
+                                    <p className="blue-text lighten-3">Chất lượng đề</p>
                                 </div>
-                            </div>
-                            <div className="line" style={{ width: "96%", marginLeft: "2%", marginBottom: "30px" }}></div>
-                            <a className="modal-action modal-close black-text lighten-1" style={{ margin: "0 1.5vw", float: "left" }}>Hủy thao tác</a>
-                            <a href="#knowledgeGroupCustomize" className="modal-action modal-close blue-text lighten-1 modal-trigger" style={{ margin: "0 1.5vw", float: "right" }}>Tiếp theo</a>
-                        </div>
-                    </Modal>
-                    <Modal id="knowledgeGroupCustomize" options={{ preventScrolling: true }} style={{ width: "60vw", height: "80vh", overflow: "hidden" }} actions={[]}>
-                        <div style={{ paddingTop: "52.5vh" }}></div>
-                        <div className="modal-content" style={{
-                            position: "absolute",
-                            top: "0",
-                            bottom: "0",
-                            left: "0",
-                            right: "-17px", /* Increase/Decrease this value for cross-browser compatibility */
-                            overflowY: "scroll"
-                        }}>
-                            <h5 className="center">Cấu hình nhóm chia mảng kiến thức</h5>
-                            <div className="line" style={{ width: "96%", marginLeft: "2%", marginTop: "30px" }}></div>
-                            <div className="row" style={{ marginBottom: "0" }}>
-                                <div className="row col s4" style={{ height: "100%", borderRight: "2px solid #BDBDBD" }}>
-                                    <div className="col s12 valign-wrapper">
-                                        <i className="material-icons blue-text text-darken-3 small" style={{ margin: "10px" }}>description</i>
-                                        <h5 className="blue-text text-darken-3">Phản ứng hóa học</h5>
-                                    </div>
-                                    <div className="col s12" style={{ marginTop: "10px", marginBottom: "10px" }}>
-                                        <h3 className="blue-text text-darken-2 font-montserrat center">32</h3>
-                                        <p className="center">Tổng số câu hỏi</p>
-                                    </div>
-                                    <div className="col s12" style={{ marginTop: "10px", marginBottom: "10px" }}>
-                                        <h3 className="green-text text-darken-2 font-montserrat center">1:1</h3>
-                                        <p className="center">Lý thuyết:Bài tập</p>
-                                    </div>
-                                    <div className="col s12" style={{ marginTop: "10px", marginBottom: "10px" }}>
-                                        <h3 className="orange-text text-darken-2 font-montserrat center">64%</h3>
-                                        <p className="center">Độ toàn diện</p>
-                                    </div>
-                                </div>
-                                <div className="row col s8">
-                                    <div className="col s1"></div>
-                                    <div className='col s10'>
-                                        <p className="blue-text lighten-3">Độ khó</p>
-                                        <CustomizedSlider />
-                                    </div>
-                                    <div className="col s1"></div>
-                                    <div className="line col s12" style={{ width: "96%", marginLeft: "2%", marginTop: "30px" }}></div>
-                                    <div className="col s1"></div>
-                                    <div className='col s10'>
-                                        <p className="blue-text lighten-3">Thuộc tính</p>
-                                    </div>
-                                    <div className="col s1"></div>
-                                    <div className="line col s12" style={{ width: "96%", marginLeft: "2%", marginTop: "30px" }}></div>
-                                    <div className="col s1"></div>
-                                    <div className='col s10'>
-                                        <p className="blue-text lighten-3">Kiến thức đặc thù</p>
-                                    </div>
-                                    <div className="col s1"></div>
-                                </div>
-                            </div>
-                            <div className="line" style={{ width: "96%", marginLeft: "2%", marginBottom: "30px" }}></div>
-                            <a className="modal-action modal-close black-text lighten-1" style={{ margin: "0 1.5vw", float: "left" }}>Hủy thao tác</a>
-                            <a className="modal-action modal-close blue-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }}>Tạo mảng</a>
-                            <a href="#knowledgeGroupFilter" className="modal-action modal-close black-text lighten-1 modal-trigger" style={{ margin: "0 1.5vw", float: "right" }}>Quay lại</a>
-                        </div>
-                    </Modal>
-                    <Modal id="nonKnowledgeGroupFilter" options={{ preventScrolling: true }} style={{ width: "60vw", height: "80vh", overflow: "hidden" }} actions={[]}>
-                        <div style={{ paddingTop: "52.5vh" }}></div>
-                        <div className="modal-content" style={{
-                            position: "absolute",
-                            top: "0",
-                            bottom: "0",
-                            left: "0",
-                            right: "-17px", /* Increase/Decrease this value for cross-browser compatibility */
-                            overflowY: "scroll"
-                        }}>
-                            <h5 className="center">Cấu hình nhóm chia ngoài mảng kiến thức</h5>
-                            <div className="line" style={{ width: "96%", marginLeft: "2%", marginTop: "30px" }}></div>
-                            <div className="row">
-                                <div className="col s12">
-                                    <p className="blue-text lighten-3">Bộ lọc</p>
-                                </div>
-                                <div className="row col s10">
-                                    <div className="col s3">
-                                        <p>Thuộc tính:</p>
-                                    </div>
-                                    <div className="col s3">
-                                        <p>Độ khó:</p>
-                                    </div>
-                                    <div className="col s6">
-                                        <p>Kiến thức đặc thù:</p>
-                                    </div>
-                                </div>
-                                <div className="col s2">
-                                    <h3 className="blue-text text-darken-2 font-montserrat center">25</h3>
+                                <div className="col s4">
+                                    <h3 className="blue-text text-darken-2 font-montserrat center">{this.state.testQuality.noOfQuestions}</h3>
                                     <p className="center">Tổng số câu hỏi</p>
                                 </div>
-                                <div className="col s12">
-                                    <p className="blue-text lighten-3">Chọn câu hỏi</p>
+                                <div className="col s4">
+                                    <h3 className="orange-text text-darken-2 font-montserrat center">{this.state.testQuality.testCoverage}</h3>
+                                    <p className="center">Độ toàn diện</p>
+                                </div>
+                                <div className="col s4">
+                                    <h3 className="purple-text text-darken-2 font-montserrat center">{this.state.testQuality.meanDifficulty}</h3>
+                                    <p className="center">Độ khó trung bình</p>
+                                </div>
+                                <div className="col s6">
+                                    <h3 className="green-text text-darken-2 font-montserrat center">{this.state.testQuality.typeRatio}</h3>
+                                    <p className="center">Lý thuyết:Bài tập</p>
+                                </div>
+                                <div className="col s6">
+                                    <h3 className="pink-text text-darken-2 font-montserrat center">{this.state.testQuality.difficultyDistribution}</h3>
+                                    <p className="center">Phân phối mức khó</p>
                                 </div>
                             </div>
-                            <div className="row" style={{ marginBottom: "0" }}>
-                                <div className="row col s4" style={{ height: "100%", borderRight: "2px solid #BDBDBD" }}>
-                                    <p className="blue-text lighten-3">Thư viện câu hỏi</p>
-                                </div>
-                                <div className="row col s8" style={{ height: "100%", borderLeft: "2px solid #BDBDBD" }}>
-                                    <div className='col s12'>
-                                        <h5 className="blue-text text-darken-3 font-montserrat">Phản ứng hóa học</h5>
-                                        <table>
-                                            <thead className="blue-text text-darken-3 font-montserrat">
-                                                <tr>
-                                                    <th></th>
-                                                    <th>Mã câu</th>
-                                                    <th>Câu hỏi</th>
-                                                </tr>
-                                            </thead>
-                                        </table>
+
+                            <div className="line" style={{ width: "96%", marginLeft: "2%", marginBottom: "30px" }}></div>
+
+                            <div className="row">
+                                <div className="row" style={{ marginBottom: "0" }}>
+                                    <div className="row col s3">
+                                        <p className="blue-text lighten-3">Thư viện câu hỏi</p>
+                                        <CustomizedModalTreeView folders={this.state.questionFolders} setCurrentFolder={this.setCurrentModalFolder} source={"question"} />
                                     </div>
 
+                                    <div className="row col s9" style={{ height: "100%", borderLeft: "2px solid #BDBDBD" }}>
+                                        <div className='col s12'>
+                                            <h5 className="blue-text text-darken-3 font-montserrat">{this.state.currentModalFolder && this.state.currentModalFolder.folderName}</h5>
+                                            <CustomizedModalTable
+                                                headCells={[
+                                                    { id: 'padding', numeric: false, disablePadding: false, label: '' },
+                                                    { id: 'questionCode', numeric: false, disablePadding: false, label: 'Mã câu' },
+                                                    { id: 'content', numeric: false, disablePadding: false, label: 'Câu hỏi' },
+                                                ]}
+                                                rows={this.state.modalLinkedQuestionList}
+                                                addQuestionToTest={this.addQuestionToTest}
+                                                testQuestionList={this.state.testQuestionList} />
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div className="line" style={{ width: "96%", marginLeft: "2%", marginBottom: "30px" }}></div>
                             <a className="modal-action modal-close black-text lighten-1" style={{ margin: "0 1.5vw", float: "left" }}>Hủy thao tác</a>
-                            <a className="modal-action modal-close blue-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }}>Tạo nhóm chia</a>
-                        </div>
-                    </Modal>
-                    <Modal id="testFilter" options={{ preventScrolling: true }} style={{ width: "40vw", height: "80vh", overflow: "hidden" }} actions={[]}>
-                        <div style={{ paddingTop: "52.5vh" }}></div>
-                        <div className="modal-content" style={{
-                            position: "absolute",
-                            top: "0",
-                            bottom: "0",
-                            left: "0",
-                            right: "-17px", /* Increase/Decrease this value for cross-browser compatibility */
-                            overflowY: "scroll"
-                        }}>
-                            <h5 className="center">Chọn đề cần loại trừ</h5>
-                            <div className="line" style={{ width: "96%", marginLeft: "2%", marginTop: "30px" }}></div>
-                            <div className="row">
-                                <div className='col s12'>
-                                    <p className="blue-text lighten-3">Thư viện đề thi</p>
-                                </div>
-                            </div>
-                            <div className="line" style={{ width: "96%", marginLeft: "2%", marginBottom: "30px" }}></div>
-                            <a className="modal-action modal-close black-text lighten-1" style={{ margin: "0 1.5vw", float: "left" }}>Hủy thao tác</a>
+                            {this.state.customValid &&
+                                <a className="modal-action modal-close blue-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }} onClick={() => { this.addCustomTest() }}>Hoàn tất</a>
+                            }
+                            <a href="#addTest" className="modal-action modal-close black-text lighten-1 modal-trigger" style={{ margin: "0 1.5vw", float: "right" }}>Quay lại</a>
                         </div>
                     </Modal>
                 </div>

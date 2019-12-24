@@ -839,7 +839,6 @@ class ModalQuestion extends Component {
 
         return (
             <div onClick={() => { this.checkValid() }}>
-                <button onClick={()=>{console.log(this.state)}}>click me</button>
                 {this.state.currentFolder && this.state.currentFolder.folderId != 0 &&
                     <a href="#addQuestion" style={{ position: "fixed" }} className="btn-floating btn-large my-floating-btn blue modal-trigger">
                         <i className="material-icons">add</i>

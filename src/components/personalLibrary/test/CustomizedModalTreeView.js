@@ -66,9 +66,9 @@ function StyledTreeItem(props) {
     return (
         <TreeItem
             label={
-                <div className={classes.labelRoot}>
+                <div title={labelText} className={classes.labelRoot}>
                     <LabelIcon color="inherit" className={classes.labelIcon} />
-                    <Typography variant="body2" className={classes.labelText}>
+                    <Typography variant="body2" className={[classes.labelText, "truncate"]}>
                         {labelText}
                     </Typography>
                     <Typography variant="caption" color="inherit">

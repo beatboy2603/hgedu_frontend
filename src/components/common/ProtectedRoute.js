@@ -5,11 +5,14 @@ import {
 } from "react-router-dom";
 
 function ProtectedRoute({ isAuthenticated, authenReq, userRole, roleReq, children, ...rest }) {
+    const authorized=roleReq&&roleReq.filter((el, i)=>{
+        return el===userRole;
+    })
     return (
         <Route
             {...rest}
             render={({ location }) =>
-                isAuthenticated == authenReq ? (
+                (!authenReq&&!isAuthenticated)||(authenReq&&isAuthenticated&&authorized.length==1) ? (
                     children
                 ) : (
                         authenReq ? (
