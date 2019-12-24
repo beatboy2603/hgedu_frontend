@@ -9,6 +9,8 @@ import { Modal, Button } from "react-materialize";
 import GmailTreeView from "./Folder";
 import TreeViewParent from "./TreeView";
 import PropTypes from "prop-types";
+import StudentList from '../StudentClassManagement/StudentList'
+import TeacherList from "../StudentClassManagement/TeacherList"
 import axios from 'axios';
 import {
   getClasses1,
@@ -386,6 +388,7 @@ class StudentManagement extends Component {
                 changeName = {this.changeClassName}
               />
             ) : (
+              <div>
               <GmailTreeView
                 role={this.props.user.userRoleId}
                 name1={this.changeClassName}
@@ -397,6 +400,8 @@ class StudentManagement extends Component {
                 changeTeacherState={this.changeTeacherState}
                 changeCurrentClassId={this.changeCurrentClassId}
               />
+              
+              </div>
             )}
           </div>
         </div>
@@ -511,74 +516,19 @@ class StudentManagement extends Component {
         ) : (
           <div>
             {this.props.user.userRoleId === 1 && (
-              <div className="row col s9 no-padding">
-                <div className="col s3 container min-height-60 knowledgeGroup-header">
-                  <h5
-                    className="blue-text text-darken-3 bold font-montserrat"
-                    style={{ fontSize: "23px" }}
-                  >
-                    Danh sách học sinh
-                  </h5>
-
-                  {this.state.studentTeacher.length == 0 && (
-                    <p className="grey-text text-darken-1">0 Học sinh</p>
-                  )}
-                  {this.state.studentTeacher.length > 0 && (
-                    <p className="grey-text text-darken-1">
-                      {this.state.studentTeacher.length} Học sinh
-                    </p>
-                  )}
-                </div>
-                <div className="col s9 container z-depth-1">Quảng cáo</div>
-                <div className="col s12 no-padding center">
-                  <SimpleTable2
-                    role={this.props.user.userRoleId}
-                    data={this.state.studentTeacher}
-                    connectedStudent={this.state.connectedStudent}
-                    deleteStudent={this.props.deleteStudentTeacher}
-                    parent={this.state.parent}
-                    getParent={this.props.getParent}
-                  />
-                </div>
+              <div className="col s9">
+              <StudentList/>
               </div>
             )}
             {this.props.user.userRoleId === 2 && (
-              <div className="row col s9 no-padding">
-                <div className="col s3 container min-height-60 knowledgeGroup-header">
-                  <h5
-                    className="blue-text text-darken-3 bold font-montserrat"
-                    style={{ fontSize: "22px" }}
-                  >
-                    Danh sách giáo viên
-                  </h5>
-
-                  {this.state.studentTeacher.length == 0 && (
-                    <p className="grey-text text-darken-1">0 giáo viên</p>
-                  )}
-                  {this.state.studentTeacher.length > 0 && (
-                    <p className="grey-text text-darken-1">
-                      {this.state.studentTeacher.length} giáo viên
-                    </p>
-                  )}
-                </div>
-                <div className="col s9 container z-depth-1">Quảng cáo</div>
-                <div className="col s12 no-padding center">
-                  <SimpleTable2
-                    role={this.props.user.userRoleId}
-                    data={this.state.studentTeacher}
-                    connectedStudent={this.state.connectedStudent}
-                    deleteStudent={this.props.deleteStudentTeacher}
-                    parent={this.state.parent}
-                    getParent={this.props.getParent}
-                    classOfStudent={this.state.classes}
-                  />
-                </div>
+              <div className="row col s9">
+                <TeacherList />
               </div>
             )}
           </div>
         )}
         <div>
-          {this.props.user.userRoleId == 1 && (
+          {this.props.user.userRoleId == 1 && this.state.treeStatus && (
             <a
               href="#addStudent"
               className="btn-floating btn-large blue my-floating-btn modal-trigger" onClick={()=>{this.filterStudentTeacher()}}

@@ -253,6 +253,9 @@ class ModalTest extends Component {
         console.log(testContentPlaceholder);
         axios.post(serverUrl+"api/test/addTest", testContentPlaceholder).then(res=>{
             console.log(res);
+            if(this.props.updateTreeFolder){
+                this.props.updateTreeFolder();
+            }
         })
     }
 

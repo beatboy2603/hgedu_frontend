@@ -8,6 +8,7 @@ import ModalTest from './ModalTest';
 import { serverUrl } from '../../common/common'
 import Advertisement from '../../common/Advertisement'
 import HorizontalAd1 from '../../../resources/horizontalAd1.png'
+import ExportButton from './ExportButton'
 
 
 class TestQuestions extends Component {
@@ -238,7 +239,8 @@ class TestQuestions extends Component {
                         <Dropdown
                             trigger={<i className="material-icons grey-text text-darken-3">more_vert</i>}
                         >
-                            <span onClick={() => { alert("Import") }}>Import</span>
+                            {this.state.currentFolder&&
+                            <ExportButton url={serverUrl + "testimportexport/download/" + this.state.currentFolder.folderId}/>}
                         </Dropdown>
                     </h5>
                     <p className='grey-text text-darken-3' style={{ position: "relative", top: "-15px", paddingLeft: "10px" }}>{this.state.questionList.length} câu hỏi</p>

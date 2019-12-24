@@ -67,7 +67,7 @@ class PersonalLibrary extends Component {
         })
     }
 
-    setCurrentFolder = (e,folder) => {
+    setCurrentFolder = (e, folder) => {
         e.stopPropagation();
         this.setState({
             currentFolder: folder,
@@ -219,6 +219,23 @@ class PersonalLibrary extends Component {
         });
     }
 
+    updateTreeFolder = () => {
+        axios.post(serverUrl + "api/folder/getFoldersForNav", null, {
+            params: {
+                uid: this.props.user.uid
+            }
+        }).then(res => {
+            let folders = Object.values(res.data)
+            this.setState({
+                folders: folders,
+            })
+            this.props.dispatch({ type: "UPDATE_FOLDERS", payload: folders });
+        }).catch(function (error) {
+            // handle error
+            console.log(error);
+        })
+    }
+
     componentDidMount() {
         console.log(this.props);
         axios.post(serverUrl + "api/folder/getFoldersForNav", null, {
@@ -252,7 +269,7 @@ class PersonalLibrary extends Component {
                 {this.state.isRendered &&
                     <div className="personalLibrary row">
                         {/* folder navigation bar and modals*/}
-                        <div className="row col s3 z-depth-2 grey lighten-4 personalLibrary-nav" style={{wordWrap:"break-word"}}>
+                        <div className="row col s3 z-depth-2 grey lighten-4 personalLibrary-nav" style={{ wordWrap: "break-word" }}>
                             {/* filler */}
                             <div className="col s2"></div>
                             <div className="col s10">
@@ -348,7 +365,7 @@ class PersonalLibrary extends Component {
                                                 <a className="modal-action modal-close blue-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }} onClick={() => this.addFolder(2)}>Hoàn tất</a>
                                             </div>
                                         </Modal>
-                                        <ModalTest currentFolder={this.state.currentFolder}/>
+                                        <ModalTest currentFolder={this.state.currentFolder} updateTreeFolder={this.updateTreeFolder}/>
                                     </div>
 
                                 </div>

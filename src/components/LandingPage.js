@@ -14,6 +14,8 @@ class LandingPage extends Component {
     state = {
         isLoading: false,
         newsList: [],
+        inputVal: "0",
+        width:"0px",
     }
 
     onSignIn = (googleUser) => { }
@@ -64,6 +66,15 @@ class LandingPage extends Component {
             })
     }
 
+    handleOnChange = (e)=>{
+        let value = e.target.value;
+        let width = value+"px"
+        this.setState({
+            input: value,
+            width:width,
+        })
+    }
+
     render() {
         const responseGoogle = (res) => {
             var token = res.tokenObj.id_token;
@@ -101,7 +112,7 @@ class LandingPage extends Component {
                     let todaysDate = new Date();
                     let dateDifference = Number(todaysDate) - Number(bannedUntil);
                     // console.log("diff", dateDifference);
-                    if(!user.isBan||(user.isBan&&dateDifference>0)){
+                    if (!user.isBan || (user.isBan && dateDifference > 0)) {
                         // let user = res.data.user;
                         let jwt = res.data.jwt;
                         // this.props.dispatch({ type: "CHANGE_ROLE", payload: user.roleId });
@@ -152,7 +163,7 @@ class LandingPage extends Component {
                             }
                             this.props.history.push('/home');
                         }
-                    }else{
+                    } else {
                         alert("Bạn đang bị ban!");
                     }
                 }
@@ -161,7 +172,7 @@ class LandingPage extends Component {
         }
 
         return (
-            <div className="row"> 
+            <div className="row">
                 <div style={{ maxWidth: "100vw", minHeight: "100vh", backgroundImage: `url(${BackGroundIMG})`, backgroundSize: "cover" }}>
                     <img onClick={() => { this.props.history.push('/signup'); }} src={Logo} alt="Logo" style={{ width: "8vw", position: "absolute", top: "5vh", left: "5vw" }} />
                     {/* {!this.props.isAuthenticated && */}
@@ -212,6 +223,11 @@ class LandingPage extends Component {
                             </Carousel>
                         }
                     </div>
+                </div>
+                <div style={{width:this.state.width, height:"100px", backgroundColor:"red"}}></div>
+                <div className="input-field inline" style={{ width: '80px', marginLeft: '7vw' }}>
+                    <input type="number" className="validate font-montserrat" style={{fontSize:"50px", color:"orange", textAlign:"center"}} onChange={this.handleOnChange} value={this.state.input} min="0" max="99" step="1"/>
+                    <span class="helper-text" data-error="*0-99"></span>
                 </div>
                 {/* <button onClick={()=>{
                     axios.post(serverUrl+"api/folder/testFolder", [

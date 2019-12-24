@@ -245,42 +245,7 @@ class StudentManagement extends Component {
         }
         return (
             <div className="personalLibrary row">
-                {/* folder navigation bar and modals*/}
-                <div className="row col s3 z-depth-2 grey lighten-4 personalLibrary-nav">
-                    {/* filler */}
-                    <div className="col s2"></div>
-                    <div className="col s10">
-                        <Link to='/personalLibrary'><h5 className="blue-text text-darken-3 bold font-montserrat">Học sinh</h5></Link>
-                        {/* modals */}
-                        <div>
-                            {/* modal for addFolder */}
-                            <div className='inline-block'>
-                                <a href="#addFolder" className="modal-trigger">
-                                    <i className="material-icons grey-text text-darken-3">create_new_folder</i>
-                                </a>
-                                <Modal id="addFolder" options={{ preventScrolling: true }}>
-                                    <div className="modal-content">
-                                        <h5 className="center">Thêm thư mục</h5>
-                                        <div className="line"></div>
-                                        <div className="row">
-                                            <form className="row col s12">
-                                                <div className="input-field inline col s12">
-                                                    <input id='folderNameInput' type="text" className="validate" />
-                                                    <label htmlFor="folderNameInput">Tên thư mục</label>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </Modal>
-                            </div>
-                        </div>
-                        <div className="line"></div>
-                    </div>
-                </div>
-                {/* filler for navigation bar */}
-                <div className="col s3 z-depth-3 grey lighten-5"></div>
-                {/* main content */}
-                <div className="row col s9 no-padding">
+                <div className="row no-padding">
                     <div className="col s3 container min-height-60 knowledgeGroup-header">
                         <div style={{ position: 'relative' }}>
                             <h5 className="blue-text text-darken-3 bold font-montserrat modal-trigger" style={{ cursor: "pointer" }} href='#student-request-modal'>D.S. giáo viên</h5>
