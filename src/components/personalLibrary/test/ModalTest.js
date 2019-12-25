@@ -8,6 +8,9 @@ import CustomizedModalTreeView from './CustomizedModalTreeView';
 import CustomizedModalTable from './CustomizedModalTable';
 import axios from 'axios';
 import { serverUrl } from '../../common/common';
+import Toggle from "../../common/Toggle";
+import CustomizedMultipleSelect from "../../common/CustomizedMultipleSelect";
+import CustomizedSelect from "../../common/CustomizedSelect";
 
 class ModalTest extends Component {
 
@@ -21,7 +24,7 @@ class ModalTest extends Component {
         modalLinkedQuestionList: [],
 
         allKnowledgeGroups: [],
-
+        allSpecialKnowledge: [],
         //common
         testDetail: {
             testCode: "",
@@ -30,6 +33,7 @@ class ModalTest extends Component {
             title: "",
             noOfTests: "",
             noOfPermutations: "",
+            isPublic: false,
         },
 
         //custom
@@ -50,6 +54,9 @@ class ModalTest extends Component {
             meanDifficulty: 0,
             noOfQuestions: 0,
             questionTypes: ["0", "0"],
+            knowledgeGroups: [],
+            specialKnowledges:[],
+            gradeLevelId: null,
         },
         difficultyWidth: ["0%", "0%", "0%", "0%"],
         meanDifficultyColor: "#9e9e9e",
@@ -67,6 +74,46 @@ class ModalTest extends Component {
             return { currentFolder: props.currentFolder };
         }
         return null;
+    }
+
+    handleToggleChange = () => {
+        this.setState(prevState => ({
+            ...prevState,
+            testDetail: {
+                ...prevState.testDetail,
+                isPublic: !prevState.testDetail.isPublic,
+            },
+        }))
+    }
+
+    handleSelectChange = (source, value) => {
+        if (source == "knowledgeGroups") {
+            this.setState(prevState => ({
+                ...prevState,
+                testCriteria: {
+                    ...prevState.testCriteria,
+                    knowledgeGroups: value,
+                }
+            }))
+        }
+        if (source == "specialKnowledges") {
+            this.setState(prevState => ({
+                ...prevState,
+                testCriteria: {
+                    ...prevState.testCriteria,
+                    specialKnowledges: value,
+                }
+            }))
+        }
+        if (source == "gradeLevelId") {
+            this.setState(prevState => ({
+                ...prevState,
+                testCriteria: {
+                    ...prevState.testCriteria,
+                    gradeLevelId: value,
+                }
+            }))
+        }
     }
 
     handleInputChange = (source, e) => {
@@ -426,7 +473,7 @@ class ModalTest extends Component {
         let test = this.state.testDetail;
         test.teacherId = this.props.user.uid;
         test.permutatedFrom = -1;
-        test.isPublic = 0;
+        
         console.log("testFolder", testFolder);
         console.log("test", test);
         console.log("testQuestionList", this.state.testQuestionList);
@@ -457,6 +504,43 @@ class ModalTest extends Component {
             if (this.props.updateTreeFolder) {
                 this.props.updateTreeFolder();
             }
+        })
+    }
+
+    addAutoTest = () => {
+        let testFolder = {
+            teacherId: this.props.user.uid,
+            folderName: this.state.testDetail.testCode,
+            folderTypeId: 3,
+            parentFolderId: this.state.currentFolder.folderId,
+            subGroupId: 2,
+        }
+        //folderId lay sau khi axios add testFolder
+        let test = this.state.testDetail;
+        test.teacherId = this.props.user.uid;
+        test.permutatedFrom = -1;
+        let testCriteria = this.state.testCriteria;
+        let difficultiesAuto = testCriteria.difficultiesAuto.map((el,i)=>{
+            let parsedInt = parseInt(el);
+            return parsedInt;
+        })
+        let questionTypes = testCriteria.questionTypes.map((el,i)=>{
+            let parsedInt = parseInt(el);
+            return parsedInt;
+        })
+        testCriteria.difficultiesAuto = difficultiesAuto;
+        testCriteria.questionTypes = questionTypes;
+        let testAutoPlaceholder = {
+            testFolder,
+            test,
+            testCriteria,
+        }
+        console.log(testAutoPlaceholder);
+        axios.post(serverUrl + "api/test/addTestAuto", testAutoPlaceholder).then(res => {
+            console.log(res);
+            // if (this.props.updateTreeFolder) {
+            //     this.props.updateTreeFolder();
+            // }
         })
     }
 
@@ -539,9 +623,29 @@ class ModalTest extends Component {
         }, 1000);
         axios.get(serverUrl + "api/folder/getAllKnowledgeGroupsId/" + this.props.user.uid).then(res => {
             const allKnowledgeGroups = res.data;
+            const allKnowledgeGroupFolders = this.props.folder.folders.filter((el, i) => {
+                let found = false;
+                allKnowledgeGroups.map((subEl, k) => {
+                    if (el.folderId == subEl) {
+                        found = true;
+                    }
+                })
+                if (found) {
+                    return el;
+                }
+            })
             this.setState(prevState => ({
                 ...prevState,
-                allKnowledgeGroups,
+                allKnowledgeGroups: allKnowledgeGroupFolders,
+            }))
+        })
+        axios.get(serverUrl + "api/question/getAllSpecialKnowledge/" + this.props.user.uid).then(res => {
+            const allSpecialKnowledge = res.data.map(el => {
+                return { value: el, text: el }
+            })
+            this.setState(prevState => ({
+                ...prevState,
+                allSpecialKnowledge,
             }))
         })
     }
@@ -671,34 +775,13 @@ class ModalTest extends Component {
                                             <input id='testName' type="text" className="validate" value={this.state.testDetail.title} onChange={(e) => { this.handleInputChange("title", e) }} />
                                         </div>
                                     </div>
+                                    <div className="col s12">
+                                        <Toggle label="Đề thi công cộng" handleToggleChange={this.handleToggleChange} customStyle={{ position: "relative", left: "-20px" }} checked={this.state.testDetail.isPublic} />
+                                    </div>
                                 </form>
                             </div>
                             <div className="line" style={{ width: "96%", marginLeft: "2%", marginBottom: "30px" }}></div>
                             <div className="row">
-                                {/* <div className="col s3">
-                                    <h3 className="blue-text text-darken-2 font-montserrat center">0</h3>
-                                    <p className="center">Tổng số câu hỏi</p>
-                                </div>
-                                <div className="col s3">
-                                    <h3 className="green-text text-darken-2 font-montserrat center">-:-</h3>
-                                    <p className="center">Lý thuyết:Bài tập</p>
-                                </div>
-                                <div className="col s3">
-                                    <h3 className="purple-text text-darken-2 font-montserrat center">-</h3>
-                                    <p className="center">Độ khó trung bình</p>
-                                </div>
-                                <div className="col s3">
-                                    <h3 className="orange-text text-darken-2 font-montserrat center">-</h3>
-                                    <p className="center">Độ toàn diện</p>
-                                </div>
-                                <div className="col s6">
-                                    <h3 className="pink-text text-darken-2 font-montserrat center">-:-:-:-</h3>
-                                    <p className="center">Phân phối mức khó</p>
-                                </div>
-                                <div className="col s6">
-                                    <h3 className="teal-text text-darken-2 font-montserrat center">-</h3>
-                                    <p className="center">Kiến thức đặc thù</p>
-                                </div> */}
                                 <div className='col s12'>
                                     <p className="blue-text lighten-3">Chất lượng đề</p>
                                 </div>
@@ -813,11 +896,14 @@ class ModalTest extends Component {
                                             <input id='testName' type="text" className="validate" value={this.state.testDetail.title} onChange={(e) => { this.handleInputChange("title", e) }} />
                                         </div>
                                     </div>
-                                    <div className="col s12">
+                                    <div className="col s6">
                                         Số lượng đề:
                                         <div className="input-field inline" style={{ width: '10vw', margin: '0 0 0 5vw' }}>
                                             <input id='noOfTests' type="number" className="validate" value={this.state.testDetail.noOfTests} onChange={(e) => { this.handleInputChange("noOfTests", e) }} />
                                         </div>
+                                    </div>
+                                    <div className="col s6" style={{ marginTop: "20px" }}>
+                                        <Toggle label="Đề thi công cộng" handleToggleChange={this.handleToggleChange} customStyle={{ position: "relative", left: "-20px" }} checked={this.state.testDetail.isPublic} />
                                     </div>
                                 </form>
                             </div>
@@ -909,6 +995,46 @@ class ModalTest extends Component {
                                                     <span>Bài tập</span>
                                                 </div>
                                                 <div className="col s3"></div>
+                                                <div className="col s4 center">
+                                                    <CustomizedMultipleSelect
+                                                        selectLabel={this.state.testCriteria.knowledgeGroups.length!=this.state.allKnowledgeGroups.length?"Mảng kiến thức (Chọn tất cả)":"Mảng kiến thức (Hủy tất cả)"}
+                                                        customStyle={{ maxWidth:"250px" }}
+                                                        source="knowledgeGroups"
+                                                        handleParentSelect={this.handleSelectChange}
+                                                        items={this.state.allKnowledgeGroups.map((el, i) => {
+                                                            return { value: el.folderId, text: el.folderName }
+                                                        })} />
+                                                </div>
+                                                <div className="col s4 center">
+                                                    <CustomizedSelect
+                                                        selectLabel="Trình độ"
+                                                        customStyle={{ maxWidth:"250px" }}
+                                                        source="gradeLevelId"
+                                                        handleParentSelect={this.handleSelectChange}
+                                                        items={[
+                                                            { value: 1, text: "Lớp 1", },
+                                                            { value: 2, text: "Lớp 2", },
+                                                            { value: 3, text: "Lớp 3", },
+                                                            { value: 4, text: "Lớp 4", },
+                                                            { value: 5, text: "Lớp 5", },
+                                                            { value: 6, text: "Lớp 6", },
+                                                            { value: 7, text: "Lớp 7", },
+                                                            { value: 8, text: "Lớp 8", },
+                                                            { value: 9, text: "Lớp 9", },
+                                                            { value: 10, text: "Lớp 10", },
+                                                            { value: 11, text: "Lớp 11", },
+                                                            { value: 12, text: "Lớp 12", },
+                                                            { value: 0, text: "Khác", },
+                                                        ]} />
+                                                </div>
+                                                <div className="col s4 center">
+                                                    <CustomizedMultipleSelect
+                                                        selectLabel={this.state.testCriteria.specialKnowledges.length!=this.state.allSpecialKnowledge.length?"Kiến thức đặc thù (Chọn tất cả)":"Kiến thức đặc thù (Hủy tất cả)"}
+                                                        customStyle={{ maxWidth:"250px" }}
+                                                        source="specialKnowledges"
+                                                        handleParentSelect={this.handleSelectChange}
+                                                        items={this.state.allSpecialKnowledge} />
+                                                </div>
                                             </div>
                                         </CollapsibleItem>
                                         <CollapsibleItem header="Nhóm câu hỏi tự chọn" icon={<i className="material-icons">code</i>}>
@@ -971,7 +1097,7 @@ class ModalTest extends Component {
                             </div> */}
                             <div className="line" style={{ width: "96%", marginLeft: "2%", marginBottom: "30px" }}></div>
                             <a className="modal-action modal-close black-text lighten-1" style={{ margin: "0 1.5vw", float: "left" }}>Hủy thao tác</a>
-                            <a className="modal-action modal-close blue-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }}>Hoàn tất</a>
+                            <a className="modal-action modal-close blue-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }} onClick={()=>{this.addAutoTest()}}>Hoàn tất</a>
                             <a href="#addTest" className="modal-action modal-close black-text lighten-1 modal-trigger" style={{ margin: "0 1.5vw", float: "right" }}>Quay lại</a>
                         </div>
                     </Modal>
@@ -1046,7 +1172,7 @@ class ModalTest extends Component {
                             {this.state.customValid &&
                                 <a className="modal-action modal-close blue-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }} onClick={() => { this.addCustomTest() }}>Hoàn tất</a>
                             }
-                            <a href="#addTest" className="modal-action modal-close black-text lighten-1 modal-trigger" style={{ margin: "0 1.5vw", float: "right" }}>Quay lại</a>
+                            <a href="#autoGen" className="modal-action modal-close black-text lighten-1 modal-trigger" style={{ margin: "0 1.5vw", float: "right" }}>Quay lại</a>
                         </div>
                     </Modal>
                 </div>

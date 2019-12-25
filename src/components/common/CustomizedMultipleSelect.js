@@ -17,16 +17,35 @@ const useStyles = makeStyles(theme => ({
 export default function CustomizedSelect(props) {
     const classes = useStyles();
 
-    let { items, handleParentSelect, source, defaultValue, disabled, selectLabel } = props;
+    let { items, handleParentSelect, source, defaultValue, disabled, customStyle, selectLabel } = props;
 
-    const [item, setItem] = React.useState(defaultValue ? defaultValue : "default");
+    const [item, setItem] = React.useState(defaultValue ? defaultValue : []);
 
     const handleChange = event => {
+        console.log("b");
         setItem(event.target.value);
         if (handleParentSelect) {
             handleParentSelect(source, event.target.value)
         }
     };
+
+    const selectAll = () => {
+        console.log("a");
+        if (item.length != items.length) {
+            const values = items.map((el, i) => {
+                return el.value;
+            })
+            setItem(values);
+            if (handleParentSelect) {
+                handleParentSelect(source, values)
+            }
+        } else {
+            setItem([]);
+            if (handleParentSelect) {
+                handleParentSelect(source, [])
+            }
+        }
+    }
 
     const menuItems = items.map((item, i) => {
         return <MenuItem key={i} value={item.value}>{item.text}</MenuItem>
@@ -35,21 +54,38 @@ export default function CustomizedSelect(props) {
     return (
         <div>
             <FormControl className={classes.formControl}>
-            <span className="blue-text text-darken-2">{selectLabel}</span>
+                <span className="blue-text text-darken-2" style={{cursor:"pointer"}} onClick={() => { selectAll() }}>{selectLabel}</span>
                 <Select
+                    multiple
                     disabled={disabled}
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={item}
                     onChange={handleChange}
+                    style={customStyle}
                 >
-                    <MenuItem value={"default"} disabled={true}>Chọn</MenuItem>
+
                     {/* <Temp setItem={setItem}></Temp>
                     <MenuItem value={"default"} disabled={true}>Chọn</MenuItem> */}
                     {menuItems}
                 </Select>
-                
+
             </FormControl>
         </div>
     );
 }
+
+// class Temp extends Component {
+//     componentDidMount() {
+//         let {setItem} = this.props;
+//         console.log("yeah");
+//         setItem("default");
+//     }
+
+//     render(){
+//         return(
+//             // <MenuItem value={"default"} disabled={true}>Chọn</MenuItem>
+//             <div></div>
+//         )
+//     }
+// }

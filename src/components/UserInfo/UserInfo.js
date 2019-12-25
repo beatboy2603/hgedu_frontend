@@ -6,13 +6,8 @@ import { Avatar, Button } from '@material-ui/core'
 import axios from 'axios'
 import PersonalInfoEdit from './PersonalInfoEdit'
 import PersonalInfo from './PersonalInfo'
+import Setting from './Setting';
 class UserInfo extends Component {
-    renderSwitch(url) {
-        switch (url) {
-            case 'http://localhost/home':
-                console.log("home");
-        }
-    }
 
     state = {
         user: []
@@ -71,7 +66,7 @@ class UserInfo extends Component {
                         <Switch>
                             <Route path="/user/personalInfo/edit" component={PersonalInfoEdit} />
                             <Route path="/user/personalInfo" component={PersonalInfo} />
-                            <Route path="/user/setting"></Route>
+                            <Route path="/user/setting" component={Setting}/>
                         </Switch>
                     </div>
                 </div>

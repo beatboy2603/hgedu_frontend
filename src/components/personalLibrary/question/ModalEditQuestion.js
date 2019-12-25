@@ -605,7 +605,9 @@ class ModalQuestion extends Component {
                         answer.content = JSON.parse(answer.content);
                         return answer;
                     })
-                    el.question.explanation = JSON.parse(el.question.explanation);
+                    if(el.question.explanation){
+                        el.question.explanation = JSON.parse(el.question.explanation);
+                    }
                     return el;
                 })
                 this.setState(prevState => ({

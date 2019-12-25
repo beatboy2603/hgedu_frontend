@@ -70,9 +70,9 @@ function StyledTreeItem(props) {
       document
         .getElementById(props.id)
         .querySelector(".deleteBtn").style.display = "none";
-      document
-        .getElementById(props.id)
-        .querySelector(".editBtn").style.display = "none";
+      // document
+      //   .getElementById(props.id)
+      //   .querySelector(".editBtn").style.display = "none";
     }
   };
 
@@ -82,16 +82,16 @@ function StyledTreeItem(props) {
       document
         .getElementById(props.id)
         .querySelector(".deleteBtn").style.display = "block";
-      document
-        .getElementById(props.id)
-        .querySelector(".editBtn").style.display = "block";
+      // document
+      //   .getElementById(props.id)
+      //   .querySelector(".editBtn").style.display = "block";
     }
   };
 
-  const onEdit = (e) => {
-    e.stopPropagation();
-    console.log("edit");
-  };
+  // const onEdit = (e) => {
+  //   e.stopPropagation();
+  //   console.log("edit");
+  // };
 
   const onDeleteClick = (id, e) => {
     e.stopPropagation();
@@ -126,13 +126,11 @@ function StyledTreeItem(props) {
             </i>
           </div>
 
-          <div className="editBtn" style={{ display: "none", color: "blue" }}>
-            {/* Ed */}
+          {/* <div className="editBtn" style={{ display: "none", color: "blue" }}>
             <i onClick={(e) => {onEdit(e)}} className="material-icons md-18">
               edit
             </i>
-          </div>
-          {/* )} */}
+          </div> */}
         </div>
       }
       style={{
