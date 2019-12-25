@@ -44,7 +44,7 @@ class Home extends Component {
 
                     }
                     {
-                        this.state.newsList.length !== 0 && 
+                        this.state.newsList.length >1 && 
                         <Carousel options={{ dist: 0, padding: 0 }} className="white-text center">
                             {this.state.newsList.slice(1).map((post) => 
                                 <div className="col s4 carousel-item">

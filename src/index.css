@@ -747,6 +747,10 @@ strong {
   visibility: hidden;
 }
 
+.news-content p img {
+  width: 100% !important;
+}
+
 /* width */
 /* ::-webkit-scrollbar {
   width: 5px;

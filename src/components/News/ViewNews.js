@@ -71,14 +71,14 @@ class ViewNews extends Component {
 
     render() {
         return(
-            <div style={{width: '710px', minHeight: '100vh', padding: '0 30px', margin: '0 auto', backgroundColor: '#FFFFFF'}}>
+            <div style={{width: '710px',maxWidth: '710px', minHeight: '100vh', padding: '0 30px', margin: '0 auto', backgroundColor: '#FFFFFF'}}>
                 <div style={{
                     fontSize: '34px',
                     padding: '20px 0',
                     lineHeight: '38px',
                     color: '#222'}}>{this.state.title}</div>
                 <Divider />
-                <div style={{
+                <div className = "news-content" style={{
                         width: 'fit-content',
                         marginBottom: '-20px'
                         }} 

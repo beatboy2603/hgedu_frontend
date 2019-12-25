@@ -695,7 +695,6 @@ class ModalTest extends Component {
     render() {
         return (
             <div>
-                <button onClick={() => { console.log(this.state) }}>click me</button>
                 <div style={{ zIndex: "100" }}>
                     {/* <a href="#addTest" className="btn-floating btn-large blue modal-trigger">
                         <i className="material-icons" onClick={() => { console.log(this.state) }}>add</i>
@@ -1097,7 +1096,8 @@ class ModalTest extends Component {
                             </div> */}
                             <div className="line" style={{ width: "96%", marginLeft: "2%", marginBottom: "30px" }}></div>
                             <a className="modal-action modal-close black-text lighten-1" style={{ margin: "0 1.5vw", float: "left" }}>Hủy thao tác</a>
-                            <a className="modal-action modal-close blue-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }} onClick={()=>{this.addAutoTest()}}>Hoàn tất</a>
+                            <a className="modal-action modal-close black-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }}>Chức năng đang trong quá trình hoàn thiện!</a>
+                            {/* <a className="modal-action modal-close blue-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }} onClick={()=>{this.addAutoTest()}}>Hoàn tất</a> */}
                             <a href="#addTest" className="modal-action modal-close black-text lighten-1 modal-trigger" style={{ margin: "0 1.5vw", float: "right" }}>Quay lại</a>
                         </div>
                     </Modal>
@@ -1169,9 +1169,10 @@ class ModalTest extends Component {
                             </div>
                             <div className="line" style={{ width: "96%", marginLeft: "2%", marginBottom: "30px" }}></div>
                             <a className="modal-action modal-close black-text lighten-1" style={{ margin: "0 1.5vw", float: "left" }}>Hủy thao tác</a>
-                            {this.state.customValid &&
+                            <a className="modal-action modal-close black-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }}>Chức năng đang trong quá trình hoàn thiện!</a>
+                            {/* {this.state.customValid &&
                                 <a className="modal-action modal-close blue-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }} onClick={() => { this.addCustomTest() }}>Hoàn tất</a>
-                            }
+                            } */}
                             <a href="#autoGen" className="modal-action modal-close black-text lighten-1 modal-trigger" style={{ margin: "0 1.5vw", float: "right" }}>Quay lại</a>
                         </div>
                     </Modal>

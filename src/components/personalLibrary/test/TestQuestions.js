@@ -232,7 +232,6 @@ class TestQuestions extends Component {
     render() {
         return (
             <div id="knowledgeGroup" className="knowledgeGroup row">
-                <button onClick={() => { console.log(this.state) }}>Click me</button>
                 {/* <ModalTest/> */}
                 <div className="col s4 container min-height-60 knowledgeGroup-header" >
                     <h5 className="blue-text text-darken-3 bold font-montserrat" style={{ paddingLeft: "10px" }}>{this.state.currentFolder && this.state.currentFolder.folderName}

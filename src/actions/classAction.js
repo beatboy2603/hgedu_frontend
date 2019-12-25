@@ -67,6 +67,7 @@ export const getClassesByStudentId = studentId => async dispatch => {
 
 export const getStudentsByParentId = parentId => async dispatch => {
   const res = await axios.get(serverUrl + `api/classManagement/parentStudent/${parentId}`);
+  console.log("RES", res.data)
   dispatch({
     type: GET_STUDENT_BY_PARENTID,
     payload: res.data

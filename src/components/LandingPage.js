@@ -60,7 +60,7 @@ class LandingPage extends Component {
     }
 
     componentDidMount() {
-        axios.get(serverUrl + 'news')
+        axios.get(serverUrl + 'api/news')
             .then(res => {
                 this.setState({ newsList: res.data })
             })
@@ -211,7 +211,7 @@ class LandingPage extends Component {
                         {
                             this.state.newsList.length !== 0 &&
                             <Carousel options={{ dist: 0, padding: 0 }} className="white-text center">
-                                {this.state.newsList.slice(1).map((post) =>
+                                {this.state.newsList.map((post) =>
                                     <div className="col s4 carousel-item">
                                         <SubPost imgSrc={serverUrl + post.thumbnail}
                                             post={post}
@@ -224,11 +224,11 @@ class LandingPage extends Component {
                         }
                     </div>
                 </div>
-                <div style={{width:this.state.width, height:"100px", backgroundColor:"red"}}></div>
+                {/* <div style={{width:this.state.width, height:"100px", backgroundColor:"red"}}></div>
                 <div className="input-field inline" style={{ width: '80px', marginLeft: '7vw' }}>
                     <input type="number" className="validate font-montserrat" style={{fontSize:"50px", color:"orange", textAlign:"center"}} onChange={this.handleOnChange} value={this.state.input} min="0" max="99" step="1"/>
                     <span class="helper-text" data-error="*0-99"></span>
-                </div>
+                </div> */}
                 {/* <button onClick={()=>{
                     axios.post(serverUrl+"api/folder/testFolder", [
                         {folderId: 100},

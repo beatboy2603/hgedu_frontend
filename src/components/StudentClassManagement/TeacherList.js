@@ -87,8 +87,6 @@ class StudentManagement extends Component {
             status: "accept",
             teacherId: teacherId,
             studentId: studentId,
-        }, () => {
-            this.loadData();
         })
         console.log("accept")
         let newList = this.state.requestTeacher.filter((item, index) =>
@@ -190,7 +188,7 @@ class StudentManagement extends Component {
                                 </div>
                                 <div className='col s12' style={this.style.column}>
                                     <Link style={{ alignSelf: 'flex-end', color: '#f44336', fontSize: '18px', paddingLeft: '11.25px' }} onClick={(e) => { this.refuseRequest(teacherInfo.userId, this.props.user.uid, this.state.requestTeacher.indexOf(teacherInfo)) }}>Từ chối</Link>
-                                    <Link style={{ float: "right", fontSize: '18px', paddingRight: '11.25px' }} onClick={(e) => { this.acceptRequest(teacherInfo.userId, this.props.user.uid, teacherInfo.fullName, this.state.requestTeacher.indexOf(teacherInfo)) }}>Xác nhận</Link>
+                                    <Link style={{ float: "right", fontSize: '18px', paddingRight: '11.25px' }} onClick={(e) => { this.acceptRequest(teacherInfo.userId, this.props.user.uid, this.state.requestTeacher.indexOf(teacherInfo)) }}>Xác nhận</Link>
                                 </div>
                             </div>
                         </div>

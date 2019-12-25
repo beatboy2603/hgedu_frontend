@@ -16,7 +16,7 @@ import Divider from '@material-ui/core/Divider';
 import { withStyles } from '@material-ui/core/styles';
 import classnames from 'classnames';
 import axios from 'axios';
-import {serverUrl} from '../common/common';
+import { serverUrl } from '../common/common';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -58,53 +58,53 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const ExpansionPanel = withStyles({
-    root: {
-      //border: '1px solid rgba(0, 0, 0, .125)',
-      boxShadow: 'none',
-      '&:not(:last-child)': {
-        borderBottom: 0,
-      },
-      '&:before': {
-        display: 'none',
-      },
-      '&$expanded': {
-        margin: 'auto',
-      },
+  root: {
+    //border: '1px solid rgba(0, 0, 0, .125)',
+    boxShadow: 'none',
+    '&:not(:last-child)': {
+      borderBottom: 0,
     },
-    expanded: {},
-  })(MuiExpansionPanel);
-  
-  const ExpansionPanelSummary = withStyles({
-    root: {
-      backgroundColor: 'rgba(0, 0, 0, .03)',
-      //borderBottom: '1px solid rgba(0, 0, 0, .125)',
-      marginBottom: -1,
+    '&:before': {
+      display: 'none',
+    },
+    '&$expanded': {
+      margin: 'auto',
+    },
+  },
+  expanded: {},
+})(MuiExpansionPanel);
+
+const ExpansionPanelSummary = withStyles({
+  root: {
+    backgroundColor: 'rgba(0, 0, 0, .03)',
+    //borderBottom: '1px solid rgba(0, 0, 0, .125)',
+    marginBottom: -1,
+    minHeight: 56,
+    '&$expanded': {
       minHeight: 56,
-      '&$expanded': {
-        minHeight: 56,
-      },
-      padding: 0
     },
-    content: {
-      '&$expanded': {
-        margin: '12px 0',
-      },
-      paddingLeft: '50px'
+    padding: 0
+  },
+  content: {
+    '&$expanded': {
+      margin: '12px 0',
     },
-    expanded: {},
-    expandIcon: {
-        left: 0,
-        position: 'absolute',
-        padding:'24px'
-    }
-  })(MuiExpansionPanelSummary);
-  
-  const ExpansionPanelDetails = withStyles(theme => ({
-    root: {
-      backgroundColor: 'rgba(0, 0, 0, .03)',
-      padding: '24px',
-    },
-  }))(MuiExpansionPanelDetails);
+    paddingLeft: '50px'
+  },
+  expanded: {},
+  expandIcon: {
+    left: 0,
+    position: 'absolute',
+    padding: '24px'
+  }
+})(MuiExpansionPanelSummary);
+
+const ExpansionPanelDetails = withStyles(theme => ({
+  root: {
+    backgroundColor: 'rgba(0, 0, 0, .03)',
+    padding: '24px',
+  },
+}))(MuiExpansionPanelDetails);
 
 export default function ViewExam(props) {
   const classes = useStyles();
@@ -119,25 +119,25 @@ export default function ViewExam(props) {
 
   const getSelectedClasses = (examId) => {
     axios.get(serverUrl + "api/examClass/classes/" + examId + "/all")
-        .then(res => {
-            let result = [];
-            if(res.data) {
-                res.data.map(item => result.push({id: item.id, name: item.name}))
-            }
-            setSelectedClasses(result);
-        })
-}
+      .then(res => {
+        let result = [];
+        if (res.data) {
+          res.data.map(item => result.push({ id: item.id, name: item.name }))
+        }
+        setSelectedClasses(result);
+      })
+  }
 
   const getSelectedTests = (examId) => {
-      axios.get(serverUrl + "api/examTest/tests/" + examId + "/all")
-          .then(res => {
-            setSelectedTests(res.data)
-          })
+    axios.get(serverUrl + "api/examTest/tests/" + examId + "/all")
+      .then(res => {
+        setSelectedTests(res.data)
+      })
   }
 
   const { exam } = props;
 
-  if(exam && executed === false) {
+  if (exam && executed === false) {
     getSelectedClasses(exam.id);
     getSelectedTests(exam.id);
     setExecuted(true);
@@ -145,7 +145,7 @@ export default function ViewExam(props) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="default" style={{width: 'fit-content', minHeight: '500px'}}>
+      <AppBar position="static" color="default" style={{ width: 'fit-content', minHeight: '500px' }}>
         <Tabs
           value={value}
           orientation="vertical"
@@ -161,89 +161,89 @@ export default function ViewExam(props) {
           <Tab label="Lịch sử" icon={<TimelineIcon />} {...a11yProps(1)} />
         </Tabs>
       </AppBar>
-        <TabPanel value={value} index={0} style={{width: '100%'}}>
-            <div className="blue-text">Thông tin cơ bản</div>
-            <div className="row required" style={{marginTop: "20px"}}>
-                <label htmlFor="title" className="col s2" style={{paddingLeft: 0, fontSize: '1rem'}}>
-                    Chủ đề:
+      <TabPanel value={value} index={0} style={{ width: '100%' }}>
+        <div className="blue-text">Thông tin cơ bản</div>
+        <div className="row required" style={{ marginTop: "20px" }}>
+          <label htmlFor="title" className="col s2" style={{ paddingLeft: 0, fontSize: '1rem' }}>
+            Chủ đề:
                 </label>
-                <div className="col s10">{exam.title}</div>
-            </div>
-            <div className="row required" style={{marginTop: "20px"}}>
-                <label htmlFor="title" className="col s2" style={{paddingLeft: 0, fontSize: '1rem'}}>
-                    Điểm hệ số:
+          <div className="col s10">{exam.title}</div>
+        </div>
+        <div className="row required" style={{ marginTop: "20px" }}>
+          <label htmlFor="title" className="col s2" style={{ paddingLeft: 0, fontSize: '1rem' }}>
+            Điểm hệ số:
                 </label>
-                <div className="col s10">{exam.powerLevel}</div>
-            </div>
-            <div className="row required" style={{marginTop: "20px"}}>
-                <label htmlFor="title" className="col s2" style={{paddingLeft: 0, fontSize: '1rem'}}>
-                    Mã bài thi:
+          <div className="col s10">{exam.powerLevel}</div>
+        </div>
+        <div className="row required" style={{ marginTop: "20px" }}>
+          <label htmlFor="title" className="col s2" style={{ paddingLeft: 0, fontSize: '1rem' }}>
+            Mã bài thi:
                 </label>
-                <div className="col s10">{exam.code ? exam.code : 'N/A'}</div>
+          <div className="col s10">{exam.code ? exam.code : 'N/A'}</div>
+        </div>
+        <div className="row required">
+          <label htmlFor="forClass" className="col s2" style={{ paddingLeft: 0, fontSize: '1rem' }}>Lớp:</label>
+          {/* <div> */}
+          {(selectedClassList && selectedClassList.length !== 0) &&
+            <div className="col s10 no-padding">
+              <div className="col s11 no-padding">
+                {selectedClassList.map((item, index) =>
+                  <span key={item.id}>{item.name}{index !== selectedClassList.length - 1 ? ", " : ''}</span>
+                )
+                }</div>
             </div>
-            <div className="row required">
-                <label htmlFor="forClass" className="col s2" style={{paddingLeft: 0, fontSize: '1rem'}}>Lớp:</label>
-                {/* <div> */}
-                    { (selectedClassList && selectedClassList.length !== 0) &&
-                        <div className="col s10 no-padding">
-                            <div className="col s11 no-padding">
-                            { selectedClassList.map( (item, index) => 
-                                <span key={item.id}>{item.name}{index !== selectedClassList.length - 1 ? ", " : ''}</span>
-                            )
-                            }</div>
-                        </div>
-                    }
-                {/* </div> */}
-            </div>
-            <Divider style={{marginBottom: "1vw"}}/>
-            <div className="blue-text">Giờ kiểm tra</div>
-            <div style={{
-            position: 'relative',
-            marginTop: '10px',
-            marginLeft: '-24px',
-            marginRight: '-24px'
-            //margin:'-10px'
-            }}>
-            <ExpansionPanel square >
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1d-content" id="panel1d-header">
-                    <Typography>Thông tin phát bài</Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails className={classes.details} style={{display: 'block'}}>
-                    <div className="row">
-                        <div className="row" >
-                            <label htmlFor="title" className="col s4 inputLabel" style={{paddingLeft: 0}}>Thời gian làm bài (Phút):</label>
-                            <div className="col s8">{exam.duration}</div>
-                        </div>
-                        <div className="row" style={{marginTop: "20px"}}>
-                            <label htmlFor="title" className="col s4 inputLabel" style={{paddingLeft: 0}}>Số lần làm bài:</label>
-                            <div className="col s8">{exam.trials}</div>
-                        </div>
-                        <div className="row" style={{marginTop: "20px"}}>
-                            <label htmlFor="title" className="col s4 inputLabel" style={{paddingLeft: 0}}>Thời gian phát:</label>
-                            <div className="col s8">{new Date(exam.startEntryTime).toLocaleString("vi-VN")}</div>
-                        </div>
-                        <div className="row" style={{marginTop: "20px"}}>
-                            <label htmlFor="title" className="col s4 inputLabel" style={{paddingLeft: 0}}>Thời gian đóng:</label>
-                            <div className="col s8">{exam.endEntryTime === '0000-00-00 00:00:00' ? 'Không xác định' : new Date(exam.endEntryTime).toLocaleString("vi-VN")}</div>
-                        </div>
+          }
+          {/* </div> */}
+        </div>
+        <Divider style={{ marginBottom: "1vw" }} />
+        <div className="blue-text">Giờ kiểm tra</div>
+        <div style={{
+          position: 'relative',
+          marginTop: '10px',
+          marginLeft: '-24px',
+          marginRight: '-24px'
+          //margin:'-10px'
+        }}>
+          <ExpansionPanel square >
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1d-content" id="panel1d-header">
+              <Typography>Thông tin phát bài</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails className={classes.details} style={{ display: 'block' }}>
+              <div className="row">
+                <div className="row" >
+                  <label htmlFor="title" className="col s4 inputLabel" style={{ paddingLeft: 0 }}>Thời gian làm bài (Phút):</label>
+                  <div className="col s8">{exam.duration}</div>
+                </div>
+                <div className="row" style={{ marginTop: "20px" }}>
+                  <label htmlFor="title" className="col s4 inputLabel" style={{ paddingLeft: 0 }}>Số lần làm bài:</label>
+                  <div className="col s8">{exam.trials}</div>
+                </div>
+                <div className="row" style={{ marginTop: "20px" }}>
+                  <label htmlFor="title" className="col s4 inputLabel" style={{ paddingLeft: 0 }}>Thời gian phát:</label>
+                  <div className="col s8">{new Date(exam.startEntryTime).toLocaleString("vi-VN")}</div>
+                </div>
+                <div className="row" style={{ marginTop: "20px" }}>
+                  <label htmlFor="title" className="col s4 inputLabel" style={{ paddingLeft: 0 }}>Thời gian đóng:</label>
+                  <div className="col s8">{exam.endEntryTime === '0000-00-00 00:00:00' ? 'Không xác định' : new Date(exam.endEntryTime).toLocaleString("vi-VN")}</div>
+                </div>
+              </div>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+          <Divider />
+          <ExpansionPanel square >
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1d-content" id="panel1d-header">
+              <Typography>Đề kiểm tra</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails className={classes.details} style={{ paddingBottom: 0 }}>
+              <div className={classes.column + " blue-text text-darken-3 bold"} style={{ width: '33.33%' }}>
+                Mã đề thi
                     </div>
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
-            <Divider />
-            <ExpansionPanel square >
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1d-content" id="panel1d-header">
-                    <Typography>Đề kiểm tra</Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails className={classes.details} style={{paddingBottom: 0}}>
-                    <div className={classes.column + " blue-text text-darken-3 bold"} style={{width: '33.33%'}}>
-                        Mã đề thi
+              <div className={classes.column + " blue-text text-darken-3 bold"} style={{ width: '33.33%' }}>
+                Tên bài kiểm tra
                     </div>
-                    <div className={classes.column + " blue-text text-darken-3 bold"} style={{width: '33.33%'}}>
-                        Tên bài kiểm tra
-                    </div>
-                    <div className={classes.column + " blue-text text-darken-3 bold"} style={{width: '33.33%'}}>
-                    </div>
-                        {/* <div className={clsx(classes.column, classes.helper)}>
+              <div className={classes.column + " blue-text text-darken-3 bold"} style={{ width: '33.33%' }}>
+              </div>
+              {/* <div className={clsx(classes.column, classes.helper)}>
                         <Typography variant="caption">
                         Select your destination of choice
                         <br />
@@ -252,27 +252,27 @@ export default function ViewExam(props) {
                         </a>
                         </Typography>
                     </div> */}
-                </ExpansionPanelDetails>
-                <Divider/>
-                { selectedTestList && selectedTestList.map((test, index) => 
-                    <div key={test.id}>
-                        <ExpansionPanelDetails className={classes.details} style={{paddingBottom: 0}}>
-                            <div className={classes.column} style={{width: '33.33%'}}>
-                                {test.testCode}
-                            </div>
-                            <div className={classes.column} style={{width: '60.33%'}}>
-                                {test.title}
-                                {/* <a href="#dateTimePicker" className="modal-trigger" style={{textDecorationLine: 'underline'}}>Cai dat thoi gian phat</a>
+            </ExpansionPanelDetails>
+            <Divider />
+            {selectedTestList && selectedTestList.map((test, index) =>
+              <div key={test.id}>
+                <ExpansionPanelDetails className={classes.details} style={{ paddingBottom: 0 }}>
+                  <div className={classes.column} style={{ width: '33.33%' }}>
+                    {test.testCode}
+                  </div>
+                  <div className={classes.column} style={{ width: '60.33%' }}>
+                    {test.title}
+                    {/* <a href="#dateTimePicker" className="modal-trigger" style={{textDecorationLine: 'underline'}}>Cai dat thoi gian phat</a>
                                 <Modal id="dateTimePicker" options={{ preventScrolling: false }} actions={<Button style={{display: 'none'}}></Button>}> 
                                     <div>
                                         <h5 className="center" style={{marginTop: 0}}>Cai dat thoi gian phat</h5>
                                         <Divider style={{marginBottom: "1vw"}}/>
                                 </Modal> */}
-                            </div>
-                            {/* <div className={classes.column} style={{width: '6.33%'}}> */}
-                                {/* <input type="text" size="5" style={{height: 'fit-content', width: 'fit-content', display: 'flex'}}/> */}
-                            {/* </div>*/} 
-                                {/* <div className={clsx(classes.column, classes.helper)}>
+                  </div>
+                  {/* <div className={classes.column} style={{width: '6.33%'}}> */}
+                  {/* <input type="text" size="5" style={{height: 'fit-content', width: 'fit-content', display: 'flex'}}/> */}
+                  {/* </div>*/}
+                  {/* <div className={clsx(classes.column, classes.helper)}>
                                 <Typography variant="caption">
                                 Select your destination of choice
                                 <br />
@@ -281,30 +281,30 @@ export default function ViewExam(props) {
                                 </a>
                                 </Typography>
                             </div> */}
-                        </ExpansionPanelDetails>
-                        <Divider/>
-                    </div>
-                )}
-            </ExpansionPanel>
-            <Divider />
-            <ExpansionPanel square>
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2d-content" id="panel2d-header">
-                    <Typography>Thông tin thu bài</Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails style={{display: 'block'}}>
-                    <div className="row">
-                        <label className="col s5 inputLabel" style={{paddingLeft: 0}}>Vào điểm:</label>
-                        <div className="col s7">{exam.isMarked ? 'Có' : 'Không'}</div>
-                    </div>
-                    <div className="row">
-                        <label className="col s5 inputLabel" style={{paddingLeft: 0}}>Hiển thị đáp án:</label>
-                        <div className="col s7">{exam.isShowAnswers ? 'Có' : 'Không'}</div>
-                    </div>
-                    <div className="row">
-                        <label className="col s5 inputLabel" style={{paddingLeft: 0}}>Hiển thị lời giải:</label>
-                        <div className="col s7">{exam.isShowExplanation ? 'Có' : 'Không'}</div>
-                    </div>
-                    {/* <div className="row" style={{marginTop: "20px"}}>
+                </ExpansionPanelDetails>
+                <Divider />
+              </div>
+            )}
+          </ExpansionPanel>
+          <Divider />
+          <ExpansionPanel square>
+            <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel2d-content" id="panel2d-header">
+              <Typography>Thông tin thu bài</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails style={{ display: 'block' }}>
+              <div className="row">
+                <label className="col s5 inputLabel" style={{ paddingLeft: 0 }}>Vào điểm:</label>
+                <div className="col s7">{exam.isMarked ? 'Có' : 'Không'}</div>
+              </div>
+              <div className="row">
+                <label className="col s5 inputLabel" style={{ paddingLeft: 0 }}>Hiển thị đáp án:</label>
+                <div className="col s7">{exam.isShowAnswers ? 'Có' : 'Không'}</div>
+              </div>
+              <div className="row">
+                <label className="col s5 inputLabel" style={{ paddingLeft: 0 }}>Hiển thị lời giải:</label>
+                <div className="col s7">{exam.isShowExplanation ? 'Có' : 'Không'}</div>
+              </div>
+              {/* <div className="row" style={{marginTop: "20px"}}>
                         <label htmlFor="title" className="col s2 inputLabel" style={{paddingLeft: 0}}>Gửi thông báo sau kiểm tra:</label>
                     </div>
                     <div className="row" style={{marginTop: "20px"}}>
@@ -319,13 +319,20 @@ export default function ViewExam(props) {
                             </FormGroup>
                         </FormControl>
                     </div> */}
-                </ExpansionPanelDetails>
-            </ExpansionPanel>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        </div>
+      </TabPanel>
+      <TabPanel value={value} index={1} style={{ width: '100%' }}>
+        <div className='row'>
+          <div className="col s12 no-padding flex-column center min-height-400">
+            <div>
+              <i className="material-icons large grey-text">emoji_food_beverage</i>
+              <h6 className="grey-text">Chức năng đang trong quá trình xây dựng <br />Mong bạn quay lại sau</h6>
             </div>
-        </TabPanel>
-        <TabPanel value={value} index={1} style={{width: '100%'}}>
-            Item Two
-        </TabPanel>
+          </div>
+        </div>
+      </TabPanel>
     </div>
   );
 }

@@ -94,9 +94,13 @@ export default function SimpleTable(props) {
 
   const studentClickHandle = (index, id, classStudentId) => {
     // console.log("GRADE", grade[0].value)
-    getGrade(id);
+
+    
     if (role === 1) {
+      getGrade(id);
       getParent(classStudentId);
+    } else {
+      getGrade(classStudentId);
     }
 
     document
@@ -514,14 +518,18 @@ export default function SimpleTable(props) {
                       <th className={classes.table1}>Hệ số III</th>
                     </tr>
                     <tr>
-                      <td className={classes.table1}>
-                        {grade && grade[0] ? grade[0].value : ""}
+                    <td className={classes.table1}>
+                        {grade && grade[0] && grade[0].powerId == 14 ? grade[0].value : ""}
+                        
                       </td>
                       <td className={classes.table1}>
-                        {grade && grade[1] ? grade[1].value : ""}
+                        {grade && grade[1] && grade[1].powerId == 15 ? grade[1].value : ""}
+                        {grade && grade[0] && grade[0].powerId == 15 ? grade[0].value : ""}
                       </td>
                       <td className={classes.table1}>
-                        {grade && grade[2] ? grade[2].value : ""}
+                        {grade && grade[2] && grade[2].powerId == 16 ? grade[2].value : ""}
+                        {grade && grade[1] && grade[1].powerId == 16 ? grade[1].value : ""}
+                        {grade && grade[0] && grade[0].powerId == 16 ? grade[0].value : ""}
                       </td>
                     </tr>
                   </table>

@@ -205,7 +205,6 @@ class TestList extends Component {
                 </div>
                 <div className="col s12 no-padding center">
                     {/* <SimpleTable /> */}
-                    <button onClick={()=>{console.log(this.state)}}>click me</button>
                     <CustomizedTestListTable
                         headCells={[
                             { id: 'title', numeric: false, disablePadding: false, label: 'Đề' },

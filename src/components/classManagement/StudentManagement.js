@@ -111,6 +111,7 @@ class StudentManagement extends Component {
       JSON.stringify(nextProps.studentByParentId) !==
       JSON.stringify(this.state.studentByParentId)
     ) {
+      console.log("aaaa",nextProps.studentByParentId);
       this.setState({
         studentByParentId: nextProps.studentByParentId
       });
@@ -289,9 +290,8 @@ class StudentManagement extends Component {
       classStudent.push(newElement);
     });
     axios
-      .post("http://localhost:8084/api/classManagement/addStudent/", classStudent)
+      .post(serverUrl+"api/classManagement/addStudent/", classStudent)
       .then(res => {
-        console.log("leu leu");
         this.props.getStudents(this.state.currentClassId);
         this.props.getClassStudents(this.state.currentClassId);
         console.log(this.state.classStudent);
@@ -321,9 +321,9 @@ class StudentManagement extends Component {
           {/* filler */}
           <div className="col s2"></div>
           <div className="col s10">
-            <Link to="/personalLibrary">
+            <Link to="/studentManagement">
               <h5 className="blue-text text-darken-3 bold font-montserrat">
-                Học sinh
+                Quản lý lớp học
               </h5>
             </Link>
             {/* modals */}
