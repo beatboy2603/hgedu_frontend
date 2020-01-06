@@ -15,7 +15,7 @@ class LandingPage extends Component {
         isLoading: false,
         newsList: [],
         inputVal: "0",
-        width:"0px",
+        width: "0px",
     }
 
     onSignIn = (googleUser) => { }
@@ -66,12 +66,12 @@ class LandingPage extends Component {
             })
     }
 
-    handleOnChange = (e)=>{
+    handleOnChange = (e) => {
         let value = e.target.value;
-        let width = value+"px"
+        let width = value + "px"
         this.setState({
             input: value,
-            width:width,
+            width: width,
         })
     }
 
@@ -112,7 +112,13 @@ class LandingPage extends Component {
                     let todaysDate = new Date();
                     let dateDifference = Number(todaysDate) - Number(bannedUntil);
                     // console.log("diff", dateDifference);
-                    if (!user.isBan || (user.isBan && dateDifference > 0)) {
+                    if (!user.isBan || (user.isBan && !user.isBanForever && dateDifference > 0)) {
+                        if (user.isBan) {
+                            user.isBan = false;
+                            axios.post(serverUrl + "api/user/unBanUsers", user).then(res => {
+                                console.log("after", res.data);
+                            })
+                        }
                         // let user = res.data.user;
                         let jwt = res.data.jwt;
                         // this.props.dispatch({ type: "CHANGE_ROLE", payload: user.roleId });
