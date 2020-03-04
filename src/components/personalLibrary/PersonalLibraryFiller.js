@@ -8,7 +8,6 @@ const PersonalLibraryFiller = () => {
             <div className="col s3 container min-height-60">
             </div>
             <div className="col s9 container">
-                <Advertisement imgSrc={HorizontalAd1} />
             </div>
             <div className="col s12 no-padding flex-column center min-height-400">
                 <div>

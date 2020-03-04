@@ -4,9 +4,15 @@ import { GoogleLogin } from 'react-google-login';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { serverUrl, setCookie } from './common/common';
-import Logo from '../resources/logo_transparent.png';
-import BackGroundIMG from '../resources/landing_page.jpg';
+import Logo from '../resources/logo_transparent_2.png';
+import LogoTransparent from '../resources/logo_transparent.png';
+import BackGroundIMG from '../resources/Landing/0/landing_page.jpg';
 import SubPost from './SubPost';
+import Landing_1 from '../resources/Landing/1/Landing_1.png';
+import Landing_2 from '../resources/Landing/2/Landing_2.png';
+import Landing_3 from '../resources/Landing/3/Landing_3.png';
+import Landing_4 from '../resources/Landing/4/Landing_4.png';
+import Landing_5 from '../resources/Landing/5/Landing_5.png';
 import { Carousel } from 'react-materialize';
 
 class LandingPage extends Component {
@@ -54,9 +60,9 @@ class LandingPage extends Component {
         }))
     }
 
-    goToNews = (e) => {
+    goTo = (e, place) => {
         e.preventDefault();
-        window.scroll({ top: document.getElementById("news").offsetTop, left: 0, behavior: 'smooth' })
+        window.scroll({ top: document.getElementById(place).offsetTop, left: 0, behavior: 'smooth' })
     }
 
     componentDidMount() {
@@ -179,39 +185,35 @@ class LandingPage extends Component {
 
         return (
             <div className="row">
-                <div style={{ maxWidth: "100vw", minHeight: "100vh", backgroundImage: `url(${BackGroundIMG})`, backgroundSize: "cover" }}>
+                < GoogleLogin
+                    clientId="1072039829865-jc2jf9cv96ifoph4ptpg1840s8n5gg5b.apps.googleusercontent.com"
+                    scope='https://www.googleapis.com/auth/userinfo.profile'
+                    render={renderProps => (
+                        <Link onClick={renderProps.onClick} disabled={renderProps.disabled} className='flex-row' style={{ position: "sticky", top: "7vh", paddingLeft: "80vw", marginTop: "-8vh", zIndex: "10" }}>
+                            <i className="material-icons left padding-vertical-10 md-36" style={{ color: "#086bd1", fontSize: "30px" }}>account_circle</i>
+                            <span style={{ color: "#086bd1", fontSize: "20px" }}>Đăng nhập với Google</span>
+                        </Link>
+                    )}
+                    onSuccess={responseGoogle}
+                    onFailure={responseGoogle}
+                    cookiePolicy={'single_host_origin'}
+                />
+                <div id="slide0" style={{ maxWidth: "100vw", minHeight: "100vh", backgroundImage: `url(${BackGroundIMG})`, backgroundSize: "cover" }}>
                     <img onClick={() => { this.props.history.push('/signup'); }} src={Logo} alt="Logo" style={{ width: "8vw", position: "absolute", top: "5vh", left: "5vw" }} />
                     {/* {!this.props.isAuthenticated && */}
-                    < GoogleLogin
-                        clientId="1072039829865-jc2jf9cv96ifoph4ptpg1840s8n5gg5b.apps.googleusercontent.com"
-                        scope='https://www.googleapis.com/auth/userinfo.profile'
-                        render={renderProps => (
-                            <Link onClick={renderProps.onClick} disabled={renderProps.disabled} className='flex-row' style={{ position: "absolute", top: "7vh", left: "80vw" }}>
-                                <i className="material-icons left padding-vertical-10 md-36" style={{ color: "#ffffff", fontSize: "30px" }}>account_circle</i>
-                                <span style={{ color: "#ffffff", fontSize: "20px" }}>Đăng nhập với Google</span>
-                            </Link>
-                        )}
-                        onSuccess={responseGoogle}
-                        onFailure={responseGoogle}
-                        cookiePolicy={'single_host_origin'}
-                    />
+
                     {/* } */}
                     <div className="flex-column" style={{ width: "60vw", position: "absolute", top: "35vh", left: "20vw", color: "#ffffff", fontSize: "43px" }}>
-                        <p align="center" className="font-montserrat" style={{ margin: "0", padding: "0", color: "#ffffff", fontSize: "43px" }}>MỘT NỀN GIÁO DỤC THÔNG MINH</p>
-                        <p align="center" className="font-montserrat" style={{ margin: "0", padding: "0", color: "#ffffff", fontSize: "43px" }}>LÀ MỘT NỀN GIÁO DỤC LINH HOẠT</p>
-                        <p align="center" style={{ color: "#ffffff", fontSize: "30px" }}>Kết nối giáo viên, học sinh và phụ huynh không giới hạn!</p>
+                        <p align="center" className="font-montserrat" style={{ margin: "0", padding: "0", color: "#086bd1", fontSize: "43px" }}>MÔI TRƯỜNG LINH HOẠT</p>
+                        <p align="center" className="font-montserrat" style={{ margin: "0", padding: "0", color: "#086bd1", fontSize: "43px" }}>KHƠI NGUỒN SÁNG TẠO</p>
+                        <p align="center" style={{ color: "#086bd1", fontSize: "30px" }}>Nền tảng giáo dục kết nối giáo viên, học sinh và phụ huynh không giới hạn!</p>
                     </div>
-                    <a href="" onClick={this.goToNews}>
-                        <i className="material-icons" style={{ position: "absolute", top: "90vh", left: "47vw", color: "#ffffff", fontSize: "50px" }}>arrow_drop_down_circle</i>
+                    <a href="" onClick={e => { this.goTo(e, "slide1") }}>
+                        <i className="material-icons" style={{ position: "relative", top: "90vh", left: "47vw", color: "#086bd1", fontSize: "50px" }}>arrow_drop_down_circle</i>
                     </a>
                 </div>
-                {/* <div className="g-signin2" onSuccess={() => this.onSignIn()}></div> */}
-                {/* <a href="#" onClick={() => this.signOut()}>Sign out</a> */}
-                {/* <button onClick={() => { this.handleLoading() }}>loading</button>
-                {this.state.isLoading && <Loading type={"spokes"} color={"#999999"} />}
-                <button onClick={() => { console.log(auth.getAuth()) }}>test</button>
-                <button onClick={() => { this.token() }}>test Token</button> */}
-                <div id="news" className="container row" style={{ minHeight: "100vh" }}>
+
+                {/* <div id="news" className="container row" style={{ minHeight: "100vh" }}>
                     <div className="col s12 container row">
                         <h5 className="blue-text text-darken-2 bold font-montserrat" style={{ margin: "50px 0 30px 0" }}>Tin tức</h5>
                         {
@@ -229,20 +231,61 @@ class LandingPage extends Component {
                             </Carousel>
                         }
                     </div>
-                </div>
-                {/* <div style={{width:this.state.width, height:"100px", backgroundColor:"red"}}></div>
-                <div className="input-field inline" style={{ width: '80px', marginLeft: '7vw' }}>
-                    <input type="number" className="validate font-montserrat" style={{fontSize:"50px", color:"orange", textAlign:"center"}} onChange={this.handleOnChange} value={this.state.input} min="0" max="99" step="1"/>
-                    <span class="helper-text" data-error="*0-99"></span>
                 </div> */}
-                {/* <button onClick={()=>{
-                    axios.post(serverUrl+"api/folder/testFolder", [
-                        {folderId: 100},
-                        {folderId: 2},
-                    ]).then(res=>{
-                        console.log(res);
-                    })
-                }}> Click </button> */}
+
+                <div id="slide1" style={{ maxWidth: "100vw", minHeight: "100vh", backgroundImage: `url(${Landing_1})`, backgroundSize: "cover" }}>
+                    <a href="" onClick={e => { this.goTo(e, "slide2") }}>
+                        <i className="material-icons" style={{ position: "relative", top: "90vh", left: "47vw", color: "#ffffff", fontSize: "50px" }}>arrow_drop_down_circle</i>
+                    </a>
+                </div>
+                <div id="slide2" style={{ maxWidth: "100vw", minHeight: "100vh", backgroundImage: `url(${Landing_2})`, backgroundSize: "cover" }}>
+                    <a href="" onClick={e => { this.goTo(e, "slide3") }}>
+                        <i className="material-icons" style={{ position: "relative", top: "90vh", left: "47vw", color: "#086bd1", fontSize: "50px" }}>arrow_drop_down_circle</i>
+                    </a>
+                </div>
+                <div id="slide3" style={{ maxWidth: "100vw", minHeight: "100vh", backgroundImage: `url(${Landing_3})`, backgroundSize: "cover" }}>
+                    <a href="" onClick={e => { this.goTo(e, "slide4") }}>
+                        <i className="material-icons" style={{ position: "relative", top: "90vh", left: "47vw", color: "#086bd1", fontSize: "50px" }}>arrow_drop_down_circle</i>
+                    </a>
+                </div>
+                <div id="slide4" style={{ maxWidth: "100vw", minHeight: "100vh", backgroundImage: `url(${Landing_4})`, backgroundSize: "cover" }}>
+                    <a href="" onClick={e => { this.goTo(e, "slide5") }}>
+                        <i className="material-icons" style={{ position: "relative", top: "90vh", left: "47vw", color: "#086bd1", fontSize: "50px" }}>arrow_drop_down_circle</i>
+                    </a>
+                </div>
+                <div id="slide5" style={{ maxWidth: "100vw", minHeight: "100vh", backgroundImage: `url(${Landing_5})`, backgroundSize: "cover" }}>
+                    {/* <a href="" onClick={e => { this.goTo(e, "slide6") }}>
+                        <i className="material-icons" style={{ position: "relative", top: "90vh", left: "47vw", color: "#086bd1", fontSize: "50px" }}>arrow_drop_down_circle</i>
+                    </a> */}
+                    <a href="" onClick={e => { this.goTo(e, "slide0") }}>
+                        <i className="material-icons" style={{ position: "relative", top: "90vh", left: "47vw", color: "#086bd1", fontSize: "50px" }}>arrow_drop_up_circle</i>
+                    </a>
+                </div>
+                {/* <div id="slide6" style={{ maxWidth: "100vw", minHeight: "100vh" }}>
+                    <div style={{ margin: "5vh 0 12.5vh 0" }}>
+                        <a href="" onClick={e => { this.goTo(e, "slide0") }}>
+                            <img src={Logo} alt="Logo" style={{ width: "8vw", position: "relative", top: "5vh", left: "5vw" }} />
+                        </a>
+                    </div>
+                    <div className="row">
+                        <div className="col s3 center">
+                            Chức năng
+                        </div>
+                        <div className="col s3 center">
+                            Hỗ trợ
+                        </div>
+                        <div className="col s3 center">
+                            Giới thiệu
+                        </div>
+                        <div className="col s3 center">
+                            Theo dõi chúng tôi
+                        </div>
+                    </div>
+                    <a href="" onClick={e => { this.goTo(e, "slide0") }}>
+                        <i className="material-icons" style={{ position: "relative", left: "47vw", color: "#086bd1", fontSize: "50px" }}>arrow_drop_up_circle</i>
+                    </a>
+                </div> */}
+
             </div>
         )
     }

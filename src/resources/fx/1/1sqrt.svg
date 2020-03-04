@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="22.001" height="23" viewBox="0 0 22.001 23">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #3a3a3a;
+        font-size: 20px;
+        font-family: ArialMT, Arial;
+      }
+
+      .cls-2, .cls-3, .cls-5 {
+        fill: none;
+      }
+
+      .cls-2, .cls-3 {
+        stroke: #3a3a3a;
+      }
+
+      .cls-2 {
+        stroke-width: 0.7px;
+      }
+
+      .cls-4 {
+        stroke: none;
+      }
+    </style>
+  </defs>
+  <g id="sqrt" transform="translate(0 3)">
+    <text id="_" data-name="√" class="cls-1" transform="translate(0 16)"><tspan x="0" y="0">√</tspan></text>
+    <line id="Line_98" data-name="Line 98" class="cls-2" x2="11.2" transform="translate(10.801 -1.92)"/>
+    <g id="Rectangle_109" data-name="Rectangle 109" class="cls-3" transform="translate(12.229 3.5)">
+      <rect class="cls-4" width="8" height="13"/>
+      <rect class="cls-5" x="0.5" y="0.5" width="7" height="12"/>
+    </g>
+  </g>
+</svg>

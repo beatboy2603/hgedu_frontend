@@ -12,6 +12,8 @@ import CustomizedTable from './question/CustomizedTable';
 import TestQuestions from './test/TestQuestions';
 import ModalTest from './test/ModalTest'
 import TestList from './test/TestList'
+import ModalGroup from './group/ModalGroup'
+import GroupKnowledgeGroups from './group/GroupKnowledgeGroups';
 
 
 // const useStyles = makeStyles(theme => ({
@@ -329,7 +331,7 @@ class PersonalLibrary extends Component {
                                                     <i className="material-icons grey-text text-darken-3">note_add</i>
                                                 </a>
                                             ) : this.state.currentFolder.subGroupId == 3 ? (
-                                                <a href="#addGroup" className="modal-trigger" onClick={() => { alert("groups") }}>
+                                                <a href="#addGroup" className="modal-trigger">
                                                     <i className="material-icons grey-text text-darken-3">note_add</i>
                                                 </a>
                                             ) : (
@@ -366,6 +368,7 @@ class PersonalLibrary extends Component {
                                             </div>
                                         </Modal>
                                         <ModalTest currentFolder={this.state.currentFolder} updateTreeFolder={this.updateTreeFolder}/>
+                                        <ModalGroup/>
                                     </div>
 
                                 </div>
@@ -389,15 +392,7 @@ class PersonalLibrary extends Component {
                                 />} />
                                 <Route path={'/personalLibrary/test/:folderId'} render={(props) => <TestQuestions {...props} />} />
                                 <Route path={'/personalLibrary/testList'} render={(props) => <TestList {...props} />} />
-                                <Route path={'/personalLibrary/table'} render={(props) => <CustomizedTable {...props} headCells={[
-                                    { id: 'questionCode', numeric: false, disablePadding: false, label: 'Mã câu' },
-                                    { id: 'question', numeric: false, disablePadding: false, label: 'Câu hỏi' },
-                                    { id: 'difficulty', numeric: false, disablePadding: false, label: 'Mức khó' },
-                                    { id: 'gradeLevel', numeric: false, disablePadding: false, label: 'Trình độ' },
-                                    { id: 'type', numeric: false, disablePadding: false, label: 'Thuộc tính' },
-                                ]} rows={[
-                                    { questionCode: "Code", question: "question", difficulty: "difficulty", gradeLevel: "gradeLevel", type: "type" },
-                                ]} />} />
+                                <Route path={'/personalLibrary/group/:folderId'} render={(props) => <GroupKnowledgeGroups {...props} />} />
                             </Switch>
                         </div>
 

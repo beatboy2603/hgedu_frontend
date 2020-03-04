@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="8" height="16" viewBox="0 0 8 16">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #3a3a3a;
+        font-size: 14px;
+        font-family: ArialMT, Arial;
+      }
+
+      .cls-2 {
+        fill: none;
+        stroke: #3a3a3a;
+      }
+    </style>
+  </defs>
+  <g id="_no" data-name="ϵ no" transform="translate(-4)">
+    <text id="_" data-name="ϵ" class="cls-1" transform="translate(8 13)"><tspan x="-3.093" y="0">ϵ</tspan></text>
+    <line id="Line_116" data-name="Line 116" class="cls-2" x1="5" y2="12" transform="translate(5.5 2.5)"/>
+  </g>
+</svg>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24.229" height="20.5" viewBox="0 0 24.229 20.5">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #3a3a3a;
+        font-size: 14px;
+        font-family: ArialMT, Arial;
+      }
+
+      .cls-2, .cls-4 {
+        fill: none;
+      }
+
+      .cls-2 {
+        stroke: #3a3a3a;
+        stroke-width: 0.5px;
+      }
+
+      .cls-3 {
+        stroke: none;
+      }
+    </style>
+  </defs>
+  <g id="log" transform="translate(-1.428 7)">
+    <text id="log-2" data-name="log" class="cls-1" transform="translate(1.428 6)"><tspan x="0" y="0">log</tspan></text>
+    <g id="Rectangle_118" data-name="Rectangle 118" class="cls-2" transform="translate(21.657 7.5)">
+      <rect class="cls-3" width="4" height="6"/>
+      <rect class="cls-4" x="0.25" y="0.25" width="3.5" height="5.5"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="19" height="20" viewBox="0 0 19 20">
+  <defs>
+    <style>
+      .cls-1, .cls-3 {
+        fill: none;
+      }
+
+      .cls-1 {
+        stroke: #3a3a3a;
+        stroke-width: 0.5px;
+      }
+
+      .cls-2 {
+        stroke: none;
+      }
+    </style>
+  </defs>
+  <g id="abs" transform="translate(0.25 5.5)">
+    <g id="Rectangle_122" data-name="Rectangle 122" class="cls-1" transform="translate(3.229 -3.5)">
+      <rect class="cls-2" width="4" height="6"/>
+      <rect class="cls-3" x="0.25" y="0.25" width="3.5" height="5.5"/>
+    </g>
+    <g id="Rectangle_123" data-name="Rectangle 123" class="cls-1" transform="translate(3.229 6.5)">
+      <rect class="cls-2" width="4" height="6"/>
+      <rect class="cls-3" x="0.25" y="0.25" width="3.5" height="5.5"/>
+    </g>
+    <g id="Rectangle_124" data-name="Rectangle 124" class="cls-1" transform="translate(11.229 6.5)">
+      <rect class="cls-2" width="4" height="6"/>
+      <rect class="cls-3" x="0.25" y="0.25" width="3.5" height="5.5"/>
+    </g>
+    <g id="Rectangle_125" data-name="Rectangle 125" class="cls-1" transform="translate(11.229 -3.5)">
+      <rect class="cls-2" width="4" height="6"/>
+      <rect class="cls-3" x="0.25" y="0.25" width="3.5" height="5.5"/>
+    </g>
+    <line id="Line_112" data-name="Line 112" class="cls-1" y2="20" transform="translate(0 -5.5)"/>
+    <line id="Line_113" data-name="Line 113" class="cls-1" y2="20" transform="translate(18.5 -5.5)"/>
+  </g>
+</svg>

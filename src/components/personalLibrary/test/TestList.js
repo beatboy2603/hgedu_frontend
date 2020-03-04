@@ -153,6 +153,7 @@ class TestList extends Component {
         })
         axios.get(serverUrl + "api/question/" + this.props.user.uid).then(res => {
             let allQuestions = res.data.map(question => {
+                console.log(question.questionId);
                 // question.content = question.content.slice(0, question.content.length - 2) + "]";
                 question.content = JSON.parse(question.content);
                 return question;
@@ -193,15 +194,12 @@ class TestList extends Component {
     render() {
         return (
             <div id="knowledgeGroup" className="knowledgeGroup row">
-                <div className="col s4 container min-height-60 knowledgeGroup-header" >
+                <div className="col s12 container min-height-60 knowledgeGroup-header" >
                     <h5 className="blue-text text-darken-3 bold font-montserrat" style={{ paddingLeft: "10px" }}>Thư viện đề thi</h5>
                     <p className='grey-text text-darken-3' style={{ position: "relative", top: "-15px", paddingLeft: "10px" }}>
                         {/* {this.state.questionList.length} câu hỏi */}
                         {this.state.allTests && this.state.allTests.length} đề thi
                     </p>
-                </div>
-                <div className="col s8 container ">
-                    <Advertisement imgSrc={HorizontalAd1} />
                 </div>
                 <div className="col s12 no-padding center">
                     {/* <SimpleTable /> */}

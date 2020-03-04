@@ -63,6 +63,15 @@ i{
   font-weight: bold;
 }
 
+.tableCenterTd td{
+  text-align: center;
+  border-right: 1px solid #e0e5eb;
+}
+
+.tableCenterTd tr{
+  border: none;
+}
+
 .sidenav{
   width: 250px;
 }

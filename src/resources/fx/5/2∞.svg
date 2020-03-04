@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="10" height="16" viewBox="0 0 10 16">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #3a3a3a;
+        font-size: 14px;
+        font-family: ArialMT, Arial;
+      }
+    </style>
+  </defs>
+  <text id="_" data-name="∞" class="cls-1" transform="translate(5 13)"><tspan x="-4.99" y="0">∞</tspan></text>
+</svg>

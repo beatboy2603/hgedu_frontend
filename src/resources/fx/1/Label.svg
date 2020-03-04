@@ -1,0 +1,37 @@
+<svg id="Label" xmlns="http://www.w3.org/2000/svg" width="41.801" height="31" viewBox="0 0 41.801 31">
+  <defs>
+    <style>
+      .cls-1, .cls-4 {
+        fill: none;
+        stroke: #086bd1;
+      }
+
+      .cls-2, .cls-3 {
+        fill: #086bd1;
+        font-family: iCielEffra-Regular, iCiel Effra;
+      }
+
+      .cls-2 {
+        font-size: 14px;
+      }
+
+      .cls-3 {
+        font-size: 20px;
+      }
+
+      .cls-4 {
+        stroke-width: 1.5px;
+      }
+    </style>
+  </defs>
+  <g id="a_b" data-name="a/b" transform="translate(29.801)">
+    <line id="Line_89" data-name="Line 89" class="cls-1" x2="12" transform="translate(0 15.5)"/>
+    <text id="a" class="cls-2" transform="translate(2.9 11)"><tspan x="0" y="0">a</tspan></text>
+    <text id="b" class="cls-2" transform="translate(2.9 28)"><tspan x="0" y="0">b</tspan></text>
+  </g>
+  <g id="sqrt" transform="translate(0 5.5)">
+    <text id="_" data-name="√" class="cls-3" transform="translate(0 16)"><tspan x="0" y="0">√</tspan></text>
+    <line id="Line_98" data-name="Line 98" class="cls-4" x2="10" transform="translate(9.801 2.08)"/>
+    <text id="a-2" data-name="a" class="cls-2" transform="translate(11.701 14.5)"><tspan x="0" y="0">a</tspan></text>
+  </g>
+</svg>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="19" height="14" viewBox="0 0 19 14">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #3a3a3a;
+        font-size: 14px;
+        font-family: SegoeUISymbol, Segoe UI Symbol;
+      }
+    </style>
+  </defs>
+  <g id="_up" data-name="⇒ up" transform="translate(2 -4) rotate(-90)">
+    <text id="_" data-name="⇒" class="cls-1" transform="translate(-11 13)"><tspan x="-6.04" y="0">⇒</tspan></text>
+  </g>
+</svg>

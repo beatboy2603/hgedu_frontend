@@ -6,7 +6,11 @@ import ImageResize from '@capaj/quill-image-resize-module-react';
 import axios from 'axios';
 // import { throwStatement } from '@babel/types';
 import { connect } from 'react-redux';
-import {serverUrl} from '../../common/common'
+import { serverUrl } from '../../common/common'
+// import ModalFormula from "./ModalFormula";
+import { Modal } from 'react-materialize';
+import CustomizedFormulaTabs from "../../common/CustomizedFormulaTabs";
+import { InlineMath } from 'react-katex';
 
 // BEGIN allow image alignment styles
 const ImageFormatAttributesList = [
@@ -40,6 +44,17 @@ class ImageFormat extends BaseImageFormat {
 }
 // END allow image alignment styles
 
+class ModalFormula extends Component {
+    render() {
+        return (
+            <div>
+
+
+            </div>
+        )
+    }
+}
+
 class ContentEditor extends Component {
     constructor(props) {
         super(props);
@@ -59,7 +74,8 @@ class ContentEditor extends Component {
             toolbar: {
                 container: this.props.toolbarModules,
                 handlers: {
-                    image: this.imageHandler
+                    image: this.imageHandler,
+                    formula: this.formulaHandler,
                 }
             },
             imageResize: {
@@ -92,7 +108,10 @@ class ContentEditor extends Component {
             //images: [],
             imageData: [],
             originalImageData: [],
-            imageFileMap: {}
+            imageFileMap: {},
+
+            isModalOpen: false,
+            modalFormulaInput: "",
         }
 
         this.rteChange = this.rteChange.bind(this);
@@ -103,6 +122,7 @@ class ContentEditor extends Component {
         this.reactEditor = React.createRef();
         this.uploadImage = this.uploadImage.bind(this);
         this.imageHandler = this.imageHandler.bind(this);
+        this.formulaHandler = this.formulaHandler.bind(this);
         this.deleteImage = this.deleteImage.bind(this);
         this.handleDeleteImage = this.handleDeleteImage.bind(this);
         this.getImageData = this.getImageData.bind(this);
@@ -127,6 +147,55 @@ class ContentEditor extends Component {
         const input = document.getElementById('imgFile')
         input.click()
         input.onchange = this.uploadImage
+    }
+
+    formulaHandler = () => {
+        this.openModal();
+    }
+
+    range = null;
+
+    openModal = () => {
+        this.range = this.editor.getSelection();
+        this.setState({
+            isModalOpen: false,
+        }, () => {
+            this.setState({
+                isModalOpen: true,
+            })
+        })
+    }
+
+    formulaInputRef = null;
+
+    addToFormula = (text = "") => {
+        let index = this.formulaInputRef.selectionStart;
+        let formula = this.state.modalFormulaInput;
+        let newFormula = formula.slice(0, index) + text + formula.slice(index);
+        this.setState({
+            modalFormulaInput: newFormula,
+        })
+    }
+
+    addFormula = (formula = "") => {
+        if (this.range) {
+            if (this.range.length == 0) {
+                this.editor.insertEmbed(this.range.index, 'formula', this.state.modalFormulaInput ? this.state.modalFormulaInput : formula);
+                this.setState({
+                    modalFormulaInput: "",
+                })
+            }
+        } else {
+            console.log('User cursor is not in editor');
+        }
+        this.range = null;
+    }
+
+    handleInputChange = (e) => {
+        let value = e.target.value;
+        this.setState({
+            modalFormulaInput: value,
+        })
     }
 
     uploadImage() {
@@ -290,7 +359,7 @@ class ContentEditor extends Component {
         });
     }
 
-    setContent = (delta) =>{
+    setContent = (delta) => {
         this.editor.setContents(delta);
         this.setState({
             content: delta,
@@ -399,7 +468,7 @@ class ContentEditor extends Component {
         if (this.props.setResetAll) {
             this.props.setResetAll(this.resetForm);
         }
-        if(this.props.setContent){
+        if (this.props.setContent) {
             this.props.setContent(this.setContent);
         }
         if (this.props.abbreviation && this.props.abbreviation.abbreviations) {
@@ -476,6 +545,29 @@ class ContentEditor extends Component {
     render() {
         return (
             <div>
+                <Modal open={this.state.isModalOpen} options={{ preventScrolling: true }} style={{ width: "40vw", maxHeight: "70vh", height: "70vh", marginTop: "5vh", overflow: "hidden", borderRadius: "25px" }} actions={[]}>
+                    <div style={{ paddingTop: "52.5vh" }}></div>
+                    <div className="modal-content" style={{
+                        position: "absolute",
+                        top: "0",
+                        bottom: "0",
+                        left: "0",
+                        right: "-17px", /* Increase/Decrease this value for cross-browser compatibility */
+                        overflowY: "scroll"
+                    }}>
+                        <CustomizedFormulaTabs addFormula={this.addFormula} addToFormula={this.addToFormula} />
+                        <textarea ref={el => this.formulaInputRef = el} className="materialize-textarea" placeholder="Nhập từ khóa. ie: f(x)=\frac{a}{b}" style={{ borderBottom: "none", width: "95%" }} value={this.state.modalFormulaInput} onChange={(e) => { this.handleInputChange(e) }}></textarea>
+                        <p>Kết quả</p>
+                        <p style={{ fontSize: "25px", margin: "20px 0", overflowX: "scroll", paddingTop: "10px" }}>
+                            {this.state.modalFormulaInput && <InlineMath math={this.state.modalFormulaInput} renderError={(error) => {
+                                return <b style={{ color: '#cc0000' }}>Công thức chưa hoàn thiện</b>
+                            }} />}
+                        </p>
+                        <div className="line" style={{ width: "96%", marginLeft: "2%", marginBottom: "30px" }}></div>
+                        <a className="modal-action modal-close black-text lighten-1" style={{ margin: "0 1.5vw", float: "left" }}>Hủy thao tác</a>
+                        <a className="modal-action modal-close blue-text lighten-1" style={{ margin: "0 1.5vw", float: "right" }} onClick={() => { this.addFormula() }}>Hoàn tất</a>
+                    </div>
+                </Modal>
                 <ReactQuill
                     style={this.props.customStyle}
                     ref={this.reactEditor} theme="snow" modules={this.modules}

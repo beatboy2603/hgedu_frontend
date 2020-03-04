@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="8" height="16" viewBox="0 0 8 16">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #3a3a3a;
+        font-size: 14px;
+        font-family: TimesNewRomanPSMT, Times New Roman;
+      }
+    </style>
+  </defs>
+  <text id="γ" class="cls-1" transform="translate(4 12)"><tspan x="-3.093" y="0">γ</tspan></text>
+</svg>

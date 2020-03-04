@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="26" height="19" viewBox="0 0 26 19">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #086bd1;
+        font-size: 14px;
+        font-family: SegoeUISymbol, Segoe UI Symbol;
+      }
+
+      .cls-2 {
+        font-family: iCielEffra-Regular, iCiel Effra;
+      }
+    </style>
+  </defs>
+  <text id="_" data-name="ℕ, ≥" class="cls-1" transform="translate(13 15)"><tspan x="-12.237" y="0">ℕ</tspan><tspan class="cls-2" y="0">, ≥</tspan></text>
+</svg>

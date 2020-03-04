@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="6" height="23" viewBox="0 0 6 23">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #3a3a3a;
+        font-size: 20px;
+        font-family: Arial-ItalicMT, Arial;
+        font-style: italic;
+      }
+
+      .cls-2, .cls-4 {
+        fill: none;
+      }
+
+      .cls-2 {
+        stroke: #3a3a3a;
+        stroke-width: 0.75px;
+      }
+
+      .cls-3 {
+        stroke: none;
+      }
+    </style>
+  </defs>
+  <g id="_o" data-name="∫ o" transform="translate(-882.4 -348)">
+    <text id="_" data-name="∫" class="cls-1" transform="translate(885.4 367)"><tspan x="-2.739" y="0">∫</tspan></text>
+    <g id="Ellipse_69" data-name="Ellipse 69" class="cls-2" transform="translate(882.4 356)">
+      <circle class="cls-3" cx="3" cy="3" r="3"/>
+      <circle class="cls-4" cx="3" cy="3" r="2.625"/>
+    </g>
+  </g>
+</svg>

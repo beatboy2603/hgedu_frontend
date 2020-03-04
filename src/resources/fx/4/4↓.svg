@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="8" height="16" viewBox="0 0 8 16">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #3a3a3a;
+        font-size: 14px;
+        font-family: ArialMT, Arial;
+      }
+    </style>
+  </defs>
+  <g id="_" data-name="↓" transform="translate(-4)">
+    <text id="_2" data-name="↓" class="cls-1" transform="translate(8 13)"><tspan x="-3.5" y="0">↓</tspan></text>
+  </g>
+</svg>

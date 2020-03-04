@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="12" height="23.5" viewBox="0 0 12 23.5">
+  <defs>
+    <style>
+      .cls-1, .cls-4 {
+        fill: none;
+      }
+
+      .cls-1 {
+        stroke: #3a3a3a;
+      }
+
+      .cls-2 {
+        fill: #3a3a3a;
+        font-size: 12px;
+        font-family: ArialMT, Arial;
+      }
+
+      .cls-3 {
+        stroke: none;
+      }
+    </style>
+  </defs>
+  <g id="_rev" data-name="→ rev" transform="translate(2)">
+    <g id="Rectangle_109" data-name="Rectangle 109" class="cls-1" transform="translate(1.229 10.5)">
+      <rect class="cls-3" width="8" height="13"/>
+      <rect class="cls-4" x="0.5" y="0.5" width="7" height="12"/>
+    </g>
+    <text id="_" data-name="→" class="cls-2" transform="matrix(-1, 0, 0, 1, 4, 11)"><tspan x="-6" y="0">→</tspan></text>
+  </g>
+</svg>

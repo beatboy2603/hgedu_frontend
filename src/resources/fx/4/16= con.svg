@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="19" viewBox="0 0 16 19">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #3a3a3a;
+        font-size: 14px;
+        font-family: SegoeUISymbol, Segoe UI Symbol;
+      }
+
+      .cls-2, .cls-4 {
+        fill: none;
+      }
+
+      .cls-2 {
+        stroke: #3a3a3a;
+        stroke-width: 0.5px;
+      }
+
+      .cls-3 {
+        stroke: none;
+      }
+    </style>
+  </defs>
+  <g id="_con" data-name="&lt;=&gt; con" transform="translate(20 2)">
+    <text id="_" data-name="⇒" class="cls-1" transform="translate(-11 13)"><tspan x="-6.04" y="0">⇒</tspan></text>
+    <text id="_2" data-name="⇒" class="cls-1" transform="matrix(-1, 0, 0, 1, -13, 13)"><tspan x="-6.04" y="0">⇒</tspan></text>
+    <g id="Rectangle_129" data-name="Rectangle 129" class="cls-2" transform="translate(-13.771 -0.5)">
+      <rect class="cls-3" width="4" height="6"/>
+      <rect class="cls-4" x="0.25" y="0.25" width="3.5" height="5.5"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="19" height="26" viewBox="0 0 19 26">
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-5 {
+        fill: none;
+      }
+
+      .cls-1, .cls-2 {
+        stroke: #3a3a3a;
+      }
+
+      .cls-2 {
+        stroke-width: 0.5px;
+      }
+
+      .cls-3 {
+        fill: #3a3a3a;
+        font-size: 17px;
+        font-family: TimesNewRomanPSMT, Times New Roman;
+      }
+
+      .cls-4 {
+        stroke: none;
+      }
+    </style>
+  </defs>
+  <g id="_up" data-name="} up" transform="translate(-1.229 -1.5)">
+    <g id="Rectangle_109" data-name="Rectangle 109" class="cls-1" transform="translate(5.229 1.5)">
+      <rect class="cls-4" width="8" height="13"/>
+      <rect class="cls-5" x="0.5" y="0.5" width="7" height="12"/>
+    </g>
+    <g id="Rectangle_114" data-name="Rectangle 114" class="cls-2" transform="translate(6.959 21.5)">
+      <rect class="cls-4" width="4" height="6"/>
+      <rect class="cls-5" x="0.25" y="0.25" width="3.5" height="5.5"/>
+    </g>
+    <text id="_" data-name="}" class="cls-3" transform="translate(5.229 17.5) rotate(90)"><tspan x="-4.08" y="0">}</tspan></text>
+  </g>
+</svg>

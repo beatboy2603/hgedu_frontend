@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="8.905" height="17.426" viewBox="0 0 8.905 17.426">
+  <defs>
+    <style>
+      .cls-1, .cls-3 {
+        fill: none;
+      }
+
+      .cls-1 {
+        stroke: #3a3a3a;
+      }
+
+      .cls-2 {
+        stroke: none;
+      }
+    </style>
+  </defs>
+  <g id="x" transform="translate(-4.777 0.713)">
+    <g id="Rectangle_109" data-name="Rectangle 109" class="cls-1" transform="translate(5.229 1.5)">
+      <rect class="cls-2" width="8" height="13"/>
+      <rect class="cls-3" x="0.5" y="0.5" width="7" height="12"/>
+    </g>
+    <line id="Line_116" data-name="Line 116" class="cls-1" x1="8" y2="17" transform="translate(5.229 -0.5)"/>
+    <line id="Line_123" data-name="Line 123" class="cls-1" x2="8" y2="17" transform="translate(5.229 -0.5)"/>
+  </g>
+</svg>

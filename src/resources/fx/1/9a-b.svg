@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="15" height="29" viewBox="0 0 15 29">
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-4 {
+        fill: none;
+      }
+
+      .cls-1, .cls-2 {
+        stroke: #3a3a3a;
+      }
+
+      .cls-1 {
+        stroke-width: 0.5px;
+      }
+
+      .cls-3 {
+        stroke: none;
+      }
+    </style>
+  </defs>
+  <g id="a_b" data-name="a/b" transform="translate(1.072)">
+    <line id="Line_89" data-name="Line 89" class="cls-1" x2="15" transform="translate(-1.072 14.5)"/>
+    <g id="Rectangle_107" data-name="Rectangle 107" class="cls-2" transform="translate(2.428)">
+      <rect class="cls-3" width="8" height="13"/>
+      <rect class="cls-4" x="0.5" y="0.5" width="7" height="12"/>
+    </g>
+    <g id="Rectangle_108" data-name="Rectangle 108" class="cls-2" transform="translate(2.428 16)">
+      <rect class="cls-3" width="8" height="13"/>
+      <rect class="cls-4" x="0.5" y="0.5" width="7" height="12"/>
+    </g>
+  </g>
+</svg>

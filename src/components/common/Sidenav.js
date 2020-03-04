@@ -182,7 +182,7 @@ const Sidenav = (props) => {
                 <div className="my-sidenav z-depth-2 white">
                     <Link exact to='/home'>
                         <div className='side-nav-logo' >
-                            <img src={SmallLogo} alt="HGEdu Logo" style={{ width: "20px", marginTop: "-7vh" }} />
+                            <img src={SmallLogo} alt="HGEdu Logo" style={{ width: "20px", marginTop: "-5vh" }} />
                         </div>
                     </Link>
                     <div className="flex-column">

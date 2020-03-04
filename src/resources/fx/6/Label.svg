@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="28" height="14" viewBox="0 0 28 14">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #086bd1;
+        font-size: 14px;
+        font-family: iCielEffra-Regular, iCiel Effra;
+        text-decoration: line-through;
+      }
+    </style>
+  </defs>
+  <text id="ABC" class="cls-1" transform="translate(14 11)"><tspan x="-13.356" y="0">ABC</tspan></text>
+</svg>

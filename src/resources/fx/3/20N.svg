@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="12" height="15" viewBox="0 0 12 15">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #3a3a3a;
+        font-size: 14px;
+        font-family: TimesNewRomanPSMT, Times New Roman;
+      }
+    </style>
+  </defs>
+  <g id="N" transform="translate(-67 -1)">
+    <text id="_" data-name="ℕ" class="cls-1" transform="translate(73 13)"><tspan x="-5.055" y="0">ℕ</tspan></text>
+  </g>
+</svg>

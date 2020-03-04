@@ -233,7 +233,7 @@ class TestQuestions extends Component {
         return (
             <div id="knowledgeGroup" className="knowledgeGroup row">
                 {/* <ModalTest/> */}
-                <div className="col s4 container min-height-60 knowledgeGroup-header" >
+                <div className="col s12 container min-height-60 knowledgeGroup-header" >
                     <h5 className="blue-text text-darken-3 bold font-montserrat" style={{ paddingLeft: "10px" }}>{this.state.currentFolder && this.state.currentFolder.folderName}
                         <Dropdown
                             trigger={<i className="material-icons grey-text text-darken-3">more_vert</i>}
@@ -243,9 +243,6 @@ class TestQuestions extends Component {
                         </Dropdown>
                     </h5>
                     <p className='grey-text text-darken-3' style={{ position: "relative", top: "-15px", paddingLeft: "10px" }}>{this.state.questionList.length} câu hỏi</p>
-                </div>
-                <div className="col s8">
-                    <Advertisement imgSrc={HorizontalAd1} />
                 </div>
                 <div className="row col s12">
                 <div className='col s12'>

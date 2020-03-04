@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="12.229" height="24" viewBox="0 0 12.229 24">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #3a3a3a;
+        font-size: 20px;
+        font-family: Arial-ItalicMT, Arial;
+        font-style: italic;
+      }
+
+      .cls-2, .cls-4 {
+        fill: none;
+      }
+
+      .cls-2 {
+        stroke: #3a3a3a;
+        stroke-width: 0.5px;
+      }
+
+      .cls-3 {
+        stroke: none;
+      }
+    </style>
+  </defs>
+  <g id="_" data-name="∫" transform="translate(-11.428 20.5)">
+    <text id="_2" data-name="∫" class="cls-1" transform="translate(14.428 -1)"><tspan x="-2.739" y="0">∫</tspan></text>
+    <g id="Rectangle_116" data-name="Rectangle 116" class="cls-2" transform="translate(19.657 -20.5)">
+      <rect class="cls-3" width="4" height="6"/>
+      <rect class="cls-4" x="0.25" y="0.25" width="3.5" height="5.5"/>
+    </g>
+    <g id="Rectangle_117" data-name="Rectangle 117" class="cls-2" transform="translate(17.657 -2.5)">
+      <rect class="cls-3" width="4" height="6"/>
+      <rect class="cls-4" x="0.25" y="0.25" width="3.5" height="5.5"/>
+    </g>
+  </g>
+</svg>

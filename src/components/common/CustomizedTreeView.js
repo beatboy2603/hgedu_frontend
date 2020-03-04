@@ -8,6 +8,7 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import DescriptionIcon from '@material-ui/icons/Description';
 import FolderOpenIcon from '@material-ui/icons/FolderOpen';
 import DeleteIcon from '@material-ui/icons/Delete';
+import People from '@material-ui/icons/People';
 import Folder from '@material-ui/icons/Folder';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
@@ -121,7 +122,7 @@ function StyledTreeItem(props) {
                     <div className="deleteFolderBtn" style={{ display: "none", color: "red" }} onClick={() => { props.deleteFolder(props.id) }}>
                         <DeleteOutlineIcon style={{ fontSize: "24px" }} />
                     </div>
-                    <div className="editFolderBtn" style={{ display: "none", paddingRight:"20px" }}>
+                    <div className="editFolderBtn" style={{ display: "none", paddingRight: "20px" }}>
                         <a href="#editFolderName" className="modal-trigger" onClick={(e) => { props.setCurrentFolder(e, props.folder) }}>
                             <i className="material-icons md-18 grey-text text-darken-3">edit</i>
                         </a>
@@ -190,8 +191,8 @@ function CustomizedTreeView(props) {
 
     let rootFoldersFilter = (folders) => {
         return folders.filter(folder => {
-            // return folder.parentFolderId == 0;  //include "Nhóm";
-            return folder.parentFolderId == 0 && folder.subGroupId != 3; //not include "Nhóm"
+            return folder.parentFolderId == 0;  //include "Nhóm";
+            // return folder.parentFolderId == 0 && folder.subGroupId != 3; //not include "Nhóm"
         })
     }
 
@@ -206,7 +207,7 @@ function CustomizedTreeView(props) {
                 return subfolder.parentFolderId == folder.folderId;
             })
 
-            if (subfolders.length > 0) {
+            if (subfolders.length > 0 && folder.folderTypeId != 4) {
                 return (
                     <StyledTreeItem showAll={showAll} renderEditDelete={renderEditDelete} setCurrentFolder={setCurrentFolder} folder={folder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={Folder} color="#1a73e8"
                         bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={true} onClick={(e) => setCurrentFolder(e, folder)}>
@@ -224,8 +225,11 @@ function CustomizedTreeView(props) {
                 } else if (folder.folderTypeId == 3) {
                     return <StyledTreeItem showAll={showAll} renderEditDelete={renderEditDelete} setCurrentFolder={setCurrentFolder} folder={folder} deleteFolder={props.deleteFolder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={DescriptionIcon} color="#1a73e8"
                         bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={(e) => handleClick(e, folder, "test")} />
+                } else if (folder.folderTypeId == 4) {
+                    return <StyledTreeItem showAll={showAll} renderEditDelete={renderEditDelete} setCurrentFolder={setCurrentFolder} folder={folder} deleteFolder={props.deleteFolder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={People} color="#1a73e8"
+                        bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={(e) => handleClick(e, folder, "group")} />
                 } else {
-                    return <StyledTreeItem showAll={showAll} renderEditDelete={renderEditDelete} setCurrentFolder={setCurrentFolder} folder={folder} deleteFolder={props.deleteFolder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={FolderOpenIcon} color="#1a73e8"
+                    return <StyledTreeItem showAll={showAll} renderEditDelete={renderEditDelete} setCurrentFolder={setCurrentFolder} folder={folder} deleteFolder={props.deleteFolder} nodeId={folder.folderId.toString()} labelText={folder.folderName} labelIcon={<i>people</i>} color="#1a73e8"
                         bgColor="#e8f0fe" key={folder.folderId} id={folder.folderId} parentFolderId={folder.parentFolderId} hasChildren={false} onClick={(e) => setCurrentFolder(e, folder)} />
                 }
             }

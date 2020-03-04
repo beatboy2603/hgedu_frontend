@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="27" viewBox="0 0 16 27">
+  <defs>
+    <style>
+      .cls-1, .cls-4 {
+        fill: none;
+      }
+
+      .cls-1 {
+        stroke: #3a3a3a;
+      }
+
+      .cls-2 {
+        fill: #3a3a3a;
+        font-size: 20px;
+        font-family: SegoeUISymbol, Segoe UI Symbol;
+      }
+
+      .cls-3 {
+        stroke: none;
+      }
+    </style>
+  </defs>
+  <g id="_down" data-name="⁀ down" transform="translate(0 5.5)">
+    <g id="Rectangle_109" data-name="Rectangle 109" class="cls-1" transform="translate(4.229)">
+      <rect class="cls-3" width="8" height="13"/>
+      <rect class="cls-4" x="0.5" y="0.5" width="7" height="12"/>
+    </g>
+    <text id="_" data-name="⁀" class="cls-2" transform="matrix(1, 0, 0, -1, 0, 21.5)"><tspan x="0" y="22">⁀</tspan></text>
+  </g>
+</svg>

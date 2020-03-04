@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="10" height="15" viewBox="0 0 10 15">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #3a3a3a;
+        font-size: 14px;
+        font-family: TimesNewRomanPSMT, Times New Roman;
+      }
+    </style>
+  </defs>
+  <text id="Σ" class="cls-1" transform="translate(5 12)"><tspan x="-4.074" y="0">Σ</tspan></text>
+</svg>

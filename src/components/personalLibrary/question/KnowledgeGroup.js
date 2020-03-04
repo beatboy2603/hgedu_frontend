@@ -10,6 +10,8 @@ import { serverUrl } from "../../common/common";
 import Advertisement from "../../common/Advertisement";
 import HorizontalAd1 from "../../../resources/horizontalAd1.png";
 import ImportButton from "./ImportButton";
+import CustomizedMultipleSelect from "../../common/CustomizedMultipleSelect";
+import { debounce } from 'lodash';
 
 class KnowledgeGroup extends Component {
   state = {
@@ -17,11 +19,107 @@ class KnowledgeGroup extends Component {
     questionList: [],
     linkedQuestionList: [],
     currentQuestion: null,
+    allKnowledgeGroups: [],
+
+    searchInput: "",
 
     file: "",
     error: "",
     msg: "",
   };
+
+  handleInputChange = (src) => (e) => {
+    let val = e.target.value;
+    switch (src) {
+      case "search":
+        this.setState({
+          searchInput: val,
+        }, () => {
+          this.filterQuestion(this.state.searchInput)
+        })
+        break;
+    }
+  }
+
+  handleSelectChange = (source, value) => {
+    if (source == "knowledgeGroups") {
+      this.setState(prevState => ({
+        ...prevState,
+        testCriteria: {
+          ...prevState.testCriteria,
+          knowledgeGroups: value,
+        }
+      }))
+    }
+    if (source == "specialKnowledges") {
+      this.setState(prevState => ({
+        ...prevState,
+        testCriteria: {
+          ...prevState.testCriteria,
+          specialKnowledges: value,
+        }
+      }))
+    }
+    if (source == "gradeLevelId") {
+      this.setState(prevState => ({
+        ...prevState,
+        testCriteria: {
+          ...prevState.testCriteria,
+          gradeLevelId: value,
+        }
+      }))
+    }
+  }
+
+  normalizeString = (str) => {
+    str = str.toLowerCase();
+    str = str.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+    return str;
+  }
+
+  filterQuestion = debounce((rawString = "") => {
+    rawString = this.normalizeString(rawString);
+    let questionList = this.state.questionList.filter(el => {
+      if (this.normalizeString(el.questionCode).includes(rawString)) {
+        return el;
+      }
+      let found = false;
+      el.content.ops && el.content.ops.map(el => {
+        if ((el.insert && typeof el.insert === 'string' && this.normalizeString(el.insert).includes(rawString)) || (el.insert && el.insert.formula && this.normalizeString(el.insert.formula).includes(rawString))) {
+          found = true;
+        }
+      })
+      if (found) {
+        return el;
+      }
+    });
+
+    let linkedQuestionList = questionList.map((el, i) => {
+      if (el.questionTypeId == 3) {
+        let childQuestions = questionList.filter(
+          (child, i) => el.questionId == child.questionParentId
+        );
+        el.childQuestions = childQuestions;
+        let meanDifficulty = 0;
+        childQuestions.map((child, i) => {
+          meanDifficulty += child.difficultyId;
+        });
+        meanDifficulty = meanDifficulty / childQuestions.length;
+        el.difficultyId = meanDifficulty;
+      }
+      if (el.questionParentId == 0) {
+        return el;
+      }
+    });
+
+    linkedQuestionList = linkedQuestionList.filter(el => el);
+
+    this.setState({
+      linkedQuestionList
+    }, () => {
+      this.waitUpdate = false;
+    });
+  }, 200);
 
   onFileChange = event => {
     console.log("change")
@@ -279,9 +377,27 @@ class KnowledgeGroup extends Component {
         linkedQuestionList
       }, () => {
         this.waitUpdate = false;
-      }
-      );
+      });
     });
+    axios.get(serverUrl + "api/folder/getAllKnowledgeGroupsId/" + this.props.user.uid).then(res => {
+      const allKnowledgeGroups = res.data;
+      const allKnowledgeGroupFolders = this.props.folder.folders.filter((el, i) => {
+        let found = false;
+        allKnowledgeGroups.map((subEl, k) => {
+          if (el.folderId == subEl) {
+            found = true;
+          }
+        })
+        if (found) {
+          return el;
+        }
+      })
+
+      this.setState(prevState => ({
+        ...prevState,
+        allKnowledgeGroups: allKnowledgeGroupFolders,
+      }))
+    })
   }
 
   render() {
@@ -291,7 +407,7 @@ class KnowledgeGroup extends Component {
           updateQuestionList={this.updateQuestionList} />
         <ModalEditQuestion currentQuestion={this.state.currentQuestion}
           updateQuestionList={this.updateQuestionList} />
-        <div className="col s4 container min-height-60 knowledgeGroup-header">
+        <div className="col s12 container min-height-60 knowledgeGroup-header">
           {this.state.currentFolder &&
             this.state.currentFolder.folderId != 0 ? (
               <h5 className="blue-text text-darken-3 bold font-montserrat" style={{ paddingLeft: "10px" }}>
@@ -321,8 +437,75 @@ class KnowledgeGroup extends Component {
             câu hỏi
           </p>
         </div>
-        <div className="col s8 container ">
-          <Advertisement imgSrc={HorizontalAd1} />
+        <div className="row col s12" style={{ borderTop: "1px solid #e0e0e0", borderBottom: "1px solid #e0e0e0", margin: "20px 0 0 0" }}>
+          <div className="col s2 flex-row" >
+            <i className="material-icons" style={{ padding: "15px 15px 15px 0" }}>search</i>
+            <span>Tìm kiếm</span>
+          </div>
+          <div className="col s10">
+            <input type="text" style={{ borderBottom: "none" }} value={this.state.searchInput} onChange={this.handleInputChange("search")} />
+          </div>
+        </div>
+        <div className="row col s12 flex-row" style={{ margin: "0", backgroundColor: "white", borderBottom: "1px solid #e0e0e0" }}>
+          <div className="col s1">
+            {/* <i className="material-icons" style={{ padding: "15px" }}>search</i> */}
+            <span className="font-montserrat" style={{ color: "#086bd1", fontSize: "16px", paddingLeft: "2px" }}>Bộ lọc</span>
+          </div>
+          <div className="col s2">
+            <CustomizedMultipleSelect
+              selectLabel={""}
+              inputLabel={"Mức khó"}
+              customStyle={{ maxWidth: "10vw" }}
+              source="knowledgeGroups"
+              handleParentSelect={this.handleSelectChange}
+              items={this.state.allKnowledgeGroups.map((el, i) => {
+                return { value: el.folderId, text: el.folderName }
+              })} />
+          </div>
+          <div className="col s2">
+            <CustomizedMultipleSelect
+              selectLabel={""}
+              inputLabel={"Thuộc tính"}
+              customStyle={{ maxWidth: "10vw" }}
+              source="knowledgeGroups"
+              handleParentSelect={this.handleSelectChange}
+              items={this.state.allKnowledgeGroups.map((el, i) => {
+                return { value: el.folderId, text: el.folderName }
+              })} />
+          </div>
+          <div className="col s2">
+            <CustomizedMultipleSelect
+              selectLabel={""}
+              inputLabel={"Form"}
+              customStyle={{ maxWidth: "10vw" }}
+              source="knowledgeGroups"
+              handleParentSelect={this.handleSelectChange}
+              items={this.state.allKnowledgeGroups.map((el, i) => {
+                return { value: el.folderId, text: el.folderName }
+              })} />
+          </div>
+          <div className="col s2">
+            <CustomizedMultipleSelect
+              selectLabel={""}
+              inputLabel={"Trình độ"}
+              customStyle={{ maxWidth: "10vw" }}
+              source="knowledgeGroups"
+              handleParentSelect={this.handleSelectChange}
+              items={this.state.allKnowledgeGroups.map((el, i) => {
+                return { value: el.folderId, text: el.folderName }
+              })} />
+          </div>
+          <div className="col s3">
+            <CustomizedMultipleSelect
+              selectLabel={""}
+              inputLabel={"Kiến thức đặc thù"}
+              customStyle={{ minWidth: "12vw", maxWidth: "15vw" }}
+              source="knowledgeGroups"
+              handleParentSelect={this.handleSelectChange}
+              items={this.state.allKnowledgeGroups.map((el, i) => {
+                return { value: el.folderId, text: el.folderName }
+              })} />
+          </div>
         </div>
         <div className="col s12 no-padding center">
           {/* <SimpleTable /> */}

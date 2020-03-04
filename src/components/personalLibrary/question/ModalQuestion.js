@@ -52,7 +52,6 @@ class ModalQuestion extends Component {
             }
         ],
         valid: false,
-        showModal: false,
     }
 
     checkValid = () => {

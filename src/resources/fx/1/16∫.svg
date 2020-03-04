@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="6" height="23" viewBox="0 0 6 23">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #3a3a3a;
+        font-size: 20px;
+        font-family: Arial-ItalicMT, Arial;
+        font-style: italic;
+      }
+    </style>
+  </defs>
+  <text id="_" data-name="∫" class="cls-1" transform="translate(3 19)"><tspan x="-2.739" y="0">∫</tspan></text>
+</svg>

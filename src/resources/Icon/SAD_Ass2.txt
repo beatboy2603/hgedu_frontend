@@ -1,0 +1,15 @@
+Assignment 2
+Every group takes the Topic selected as in Assignmnet1.
+
+Task:
+Design using Component-Oriented methods.
+
+To do:
+1- Identify Objects and their attributes, operations
+    in the problem with the given Topic
+2- Draw Use Case diagram
+3- Draw Class Diagram
+4- Draw Business concept diagram
+5- Make Identification of components
+6- Draw first cut of component-based software architecture
+(See sample on Figure 11.6 to 11.9 in TextBook).
