@@ -5,6 +5,7 @@ import { serverUrl } from "../common/common";
 import axios from 'axios';
 import Toggle from "../common/Toggle";
 import { InlineMath } from 'react-katex';
+import CustomizedFormulaTabs from "../common/CustomizedFormulaTabs"
 
 class AbbreviationLibrary extends Component {
 
@@ -13,6 +14,7 @@ class AbbreviationLibrary extends Component {
             teacherId: this.props.user.uid,
             shortenForm: "",
             originalForm: "",
+            originalFormSelectionStart: 0,
             isKatex: false,
         },
         testRenderInput: "",
@@ -65,11 +67,37 @@ class AbbreviationLibrary extends Component {
         return renderedList;
     }
 
+    addToFormula = (text = "") => {
+        let index = this.state.abbreviation.originalFormSelectionStart;
+        let formula = this.state.abbreviation.originalForm;
+        let newFormula = formula.slice(0, index) + text + formula.slice(index);
+        // let newFormula = formula + text;
+        this.setState((prevState) => ({
+            ...prevState,
+            abbreviation: {
+                ...prevState.abbreviation,
+                originalForm: newFormula,
+            }
+        }))
+    }
+
     handleToggleChange = () => {
         this.setState(prevState => ({
             abbreviation: {
                 ...prevState.abbreviation,
                 isKatex: !prevState.abbreviation.isKatex,
+            },
+        }))
+    }
+
+    setSelection = (e)=>{
+        console.log("alo " , e.target.selectionStart);
+        let index = e.target.selectionStart;
+        this.setState(prevState => ({
+            ...prevState,
+            abbreviation: {
+                ...prevState.abbreviation,
+                originalFormSelectionStart: index,
             },
         }))
     }
@@ -111,7 +139,7 @@ class AbbreviationLibrary extends Component {
                 return;
             }
             const abbreviationList = [this.state.abbreviation, ...this.state.abbreviationList];
-            let abbreviation= this.state.abbreviation;
+            let abbreviation = this.state.abbreviation;
             axios.post(serverUrl + "api/abbreviation/addAbbreviation", abbreviation).then(res => {
                 axios.get(serverUrl + "api/abbreviation/" + this.props.user.uid).then(res => {
                     this.setState({
@@ -148,7 +176,7 @@ class AbbreviationLibrary extends Component {
                 }
                 return el;
             })
-            let abbreviation= this.state.abbreviation;
+            let abbreviation = this.state.abbreviation;
             axios.post(serverUrl + "api/abbreviation/updateAbbreviation", abbreviation).then(res => {
                 axios.get(serverUrl + "api/abbreviation/" + this.props.user.uid).then(res => {
                     this.setState({
@@ -191,7 +219,7 @@ class AbbreviationLibrary extends Component {
                 abbreviationList
             })
         }
-        axios.post(serverUrl + "api/abbreviation/deleteAbbreviation/"+abbreviation.abbreviationId).then(res => {
+        axios.post(serverUrl + "api/abbreviation/deleteAbbreviation/" + abbreviation.abbreviationId).then(res => {
             axios.get(serverUrl + "api/abbreviation/" + this.props.user.uid).then(res => {
                 this.setState({
                     abbreviationList: res.data,
@@ -227,7 +255,7 @@ class AbbreviationLibrary extends Component {
                                 <input type="text" placeholder="+ Nhập từ khóa" style={{ borderBottom: "none", width: "85%" }} value={this.state.abbreviation.shortenForm} onChange={(e) => { this.handleInputChange("shortenForm", e) }} />
                             </div>
                             <div className="col s5" style={{ marginTop: "10px", marginBottom: "10px" }}>
-                                <input type="text" placeholder="+ Nhập chuyển đổi" style={{ borderBottom: "none" }} value={this.state.abbreviation.originalForm} onChange={(e) => { this.handleInputChange("originalForm", e) }} />
+                                <input type="text" placeholder="+ Nhập chuyển đổi" style={{ borderBottom: "none" }} value={this.state.abbreviation.originalForm} onChange={(e) => { this.handleInputChange("originalForm", e) }} onBlur={this.setSelection}/>
                             </div>
                             <div className="col s1">
                                 {this.state.abbreviation.shortenForm && this.state.abbreviation.originalForm &&
@@ -244,11 +272,16 @@ class AbbreviationLibrary extends Component {
                         <div className="col s12" style={{ paddingLeft: "40px" }}>
                             <Toggle customStyle={{ minHeight: "45px" }} label="Công thức" handleToggleChange={this.handleToggleChange} checked={this.state.abbreviation.isKatex} />
                         </div>
+                        <div className="col s12" >
+                            {this.state.abbreviation.isKatex && <div style={{borderTop: "1px solid #e0e5eb", padding: "5px 0"}}>
+                                <CustomizedFormulaTabs addToFormula={this.addToFormula}/>
+                            </div>}
+                        </div>
                     </div>
                     <div className="col s12 container padding-filler-nav" style={{ minHeight: "70vh" }}>
                         <p className="blue-text text-darken-2" style={{ fontSize: "18px" }}>Tổ hợp của bạn</p>
                         {this.state.abbreviationList.length > 0 ? (
-                            <table style={{ width: "94%", tableLayout: "fixed", marginBottom: "5vh", overflow:"hidden" }}>
+                            <table style={{ width: "94%", tableLayout: "fixed", marginBottom: "5vh", overflow: "hidden" }}>
                                 {this.renderAbbreviationList()}
                             </table>
                         ) : (

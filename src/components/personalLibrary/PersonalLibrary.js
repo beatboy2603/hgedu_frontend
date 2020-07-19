@@ -374,6 +374,7 @@ class PersonalLibrary extends Component {
                                 </div>
                                 <div className="line"></div>
                                 <CustomizedTreeView folders={this.state.folders} setCurrentFolder={this.setCurrentFolder} deleteFolder={this.deleteFolder} handleFormSubmit={this.handleFormSubmit} addFolderName={this.state.addFolderName} addFolder={this.addFolder} handleInputChange={this.handleEditInputChange} updateFolder={this.updateFolder} renderEditDelete={true} />
+                                <div style={{marginTop:"50px"}}></div>
                             </div>
                         </div>
                         {/* filler for navigation bar */}

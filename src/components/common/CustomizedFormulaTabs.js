@@ -232,18 +232,18 @@ export default function FullWidthTabs({ addFormula, addToFormula }) {
                                     <div className="col s3"><img onClick={() => { addToFormula("\\varphi") }} src={require("../../resources/fx/5/φ-1.svg")} style={{ cursor: "pointer" }} alt="φ-1" /></div>
                                 </td>
                                 <td className="row">
-                                    <div className="col s1"><img onClick={() => { addToFormula("\\alpha") }} src={require("../../resources/fx/5/1∀.svg")} style={{ cursor: "pointer" }} alt="∀" /></div>
-                                    <div className="col s1"><img onClick={() => { addToFormula("\\beta") }} src={require("../../resources/fx/5/2∞.svg")} style={{ cursor: "pointer" }} alt="∞" /></div>
-                                    <div className="col s1"><img onClick={() => { addToFormula("\\gamma") }} src={require("../../resources/fx/5/4Δ.svg")} style={{ cursor: "pointer" }} alt="Δ" /></div>
-                                    <div className="col s1"><img onClick={() => { addToFormula("\\delta") }} src={require("../../resources/fx/5/φ-1.svg")} style={{ cursor: "pointer" }} alt="φ-1" /></div>
-                                    <div className="col s1"><img onClick={() => { addToFormula("\\varepsilon") }} src={require("../../resources/fx/5/φ-1.svg")} style={{ cursor: "pointer" }} alt="φ-1" /></div>
-                                    <div className="col s1"><img onClick={() => { addToFormula("\\lambda") }} src={require("../../resources/fx/5/φ-1.svg")} style={{ cursor: "pointer" }} alt="φ-1" /></div>
-                                    <div className="col s1"><img onClick={() => { addToFormula("\\mu") }} src={require("../../resources/fx/5/1∀.svg")} style={{ cursor: "pointer" }} alt="∀" /></div>
-                                    <div className="col s1"><img onClick={() => { addToFormula("\\xi") }} src={require("../../resources/fx/5/2∞.svg")} style={{ cursor: "pointer" }} alt="∞" /></div>
-                                    <div className="col s1"><img onClick={() => { addToFormula("\\pi") }} src={require("../../resources/fx/5/4Δ.svg")} style={{ cursor: "pointer" }} alt="Δ" /></div>
-                                    <div className="col s1"><img onClick={() => { addToFormula("\\sigma") }} src={require("../../resources/fx/5/φ-1.svg")} style={{ cursor: "pointer" }} alt="φ-1" /></div>
-                                    <div className="col s1"><img onClick={() => { addToFormula("\\phi") }} src={require("../../resources/fx/5/φ-1.svg")} style={{ cursor: "pointer" }} alt="φ-1" /></div>
-                                    <div className="col s1"><img onClick={() => { addToFormula("\\chi") }} src={require("../../resources/fx/5/φ-1.svg")} style={{ cursor: "pointer" }} alt="φ-1" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\alpha") }} src={require("../../resources/fx/5/α-1.svg")} style={{ cursor: "pointer" }} alt="α-1" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\beta") }} src={require("../../resources/fx/5/β-1.svg")} style={{ cursor: "pointer" }} alt="β-1" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\gamma") }} src={require("../../resources/fx/5/γ-1.svg")} style={{ cursor: "pointer" }} alt="γ-1" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\delta") }} src={require("../../resources/fx/5/δ-1.svg")} style={{ cursor: "pointer" }} alt="δ-1" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\varepsilon") }} src={require("../../resources/fx/5/ε-1.svg")} style={{ cursor: "pointer" }} alt="ε-1" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\lambda") }} src={require("../../resources/fx/5/λ-1.svg")} style={{ cursor: "pointer" }} alt="λ-1" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\mu") }} src={require("../../resources/fx/5/μ-1.svg")} style={{ cursor: "pointer" }} alt="μ-1" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\xi") }} src={require("../../resources/fx/5/ξ-1.svg")} style={{ cursor: "pointer" }} alt="ξ-1" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\pi") }} src={require("../../resources/fx/5/π-1.svg")} style={{ cursor: "pointer" }} alt="π-1" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\sigma") }} src={require("../../resources/fx/5/ϭ.svg")} style={{ cursor: "pointer" }} alt="ϭ" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\phi") }} src={require("../../resources/fx/5/ϕ.svg")} style={{ cursor: "pointer" }} alt="ϕ" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\chi") }} src={require("../../resources/fx/5/χ-1.svg")} style={{ cursor: "pointer" }} alt="χ-1" /></div>
                                 </td>
                             </tr>
                             <tr>
@@ -253,13 +253,53 @@ export default function FullWidthTabs({ addFormula, addToFormula }) {
                                     <div className="col s3"><img onClick={() => { addToFormula("\\omega") }} src={require("../../resources/fx/5/ω-1.svg")} style={{ cursor: "pointer" }} alt="ω-1" /></div>
                                     <div className="col s3"><img onClick={() => { addToFormula("\\Omega") }} src={require("../../resources/fx/5/Ω.svg")} style={{ cursor: "pointer" }} alt="Ω" /></div>
                                 </td>
-
+                                <td className="row">
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\Alpha") }} src={require("../../resources/fx/5/Α.svg")} style={{ cursor: "pointer" }} alt="Α" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\Beta") }} src={require("../../resources/fx/5/Β.svg")} style={{ cursor: "pointer" }} alt="Β" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\Gamma") }} src={require("../../resources/fx/5/Γ.svg")} style={{ cursor: "pointer" }} alt="Γ" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\Delta") }} src={require("../../resources/fx/5/Δ.svg")} style={{ cursor: "pointer" }} alt="Δ" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\Epsilon") }} src={require("../../resources/fx/5/Ε.svg")} style={{ cursor: "pointer" }} alt="Ε" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\Lambda") }} src={require("../../resources/fx/5/Λ.svg")} style={{ cursor: "pointer" }} alt="Λ" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\Mu") }} src={require("../../resources/fx/5/Μ.svg")} style={{ cursor: "pointer" }} alt="Μ" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\Xi") }} src={require("../../resources/fx/5/Ξ.svg")} style={{ cursor: "pointer" }} alt="Ξ" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\Pi") }} src={require("../../resources/fx/5/Π.svg")} style={{ cursor: "pointer" }} alt="Π" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\Sigma") }} src={require("../../resources/fx/5/Σ.svg")} style={{ cursor: "pointer" }} alt="Σ" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\Phi") }} src={require("../../resources/fx/5/Φ.svg")} style={{ cursor: "pointer" }} alt="Φ" /></div>
+                                    <div className="col s1"><img onClick={() => { addToFormula("\\Chi") }} src={require("../../resources/fx/5/Χ.svg")} style={{ cursor: "pointer" }} alt="Χ" /></div>
+                                </td>
                             </tr>
                         </table>
                     </div>
                 </TabPanel>
                 <TabPanel value={value} index={5} dir={theme.direction} style={{ backgroundColor: "#eef6ff" }}>
-                    <div>item 4</div>
+                    <div className="row" style={{ margin: "0" }}>
+                        <table className={"tableCenterTd"}>
+                            <tr>
+                                <td className="row">
+                                    <div className="col s3"><img onClick={() => { addToFormula("\\overgroup{ }") }} src={require("../../resources/fx/6/1⁀.svg")} style={{ cursor: "pointer" }} alt="⁀" /></div>
+                                    <div className="col s3"><img onClick={() => { addToFormula("\\overline{ }") }} src={require("../../resources/fx/6/3⸺.svg")} style={{ cursor: "pointer" }} alt="⸺" /></div>
+                                    <div className="col s3"><img onClick={() => { addToFormula("\\overrightarrow{ }") }} src={require("../../resources/fx/6/5→.svg")} style={{ cursor: "pointer" }} alt="→" /></div>
+                                    <div className="col s3"><img onClick={() => { addToFormula("\\hat{ }") }} src={require("../../resources/fx/6/7^.svg")} style={{ cursor: "pointer" }} alt="^" /></div>
+                                </td>
+                                <td className="row">
+                                    <div className="col s6"><img onClick={() => { addToFormula("\\sout{ }") }} src={require("../../resources/fx/6/9---.svg")} style={{ cursor: "pointer" }} alt="---" /></div>
+                                    <div className="col s6"><img onClick={() => { addToFormula("\\overbrace{ }^{ }") }} src={require("../../resources/fx/6/11{ up.svg")} style={{ cursor: "pointer" }} alt="{ up" /></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="row">
+                                    <div className="col s3"><img onClick={() => { addToFormula("\\undergroup{ }") }} src={require("../../resources/fx/6/2⁀ down.svg")} style={{ cursor: "pointer" }} alt="⁀ down" /></div>
+                                    <div className="col s3"><img onClick={() => { addToFormula("\\underline{ }") }} src={require("../../resources/fx/6/4⸺ down.svg")} style={{ cursor: "pointer" }} alt="⸺ down" /></div>
+                                    <div className="col s3"><img onClick={() => { addToFormula("\\overleftarrow{ }") }} src={require("../../resources/fx/6/6→ rev.svg")} style={{ cursor: "pointer" }} alt="→ rev" /></div>
+                                    <div className="col s3"><img onClick={() => { addToFormula("\\mathring{ }") }} src={require("../../resources/fx/6/8○.svg")} style={{ cursor: "pointer" }} alt="○" /></div>
+                                </td>
+                                <td className="row">
+                                    <div className="col s6"><img onClick={() => { addToFormula("\\xcancel{ }") }} src={require("../../resources/fx/6/10x.svg")} style={{ cursor: "pointer" }} alt="x" /></div>
+                                    <div className="col s6"><img onClick={() => { addToFormula("\\underbrace{ }_{ }") }} src={require("../../resources/fx/6/12{ down.svg")} style={{ cursor: "pointer" }} alt="{ down" /></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </TabPanel>
             </SwipeableViews>
         </div>

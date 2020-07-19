@@ -14,6 +14,11 @@ import CustomizedMultipleSelect from "../../common/CustomizedMultipleSelect";
 import { debounce } from 'lodash';
 
 class KnowledgeGroup extends Component {
+  constructor(props) {
+    super(props);
+    this.searchInput = React.createRef();
+  }
+
   state = {
     currentFolder: null,
     questionList: [],
@@ -27,6 +32,10 @@ class KnowledgeGroup extends Component {
     error: "",
     msg: "",
   };
+
+  focusSearch = () => {
+    this.searchInput.current.focus()
+  }
 
   handleInputChange = (src) => (e) => {
     let val = e.target.value;
@@ -439,11 +448,11 @@ class KnowledgeGroup extends Component {
         </div>
         <div className="row col s12" style={{ borderTop: "1px solid #e0e0e0", borderBottom: "1px solid #e0e0e0", margin: "20px 0 0 0" }}>
           <div className="col s2 flex-row" >
-            <i className="material-icons" style={{ padding: "15px 15px 15px 0" }}>search</i>
-            <span>Tìm kiếm</span>
+            <i className="material-icons" style={{ padding: "15px 15px 15px 0", cursor:"pointer" }} onClick={() => { this.focusSearch() }}>search</i>
+            <span style={{ cursor:"pointer" }} onClick={() => { this.focusSearch() }}>Tìm kiếm</span>
           </div>
           <div className="col s10">
-            <input type="text" style={{ borderBottom: "none" }} value={this.state.searchInput} onChange={this.handleInputChange("search")} />
+            <input ref={this.searchInput} type="text" style={{ borderBottom: "none" }} value={this.state.searchInput} onChange={this.handleInputChange("search")} />
           </div>
         </div>
         <div className="row col s12 flex-row" style={{ margin: "0", backgroundColor: "white", borderBottom: "1px solid #e0e0e0" }}>

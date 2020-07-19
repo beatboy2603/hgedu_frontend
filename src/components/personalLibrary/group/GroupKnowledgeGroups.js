@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import axios from "axios";
 import { serverUrl } from "../../common/common"
-import { withRouter} from "react-router-dom";
-import {connect} from "react-redux";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 
 class GroupKnowledgeGroups extends Component {
 
