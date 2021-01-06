@@ -10,7 +10,7 @@
     "@material-ui/lab": "^4.0.0-alpha.33",
     "@material-ui/pickers": "^3.2.8",
     "@material-ui/styles": "^4.6.0",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "classnames": "^2.2.6",
     "core-js": "^3.4.5",
     "date-fns": "^2.8.1",
